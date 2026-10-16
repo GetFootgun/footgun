@@ -1,0 +1,24 @@
+{
+  "id": "fg-0061",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "User access tokens",
+  "title": "Graph API token dies about weekly with OAuthException 190 subcode 460",
+  "symptoms": [
+    "OAuthException code 190, error_subcode 460",
+    "Session has been invalidated because the user changed their password or Facebook has changed the session for security reasons"
+  ],
+  "cause": "A user access token is bound to the user's Facebook session. A password change or Facebook's periodic session rotation invalidates it.",
+  "fix": "Use a system user token with expiration set to Never for server-side jobs.",
+  "apply": "Business Settings > Users > System users > select the system user > Generate new token > choose the app > Token expiration: Never",
+  "affected": "Graph API and Marketing API, June 2026",
+  "sources": [],
+  "tags": [
+    "tokens",
+    "token-expiry"
+  ],
+  "verified_on": "2026-06-19",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

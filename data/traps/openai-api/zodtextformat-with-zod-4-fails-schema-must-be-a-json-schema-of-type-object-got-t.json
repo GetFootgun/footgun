@@ -1,0 +1,28 @@
+{
+  "id": "fg-0145",
+  "provider": "openai-api",
+  "surface_type": "sdk",
+  "surface_name": "openai-node zod helpers",
+  "title": "zodTextFormat with Zod 4 fails: schema must be a JSON Schema of type object, got type string",
+  "symptoms": [
+    "Invalid schema for response_format: schema must be a JSON Schema of 'type: \"object\"', got 'type: \"string\"'.",
+    "The structured outputs example from the docs fails after installing the latest zod"
+  ],
+  "cause": "Before 6.7.0 the SDK converted schemas with a library that only understood Zod 3, so Zod 4 objects turned into a wrong schema.",
+  "fix": "Upgrade openai to 6.7.0 or later, or pin zod to version 3.",
+  "apply": "npm install openai@^6.7.0",
+  "affected": "openai-node earlier than 6.7.0 with zod 4; fixed in 6.7.0, 2025-10-24",
+  "sources": [
+    "https://github.com/openai/openai-node/issues/1602",
+    "https://github.com/openai/openai-node/issues/1576"
+  ],
+  "tags": [
+    "zod",
+    "structured-outputs",
+    "node"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

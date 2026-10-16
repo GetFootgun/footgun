@@ -1,0 +1,28 @@
+{
+  "id": "fg-0250",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel CDN cache for function responses",
+  "title": "Vercel never caches an API route response even though it sets Cache-Control max-age",
+  "symptoms": [
+    "x-vercel-cache: MISS on every request to a function",
+    "Cache-Control: max-age=3600 reaches the browser but the function runs each time",
+    "s-maxage set by the function is missing from the response the browser sees"
+  ],
+  "cause": "The Vercel CDN only stores function responses that carry s-maxage (or a CDN-Cache-Control or Vercel-CDN-Cache-Control header). Responses with set-cookie, private, no-store, or requests with an Authorization header are never cached, and Vercel strips s-maxage before the browser.",
+  "fix": "Return s-maxage with stale-while-revalidate, or a Vercel-CDN-Cache-Control header, and make sure the route sets no cookie.",
+  "apply": "return Response.json(data, {\n  headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60' },\n});",
+  "affected": "Vercel CDN, all plans, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/caching/cdn-cache"
+  ],
+  "tags": [
+    "caching",
+    "cdn",
+    "headers"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

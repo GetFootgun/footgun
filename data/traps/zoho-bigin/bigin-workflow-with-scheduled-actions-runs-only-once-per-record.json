@@ -1,0 +1,22 @@
+{
+  "id": "fg-0125",
+  "provider": "zoho-bigin",
+  "surface_type": "ui",
+  "surface_name": "Workflows, scheduled actions",
+  "title": "Bigin workflow with scheduled actions runs only once per record",
+  "symptoms": [
+    "A deal that re-enters the trigger stage does not get the email series again"
+  ],
+  "cause": "Scheduled actions require Repeat this workflow to be off, so the workflow fires once per record.",
+  "fix": "Plan for one run per record. If a record must get the series again, use a separate workflow or trigger it from an integration.",
+  "apply": "Workflow: leave Repeat this workflow unchecked whenever the workflow has scheduled actions",
+  "affected": "Bigin workflows, July 2026",
+  "sources": [],
+  "tags": [
+    "workflows"
+  ],
+  "verified_on": "2026-07-06",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

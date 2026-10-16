@@ -1,0 +1,29 @@
+{
+  "id": "fg-0191",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "Cloud Firestore web SDK, write serialization",
+  "title": "Firestore setDoc fails with Unsupported field value: undefined",
+  "symptoms": [
+    "FirebaseError: Function setDoc() called with invalid data. Unsupported field value: undefined (found in field middleName in document users/abc)",
+    "Same error from updateDoc and addDoc",
+    "Fails only when an optional form field is left empty"
+  ],
+  "cause": "The SDK throws on any property set to undefined unless the Firestore instance was created with ignoreUndefinedProperties. The default is to throw.",
+  "fix": "Initialize Firestore with ignoreUndefinedProperties true, or strip undefined fields before writing. Use null when you want the field stored as empty.",
+  "apply": "import { initializeFirestore } from 'firebase/firestore';\nconst db = initializeFirestore(app, { ignoreUndefinedProperties: true });\n// firebase-admin: getFirestore().settings({ ignoreUndefinedProperties: true })",
+  "affected": "Every Firebase JS SDK version and firebase-admin Firestore throw by default; the ignoreUndefinedProperties setting exists since @firebase/firestore 1.14.6 (mid-2020)",
+  "sources": [
+    "https://firebase.google.com/docs/reference/js/firestore_.firestoresettings",
+    "https://github.com/firebase/firebase-js-sdk/blob/main/packages/firestore/CHANGELOG.md"
+  ],
+  "tags": [
+    "firestore",
+    "serialization",
+    "writes"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

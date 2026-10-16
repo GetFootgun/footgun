@@ -1,0 +1,24 @@
+{
+  "id": "fg-0066",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "System user tokens and Page edges",
+  "title": "System user token gets 'Invalid OAuth 2.0 Access Token' on Page endpoints",
+  "symptoms": [
+    "Invalid OAuth 2.0 Access Token on /{page-id}/... calls",
+    "The same token reads Instagram media fine"
+  ],
+  "cause": "Page edges need a Page access token. A system user token is not one, and the error looks like expiry though the token is valid.",
+  "fix": "Exchange the system user token for the Page token and use that for Page calls.",
+  "apply": "GET /{page-id}?fields=access_token with the system user token, then call Page edges with the returned access_token",
+  "affected": "Graph API, September 2026",
+  "sources": [],
+  "tags": [
+    "tokens",
+    "misleading-error"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

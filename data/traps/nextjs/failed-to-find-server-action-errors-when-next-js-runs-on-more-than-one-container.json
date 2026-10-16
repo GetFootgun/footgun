@@ -1,0 +1,30 @@
+{
+  "id": "fg-0300",
+  "provider": "nextjs",
+  "surface_type": "infra",
+  "surface_name": "Server Actions on multiple instances",
+  "title": "'Failed to find Server Action' errors when Next.js runs on more than one container or after a deploy",
+  "symptoms": [
+    "Error: Failed to find Server Action \"7f3a...\". This request might be from an older or newer deployment.",
+    "Form submissions fail intermittently behind a load balancer",
+    "Users with a tab open from before a deploy get errors on every action"
+  ],
+  "cause": "Each build generates its own action IDs and a random key for encrypting action closures. Instances built separately, or old browser tabs against a new build, cannot resolve or decrypt each other's actions.",
+  "fix": "Build once and run the same artifact everywhere, set the same NEXT_SERVER_ACTIONS_ENCRYPTION_KEY at build time on every build, and set deploymentId so stale clients do a hard reload.",
+  "apply": "# generate once, store as a secret\nopenssl rand -base64 32\nNEXT_SERVER_ACTIONS_ENCRYPTION_KEY=<that value> next build\n\n// next.config.ts\nexport default { deploymentId: process.env.DEPLOYMENT_VERSION }",
+  "affected": "Self-hosted Next.js 14 to 16 with multiple instances or rolling deploys",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/self-hosting",
+    "https://nextjs.org/docs/messages/failed-to-find-server-action",
+    "https://github.com/vercel/next.js/issues/69756"
+  ],
+  "tags": [
+    "server-actions",
+    "self-hosting",
+    "deploy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

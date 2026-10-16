@@ -1,0 +1,28 @@
+{
+  "id": "fg-0219",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Workers CPU time limit, Free plan",
+  "title": "Worker on the Free plan fails with Error 1102 'Worker exceeded resource limits' under normal load",
+  "symptoms": [
+    "Error 1102: Worker exceeded resource limits",
+    "Requests that parse large JSON, hash passwords, or render HTML fail intermittently",
+    "The same code passes in wrangler dev"
+  ],
+  "cause": "Workers Free allows 10 ms of CPU time per HTTP request, while Paid defaults to 30 seconds and can be raised to 5 minutes. Waiting on fetch does not count, but parsing, crypto, and rendering do, and local dev does not enforce the cap.",
+  "fix": "Move the Worker to Workers Paid and set a CPU limit, or move heavy work out of the request path.",
+  "apply": "# wrangler.toml (Workers Paid)\n[limits]\ncpu_ms = 30000",
+  "affected": "Cloudflare Workers Free plan, as of October 2026",
+  "sources": [
+    "https://developers.cloudflare.com/workers/platform/limits/"
+  ],
+  "tags": [
+    "workers",
+    "limits",
+    "cpu"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

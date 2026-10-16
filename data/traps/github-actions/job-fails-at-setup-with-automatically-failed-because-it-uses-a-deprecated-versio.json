@@ -1,0 +1,29 @@
+{
+  "id": "fg-0228",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "Artifact actions v3 retirement",
+  "title": "Job fails at setup with 'automatically failed because it uses a deprecated version of actions/upload-artifact: v3'",
+  "symptoms": [
+    "Error: This request has been automatically failed because it uses a deprecated version of `actions/upload-artifact: v3`.",
+    "No workflow file references v3, yet the job fails",
+    "GitHub Pages deploys fail through an old upload-pages-artifact version"
+  ],
+  "cause": "v1, v2, and v3 of the artifact actions are retired on github.com, and composite actions such as older upload-pages-artifact releases still call v3 internally.",
+  "fix": "Move every artifact action, and actions that wrap them, to current majors.",
+  "apply": "- uses: actions/upload-artifact@v4\n- uses: actions/download-artifact@v4\n- uses: actions/upload-pages-artifact@v5\n- uses: actions/deploy-pages@v4",
+  "affected": "actions/upload-artifact and download-artifact v1 to v3 on github.com (v3 deprecation from 2024-11-30); GHES still uses v3",
+  "sources": [
+    "https://github.com/actions/upload-artifact/blob/main/README.md",
+    "https://github.com/actions/deploy-pages/issues/391"
+  ],
+  "tags": [
+    "artifacts",
+    "deprecation",
+    "pages"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

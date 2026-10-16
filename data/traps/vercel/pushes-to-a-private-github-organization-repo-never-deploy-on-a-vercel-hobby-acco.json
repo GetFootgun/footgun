@@ -1,0 +1,29 @@
+{
+  "id": "fg-0243",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Git deployments on Hobby",
+  "title": "Pushes to a private GitHub organization repo never deploy on a Vercel Hobby account",
+  "symptoms": [
+    "No deployment is created for commits by teammates or bots",
+    "The commit status on GitHub suggests transferring the project to a Pro team",
+    "Team access required to deploy."
+  ],
+  "cause": "Hobby teams cannot deploy private repositories owned by a GitHub organization, GitLab group, or Bitbucket workspace, and only the Hobby owner's own commits deploy. On Pro, the commit author must be a team member linked through Login Connections.",
+  "fix": "Move the project to a Pro team and add the committers, make the repo personal or public, or deploy from CI with the Vercel CLI and a token.",
+  "apply": "vercel pull --yes --environment=production --token=$VERCEL_TOKEN\nvercel build --prod --token=$VERCEL_TOKEN\nvercel deploy --prebuilt --prod --token=$VERCEL_TOKEN",
+  "affected": "Vercel Hobby teams connected to organization owned private repos; Pro teams with non member commit authors; as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/git",
+    "https://vercel.com/docs/errors/error-list"
+  ],
+  "tags": [
+    "git",
+    "hobby",
+    "deployments"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

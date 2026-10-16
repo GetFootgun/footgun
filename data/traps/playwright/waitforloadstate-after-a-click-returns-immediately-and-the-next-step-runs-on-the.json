@@ -1,0 +1,27 @@
+{
+  "id": "fg-0322",
+  "provider": "playwright",
+  "surface_type": "sdk",
+  "surface_name": "waitForLoadState after a click",
+  "title": "waitForLoadState() after a click returns immediately and the next step runs on the old page",
+  "symptoms": [
+    "Assertions after click() plus waitForLoadState() read the previous page",
+    "Flaky failures that disappear when a fixed wait is added"
+  ],
+  "cause": "waitForLoadState checks the document that is current when it is called. If the navigation has not committed yet, the old page already counts as loaded, so it resolves at once.",
+  "fix": "Wait for the destination itself with waitForURL or a web-first assertion on the new page.",
+  "apply": "await page.getByRole('button', { name: 'Save' }).click()\nawait page.waitForURL('**/orders/*')\nawait expect(page.getByText('Order saved')).toBeVisible()",
+  "affected": "All Playwright versions",
+  "sources": [
+    "https://playwright.dev/docs/api/class-page"
+  ],
+  "tags": [
+    "waiting",
+    "navigation",
+    "flaky"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

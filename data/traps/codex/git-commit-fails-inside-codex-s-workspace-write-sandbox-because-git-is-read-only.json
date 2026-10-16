@@ -1,0 +1,27 @@
+{
+  "id": "fg-0505",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Sandbox protected paths",
+  "title": "git commit fails inside Codex's workspace-write sandbox because .git is read-only",
+  "symptoms": [
+    "git commit, git checkout, or git stash fail with a permission error inside Codex",
+    "Git writes worked on Linux before a Codex update and fail now"
+  ],
+  "cause": "workspace-write keeps .git, a worktree's resolved gitdir, .agents, .codex, and .aws read-only even inside writable roots. Linux was brought in line with macOS, so git metadata writes that once worked there are now blocked.",
+  "fix": "Let Codex edit files and run git yourself, approve an escalation for the git command, or use danger-full-access only in an isolated environment.",
+  "apply": "codex --sandbox workspace-write --ask-for-approval on-request   # approve the escalated git command when asked",
+  "affected": "Codex CLI workspace-write sandbox on macOS and Linux, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-approvals-security",
+    "https://github.com/openai/codex/issues/15505"
+  ],
+  "tags": [
+    "sandbox",
+    "git"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

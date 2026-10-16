@@ -1,0 +1,29 @@
+{
+  "id": "fg-0241",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Node.js version for builds and functions",
+  "title": "New Vercel deployments fail after October 1, 2026 because the project is still on Node.js 20",
+  "symptoms": [
+    "Every new deployment errors while the project Node.js Version is still 20.x",
+    "Node.js 20 is no longer selectable in Project Settings",
+    "Existing deployments keep serving while every new deploy fails"
+  ],
+  "cause": "Vercel deprecated Node.js 20 for builds and functions on October 1, 2026, leaving 24.x (default) and 22.x. An engines.node value in package.json overrides the dashboard choice, so a pinned 20.x keeps failing after the setting is changed.",
+  "fix": "Set engines.node to 24.x or 22.x and update the project setting, then redeploy. Use vercel project ls --update-required to find affected projects.",
+  "apply": "// package.json\n{ \"engines\": { \"node\": \"24.x\" } }\n\nvercel project ls --update-required",
+  "affected": "Vercel projects on Node.js 20.x, new deployments from 2026-10-01",
+  "sources": [
+    "https://vercel.com/changelog/node-js-20-is-being-deprecated",
+    "https://vercel.com/docs/functions/runtimes/node-js/node-js-versions"
+  ],
+  "tags": [
+    "node",
+    "deprecation",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

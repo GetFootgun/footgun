@@ -1,0 +1,23 @@
+{
+  "id": "fg-0121",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, search",
+  "title": "Bigin search rejects the contains operator",
+  "symptoms": [
+    "Search with contains returns an error",
+    "string::contains is invalid on Last_Name"
+  ],
+  "cause": "Bigin record search accepts equals and starts_with on these fields, not contains.",
+  "fix": "Use equals or starts_with.",
+  "apply": "GET /bigin/v2/Contacts/search?criteria=(Last_Name:starts_with:Smi)",
+  "affected": "Bigin API v2 and Make Bigin search modules, July 2026",
+  "sources": [],
+  "tags": [
+    "search"
+  ],
+  "verified_on": "2026-07-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

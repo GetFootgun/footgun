@@ -1,0 +1,28 @@
+{
+  "id": "fg-0468",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, thinking parameter",
+  "title": "400 \"thinking.type.disabled\" is not supported when turning thinking off on Opus 5.5 or Sonnet 5.5",
+  "symptoms": [
+    "\"thinking.type.disabled\" is not supported for this model. Use \"thinking.type.adaptive\" and \"output_config.effort\" to control thinking behavior.",
+    "To turn thinking off on this model, send \"thinking\": {\"type\": \"between_tools\"} instead of {\"type\": \"disabled\"}. (Sonnet 5.5)",
+    "output_config.effort 'xhigh' is not supported when thinking is disabled on this model. Use effort 'high' or below, or enable thinking."
+  ],
+  "cause": "Opus 5.5, Fable 5 and 5.1, and Mythos 5 and 5.1 have thinking always on and reject type disabled at any effort. Sonnet 5.5 rejects disabled too and takes between_tools instead, while Opus 5 and Haiku 5.5 accept disabled only at effort high or below.",
+  "fix": "On always-on models omit thinking and lower output_config.effort. On Sonnet 5.5 send between_tools at effort high or below. Check the per-model table before sending disabled.",
+  "apply": "// Opus 5.5, Fable 5 and 5.1, Mythos 5 and 5.1: omit thinking entirely\noutput_config: { effort: \"low\" }\n// Sonnet 5.5: lowest thinking setting\nthinking: { type: \"between_tools\" }, output_config: { effort: \"high\" }",
+  "affected": "Claude Opus 5.5, Fable 5 and 5.1, Mythos 5 and 5.1, Sonnet 5.5 at any effort; Opus 5 and Haiku 5.5 at effort xhigh or max; as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting"
+  ],
+  "tags": [
+    "thinking",
+    "migration",
+    "400"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

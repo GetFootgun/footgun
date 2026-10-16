@@ -1,0 +1,31 @@
+{
+  "id": "fg-0451",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Interaction response window",
+  "title": "Discord slash command shows The application did not respond and the bot logs Unknown interaction",
+  "symptoms": [
+    "The application did not respond",
+    "DiscordAPIError[10062]: Unknown interaction",
+    "404 Unknown interaction from discord.py interaction.response.send_message"
+  ],
+  "cause": "The first response to an interaction must reach Discord within 3 seconds or the interaction token stops working. Any database or HTTP call before replying can push it past the window.",
+  "fix": "Defer as the very first awaited call, do the work, then edit the reply. The token stays valid for 15 minutes for edits and followups.",
+  "apply": "await interaction.deferReply();\nconst result = await slowWork();\nawait interaction.editReply(result);",
+  "affected": "Discord interactions, all libraries, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/interactions/receiving-and-responding",
+    "https://docs.discord.com/developers/topics/opcodes-and-status-codes",
+    "https://github.com/discordjs/discord.js/issues/7005",
+    "https://github.com/Rapptz/discord.py/issues/9331"
+  ],
+  "tags": [
+    "interactions",
+    "timeouts",
+    "slash-commands"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

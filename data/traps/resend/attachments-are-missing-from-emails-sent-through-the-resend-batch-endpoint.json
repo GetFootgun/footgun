@@ -1,0 +1,30 @@
+{
+  "id": "fg-0466",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "Batch emails endpoint",
+  "title": "Attachments are missing from emails sent through the Resend batch endpoint",
+  "symptoms": [
+    "Emails from resend.batch.send arrive without their attachments",
+    "The same payload sent through resend.emails.send arrives with the attachment",
+    "Type error on attachments in batch items after upgrading to resend 6.9.3"
+  ],
+  "cause": "The batch endpoint does not support the attachments field, and older SDK types accepted it anyway, so the files were dropped without an error. resend-node 6.9.3 removed attachments and scheduledAt from the batch item type.",
+  "fix": "Send any email that carries attachments through the single send endpoint, and use batch only for emails without them, at most 100 per call.",
+  "apply": "for (const e of emails.filter(e => e.attachments?.length)) await resend.emails.send(e); await resend.batch.send(emails.filter(e => !e.attachments?.length).slice(0, 100));",
+  "affected": "Resend POST /emails/batch as of 2026-10; resend-node below 6.9.3 accepts the field in its types",
+  "sources": [
+    "https://resend.com/docs/api-reference/emails/send-batch-emails",
+    "https://github.com/resend/resend-node/issues/409",
+    "https://github.com/resend/resend-node/pull/801"
+  ],
+  "tags": [
+    "batch",
+    "attachments",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

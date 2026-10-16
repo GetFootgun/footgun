@@ -1,0 +1,27 @@
+{
+  "id": "fg-0334",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Admin API version lifecycle",
+  "title": "Shopify responses change shape without a deploy because the pinned API version was retired and Shopify fell forward",
+  "symptoms": [
+    "X-Shopify-API-Version response header shows a newer version than the one in the request URL",
+    "Fields or arguments that worked last quarter now return errors or null"
+  ],
+  "cause": "Each quarterly version stays accessible for about 12 months. After that, requests for it are served by the oldest version still supported, so breaking changes arrive on their own schedule.",
+  "fix": "Read the X-Shopify-API-Version header on responses and webhooks, alert when it differs from what you pinned, and move the pin plus the shopify.app.toml webhooks api_version forward every quarter.",
+  "apply": "# shopify.app.toml\n[webhooks]\napi_version = \"2026-10\"\n\n// client\nconst res = await fetch(`https://${shop}/admin/api/2026-10/graphql.json`, opts)\nif (res.headers.get('x-shopify-api-version') !== '2026-10') alertVersionDrift()",
+  "affected": "All versioned Shopify APIs and webhooks; 2025-10 stops being accessible on 2026-10-16 15:00 UTC, 2026-01 on 2027-01-16",
+  "sources": [
+    "https://shopify.dev/docs/api/usage/versioning"
+  ],
+  "tags": [
+    "versioning",
+    "deprecation",
+    "admin-api"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

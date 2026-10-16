@@ -1,0 +1,28 @@
+{
+  "id": "fg-0446",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Ephemeral deferred responses",
+  "title": "Discord followup sent as ephemeral is visible to everyone after a deferred reply",
+  "symptoms": [
+    "Reply meant only for the user shows up publicly in the channel",
+    "flags: 64 on the followup has no effect",
+    "Ephemeral works without deferring and breaks once deferReply is added"
+  ],
+  "cause": "When a response is deferred, the deferral decides whether the final message is ephemeral. A followup that fills in the loading message ignores the ephemeral flag.",
+  "fix": "Set the ephemeral flag on the deferral itself.",
+  "apply": "await interaction.deferReply({ flags: MessageFlags.Ephemeral });\nawait interaction.editReply(\"Only you can see this\");",
+  "affected": "Discord interactions, DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE responses, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/interactions/receiving-and-responding"
+  ],
+  "tags": [
+    "interactions",
+    "ephemeral",
+    "privacy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

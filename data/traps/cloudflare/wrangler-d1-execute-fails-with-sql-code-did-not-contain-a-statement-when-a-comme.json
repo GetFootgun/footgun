@@ -1,0 +1,29 @@
+{
+  "id": "fg-0221",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Wrangler D1 execute and migrations",
+  "title": "wrangler d1 execute fails with 'SQL code did not contain a statement' when a comment holds a semicolon",
+  "symptoms": [
+    "SQL code did not contain a statement",
+    "Migration file runs fine in sqlite3 locally",
+    "Removing the trailing commented SQL makes it pass"
+  ],
+  "cause": "Older Wrangler split SQL files on every semicolon, including ones inside comments, which produced an empty statement. Wrangler 3.109.3 made the splitter skip comments.",
+  "fix": "Upgrade Wrangler to 3.109.3 or later, or remove semicolons from comments in migration files.",
+  "apply": "npm i -D wrangler@latest\nnpx wrangler d1 migrations apply DB --remote",
+  "affected": "Wrangler before 3.109.3 (fix merged 2025-02-20)",
+  "sources": [
+    "https://github.com/cloudflare/workers-sdk/issues/3892",
+    "https://github.com/cloudflare/workers-sdk/pull/8175"
+  ],
+  "tags": [
+    "d1",
+    "wrangler",
+    "migrations"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

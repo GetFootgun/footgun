@@ -1,0 +1,28 @@
+{
+  "id": "fg-0167",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Webhook security, X-Twilio-Signature",
+  "title": "validateRequest returns false behind a proxy, tunnel or load balancer although the Auth Token is right",
+  "symptoms": [
+    "Signature check passes locally but fails for every request in production",
+    "Webhook starts returning 403 after moving behind TLS termination",
+    "JSON webhooks never validate when passed as parameters"
+  ],
+  "cause": "Twilio signs the exact public URL it called, including scheme, port and query string, plus the sorted POST parameters. An app that rebuilds the URL from its internal host or http scheme computes a different string; voice callbacks over HTTPS also drop the port, and JSON bodies are covered by a bodySHA256 query parameter instead.",
+  "fix": "Build the validation URL from your configured public base URL, not from the incoming Host header. For application/json requests use validateRequestWithBody with the raw body.",
+  "apply": "const url = 'https://api.example.com' + req.originalUrl; // public URL Twilio called\nconst ok = twilio.validateRequest(process.env.TWILIO_AUTH_TOKEN, req.header('X-Twilio-Signature'), url, req.body);\n// JSON body: twilio.validateRequestWithBody(token, signature, url, rawBodyString)",
+  "affected": "Twilio webhook signature validation for SMS, Voice and Conversations, checked October 2026",
+  "sources": [
+    "https://www.twilio.com/docs/usage/security"
+  ],
+  "tags": [
+    "webhooks",
+    "signature",
+    "proxy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

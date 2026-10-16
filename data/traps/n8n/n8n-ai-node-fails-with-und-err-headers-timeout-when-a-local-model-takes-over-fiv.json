@@ -1,0 +1,29 @@
+{
+  "id": "fg-0341",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "AI and LLM nodes",
+  "title": "n8n AI node fails with UND_ERR_HEADERS_TIMEOUT when a local model takes over five minutes",
+  "symptoms": [
+    "{ \"name\": \"HeadersTimeoutError\", \"code\": \"UND_ERR_HEADERS_TIMEOUT\" }",
+    "Ollama or local LLM calls die at exactly 5 minutes",
+    "Raising the node timeout option changes nothing"
+  ],
+  "cause": "Before 2.5.0 the HTTP client used by AI nodes had a fixed 300 second header timeout. From 2.5.0 the limit comes from N8N_AI_TIMEOUT_MAX, which defaults to one hour.",
+  "fix": "Upgrade to 2.5.0 or later and set N8N_AI_TIMEOUT_MAX in milliseconds if you need more than one hour.",
+  "apply": "N8N_AI_TIMEOUT_MAX=7200000",
+  "affected": "n8n before 2.5.0 with AI nodes against slow or local models",
+  "sources": [
+    "https://github.com/n8n-io/n8n/issues/11886",
+    "https://docs.n8n.io/hosting/configuration/environment-variables/executions/"
+  ],
+  "tags": [
+    "ai",
+    "timeouts",
+    "llm"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

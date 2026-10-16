@@ -1,0 +1,28 @@
+{
+  "id": "fg-0361",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "Events API delivery",
+  "title": "Slack bot posts the same reply two or three times for one message",
+  "symptoms": [
+    "Duplicate replies to a single user message",
+    "Requests carry X-Slack-Retry-Num 1, 2 or 3",
+    "X-Slack-Retry-Reason: http_timeout"
+  ],
+  "cause": "Slack treats any event request not answered with a 2xx within three seconds as failed and retries up to three times. A handler that does slow work before responding gets each retry and acts again.",
+  "fix": "Return 200 at once and do the work afterwards, dedupe on event_id, and ignore or answer retries. Send x-slack-no-retry: 1 on a non-200 if you never want a redelivery.",
+  "apply": "if req.headers.get(\"X-Slack-Retry-Num\"):\n    return Response(status=200)\nif seen(event[\"event_id\"]):\n    return Response(status=200)",
+  "affected": "Slack Events API over HTTP, all versions as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/apis/events-api/"
+  ],
+  "tags": [
+    "events",
+    "retries",
+    "idempotency"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

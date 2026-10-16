@@ -1,0 +1,31 @@
+{
+  "id": "fg-0151",
+  "provider": "stripe",
+  "surface_type": "sdk",
+  "surface_name": "stripe-node TypeScript types, CommonJS",
+  "title": "Stripe.Customer and other namespace types vanish after upgrading stripe-node to v22 in a CommonJS project",
+  "symptoms": [
+    "TS2694: Namespace 'StripeConstructor' has no exported member 'Customer'",
+    "TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type",
+    "Stripe.Checkout.SessionCreateParams is no longer exported"
+  ],
+  "cause": "v22 moved the types inline with the code and turned the default export into a real ES class, which broke the CommonJS companion namespace. Patches landed in 22.0.1 for the constructor and 22.3.0 for nested type access.",
+  "fix": "Upgrade to 22.3.0 or later. Switching the project to ESM also restores the types.",
+  "apply": "npm install stripe@^22.3.0",
+  "affected": "stripe-node 22.0.0 to 22.2.x with TypeScript module commonjs; fixed in 22.3.0, 2026-06-24",
+  "sources": [
+    "https://github.com/stripe/stripe-node/issues/2683",
+    "https://github.com/stripe/stripe-node/issues/2660",
+    "https://github.com/stripe/stripe-node/issues/2658",
+    "https://github.com/stripe/stripe-node/blob/master/CHANGELOG.md"
+  ],
+  "tags": [
+    "typescript",
+    "commonjs",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

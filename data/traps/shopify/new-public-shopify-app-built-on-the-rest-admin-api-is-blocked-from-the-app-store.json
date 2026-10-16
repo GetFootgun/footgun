@@ -1,0 +1,28 @@
+{
+  "id": "fg-0330",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "REST Admin API legacy status",
+  "title": "New public Shopify app built on the REST Admin API is blocked from the App Store",
+  "symptoms": [
+    "A new public app built on REST Admin calls cannot pass App Store submission",
+    "Newer platform features exist only in GraphQL with no REST endpoint",
+    "Tutorials and older SDK examples use REST resources that the reference marks legacy"
+  ],
+  "cause": "Shopify made the REST Admin API legacy on 2024-10-01 and since 2025-04-01 requires new public apps to use only the GraphQL Admin API.",
+  "fix": "Build new public apps on the GraphQL Admin API from the start and treat REST code samples as legacy.",
+  "apply": "const client = new shopify.clients.Graphql({ session })\nconst res = await client.request(`query { shop { name } }`)",
+  "affected": "New public apps submitted on or after 2025-04-01; existing REST apps keep working but get no new features",
+  "sources": [
+    "https://shopify.dev/docs/api/admin-rest"
+  ],
+  "tags": [
+    "rest",
+    "graphql",
+    "app-review"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

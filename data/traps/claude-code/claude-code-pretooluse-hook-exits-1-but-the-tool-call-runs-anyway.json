@@ -1,0 +1,28 @@
+{
+  "id": "fg-0483",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Hooks, exit codes",
+  "title": "Claude Code PreToolUse hook exits 1 but the tool call runs anyway",
+  "symptoms": [
+    "PreToolUse:Bash hook error notice with 'Failed with non-blocking status code:' and the command still runs",
+    "A mistyped hook path shows '/bin/sh: ... No such file or directory' and the action goes ahead",
+    "A policy hook that prints JSON with a typo lets the action through"
+  ],
+  "cause": "Only exit code 2 blocks. Exit 1, any other code, a script that cannot start, or stdout JSON that fails to parse is a non-blocking error, so the action proceeds.",
+  "fix": "Exit 2 with the reason on stderr to block, or return a JSON decision. On Claude Code v2.1.295 or later, set onFailure to block on policy hooks so a broken or missing script fails closed; older versions ignore the field.",
+  "apply": "# hook script\necho \"Blocked: force push is not allowed\" >&2\nexit 2\n# settings.json hook entry\n{ \"type\": \"command\", \"command\": \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/policy.sh\", \"onFailure\": \"block\" }",
+  "affected": "Claude Code hooks, as of 2026-10; onFailure requires v2.1.295 or later",
+  "sources": [
+    "https://code.claude.com/docs/en/hooks"
+  ],
+  "tags": [
+    "hooks",
+    "exit-codes",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

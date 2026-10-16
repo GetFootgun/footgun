@@ -1,0 +1,26 @@
+{
+  "id": "fg-0504",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "MCP server startup",
+  "title": "Codex starts the first turn without tools from a slow MCP server",
+  "symptoms": [
+    "Tools from an MCP server are missing on the first prompt but appear later",
+    "An MCP server launched through npx or docker times out on first start"
+  ],
+  "cause": "When building the initial tool catalog, Codex waits only mcp_optional_startup_grace_ms, 1000 ms by default, for optional servers, and each server gets startup_timeout_sec, 10 seconds by default.",
+  "fix": "Raise startup_timeout_sec for slow servers, mark servers the task depends on as required, or set the grace to 0 to wait for each server's own timeout.",
+  "apply": "# ~/.codex/config.toml\nmcp_optional_startup_grace_ms = 0\n[mcp_servers.docs]\ncommand = \"npx\"\nargs = [\"-y\", \"docs-mcp\"]\nstartup_timeout_sec = 30\nrequired = true",
+  "affected": "Codex CLI, IDE extension, and ChatGPT desktop app, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/extend/mcp"
+  ],
+  "tags": [
+    "mcp",
+    "timeout"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

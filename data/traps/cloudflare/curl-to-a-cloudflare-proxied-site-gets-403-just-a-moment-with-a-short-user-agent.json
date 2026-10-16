@@ -1,0 +1,24 @@
+{
+  "id": "fg-0012",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Bot protection, Managed Challenge",
+  "title": "curl to a Cloudflare-proxied site gets 403 'Just a moment...' with a short User-Agent",
+  "symptoms": [
+    "HTTP 403 with a Just a moment... page",
+    "cf-mitigated: challenge header"
+  ],
+  "cause": "Requests with a bare 'Mozilla/5.0' User-Agent or a default library agent get a Managed Challenge or a browser signature block. It looks like the page is down when it is not.",
+  "fix": "Send a full, realistic browser User-Agent when testing or scripting against the site. Never conclude a URL is 404 from a 403. Note: scripts calling any Cloudflare-fronted API, not only zones on the plan named below, can instead get error code: 1010 (a browser signature block) for a default library User-Agent; the same fix applies.",
+  "apply": "curl -A \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\" https://example.com/",
+  "affected": "Cloudflare Pro zone, August and September 2026",
+  "sources": [],
+  "tags": [
+    "waf",
+    "testing"
+  ],
+  "verified_on": "2026-09-22",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

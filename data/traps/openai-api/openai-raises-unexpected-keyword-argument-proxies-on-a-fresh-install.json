@@ -1,0 +1,28 @@
+{
+  "id": "fg-0139",
+  "provider": "openai-api",
+  "surface_type": "sdk",
+  "surface_name": "openai-python HTTP client",
+  "title": "OpenAI() raises \"unexpected keyword argument 'proxies'\" on a fresh install",
+  "symptoms": [
+    "TypeError: Client.__init__() got an unexpected keyword argument 'proxies'",
+    "TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'"
+  ],
+  "cause": "httpx 0.28.0 removed the proxies argument that openai-python passed to it until 1.55.3. Pinned old SDK versions pull the newest httpx and fail at client creation.",
+  "fix": "Upgrade openai to 1.55.3 or later, or pin httpx below 0.28.",
+  "apply": "pip install \"openai>=1.55.3\"  # or: pip install \"httpx<0.28\"",
+  "affected": "openai-python earlier than 1.55.3 with httpx 0.28.0 or later, since 2024-11-28",
+  "sources": [
+    "https://github.com/openai/openai-python/issues/1902",
+    "https://github.com/openai/openai-python/releases/tag/v1.55.3"
+  ],
+  "tags": [
+    "python",
+    "httpx",
+    "dependencies"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

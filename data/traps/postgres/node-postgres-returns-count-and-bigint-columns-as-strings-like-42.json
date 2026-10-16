@@ -1,0 +1,28 @@
+{
+  "id": "fg-0272",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "node-postgres (pg) type parsing",
+  "title": "node-postgres returns COUNT(*) and bigint columns as strings like '42'",
+  "symptoms": [
+    "typeof rows[0].count is 'string'",
+    "Totals concatenate: '1' + 1 gives '11'",
+    "NUMERIC columns also come back as strings"
+  ],
+  "cause": "pg leaves int8 (bigint, which is also the result type of count) and numeric as strings because their values can exceed the safe JavaScript number range. Maintainers keep this default for backward compatibility.",
+  "fix": "Cast in SQL when the value is known to be small, or register a parser for type 20 (int8) if every value stays below 2^53.",
+  "apply": "import pg from 'pg'\npg.types.setTypeParser(20, (v) => parseInt(v, 10)) // int8\n// or per query: SELECT count(*)::int AS count FROM orders",
+  "affected": "pg (node-postgres) 8.x default parsers, as of October 2026",
+  "sources": [
+    "https://github.com/brianc/node-postgres/issues/2398"
+  ],
+  "tags": [
+    "node-postgres",
+    "bigint",
+    "types"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

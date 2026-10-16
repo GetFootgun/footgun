@@ -1,0 +1,24 @@
+{
+  "id": "fg-0084",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Restricted API keys",
+  "title": "Twilio restricted API key fails with error 8021 although Read is granted",
+  "symptoms": [
+    "Error 8021",
+    "Listing messages fails with a key that has Read"
+  ],
+  "cause": "Restricted keys separate List from Read. Listing resources needs the List permission.",
+  "fix": "Tick List as well as Read for each resource the key must enumerate.",
+  "apply": "https://console.twilio.com/us1/account/keys-credentials/api-keys/<key SID>: tick List next to Read for Messages, then Save",
+  "affected": "Twilio restricted API keys, October 2026",
+  "sources": [],
+  "tags": [
+    "permissions",
+    "api-keys"
+  ],
+  "verified_on": "2026-10-07",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

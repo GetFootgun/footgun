@@ -1,0 +1,30 @@
+{
+  "id": "fg-0331",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Product and variant creation",
+  "title": "productCreate makes only one default variant, so multi-variant products need a second mutation",
+  "symptoms": [
+    "Created product shows a single Default Title variant",
+    "Code that sent variants inside the productCreate input breaks after moving to a newer API version",
+    "REST POST /products.json is marked deprecated in the reference"
+  ],
+  "cause": "Since the 2024-04 product model, productCreate only makes the product and its first variant. Other variants go through productVariantsBulkCreate or productSet, and REST product create and list calls are deprecated.",
+  "fix": "Create the product with its options, then add variants with productVariantsBulkCreate, or send the full state with productSet for imports.",
+  "apply": "mutation($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {\n  productVariantsBulkCreate(productId: $productId, variants: $variants, strategy: REMOVE_STANDALONE_VARIANT) {\n    productVariants { id }\n    userErrors { field message }\n  }\n}",
+  "affected": "GraphQL Admin API 2024-04 and later; REST product endpoints deprecated from 2024-04",
+  "sources": [
+    "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate",
+    "https://shopify.dev/docs/apps/build/graphql/migrate/new-product-model",
+    "https://shopify.dev/docs/api/admin-rest/latest/resources/product"
+  ],
+  "tags": [
+    "products",
+    "graphql",
+    "migration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

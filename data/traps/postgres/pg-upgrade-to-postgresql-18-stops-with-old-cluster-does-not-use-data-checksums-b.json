@@ -1,0 +1,28 @@
+{
+  "id": "fg-0275",
+  "provider": "postgres",
+  "surface_type": "tool",
+  "surface_name": "pg_upgrade",
+  "title": "pg_upgrade to PostgreSQL 18 stops with 'old cluster does not use data checksums but the new one does'",
+  "symptoms": [
+    "old cluster does not use data checksums but the new one does",
+    "pg_upgrade --check fails right after initdb of the new 18 cluster"
+  ],
+  "cause": "initdb in PostgreSQL 18 enables data checksums by default, and pg_upgrade requires both clusters to match. Clusters created by earlier versions usually have checksums off.",
+  "fix": "Initialize the new cluster with --no-data-checksums and upgrade. If you want checksums, enable them afterwards with pg_checksums while the server is stopped.",
+  "apply": "initdb --no-data-checksums -D /var/lib/postgresql/18/data\npg_upgrade -b /usr/lib/postgresql/17/bin -B /usr/lib/postgresql/18/bin \\\n  -d /var/lib/postgresql/17/main -D /var/lib/postgresql/18/data --check",
+  "affected": "PostgreSQL 18.0 and later (September 2025), upgrading from clusters without checksums",
+  "sources": [
+    "https://www.postgresql.org/docs/release/18.0/",
+    "https://github.com/postgres/postgres/blob/REL_18_STABLE/src/bin/pg_upgrade/controldata.c"
+  ],
+  "tags": [
+    "postgres-18",
+    "pg-upgrade",
+    "checksums"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

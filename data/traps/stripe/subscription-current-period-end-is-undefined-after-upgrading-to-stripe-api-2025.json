@@ -1,0 +1,29 @@
+{
+  "id": "fg-0155",
+  "provider": "stripe",
+  "surface_type": "api",
+  "surface_name": "Subscriptions API, billing period fields",
+  "title": "subscription.current_period_end is undefined after upgrading to Stripe API 2025-03-31.basil",
+  "symptoms": [
+    "subscription.current_period_end and current_period_start come back undefined with a 200 response",
+    "TypeScript: Property 'current_period_end' does not exist on type 'Subscription'",
+    "Renewal dates saved as null or NaN right after an SDK major upgrade"
+  ],
+  "cause": "Basil moved the billing period from the Subscription onto each SubscriptionItem so one subscription can mix monthly and yearly prices. The old top level fields are simply absent, so nothing throws.",
+  "fix": "Read current_period_start and current_period_end from subscription.items.data. If you need one renewal date, take the latest item end.",
+  "apply": "const periodEnd = Math.max(...subscription.items.data.map((item) => item.current_period_end));",
+  "affected": "Stripe API 2025-03-31.basil and later; stripe-node 18+, stripe-python 12+, stripe-php 17+, stripe-go 82+, stripe-java 29+, stripe-dotnet 48+",
+  "sources": [
+    "https://docs.stripe.com/changelog/basil/2025-03-31/deprecate-subscription-current-period-start-and-end.md",
+    "https://github.com/stripe/stripe-node/issues/2353"
+  ],
+  "tags": [
+    "subscriptions",
+    "api-version",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0256",
+  "provider": "docker",
+  "surface_type": "infra",
+  "surface_name": "Container to host networking",
+  "title": "Container cannot reach a service on the host through localhost, and host.docker.internal does not resolve on Linux",
+  "symptoms": [
+    "connect ECONNREFUSED 127.0.0.1:5432 from inside the container",
+    "getaddrinfo ENOTFOUND host.docker.internal on Docker Engine for Linux",
+    "The same Compose file works on Docker Desktop for Mac"
+  ],
+  "cause": "Inside a container, localhost is the container itself. Docker Desktop resolves host.docker.internal on its own, but Docker Engine on Linux only does when you map the name to the special host-gateway value.",
+  "fix": "Map host.docker.internal to host-gateway and make the host service listen on an address the bridge can reach. Between Compose services, connect by service name instead.",
+  "apply": "services:\n  app:\n    extra_hosts:\n      - \"host.docker.internal:host-gateway\"\n# docker run: --add-host host.docker.internal=host-gateway",
+  "affected": "Docker Engine on Linux, as of October 2026; Docker Desktop resolves the name by default",
+  "sources": [
+    "https://docs.docker.com/reference/cli/docker/container/run/",
+    "https://docs.docker.com/desktop/features/networking/networking-how-tos/"
+  ],
+  "tags": [
+    "networking",
+    "linux",
+    "compose"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

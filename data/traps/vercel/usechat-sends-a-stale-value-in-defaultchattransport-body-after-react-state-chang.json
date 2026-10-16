@@ -1,0 +1,31 @@
+{
+  "id": "fg-0246",
+  "provider": "vercel",
+  "surface_type": "sdk",
+  "surface_name": "AI SDK useChat transport",
+  "title": "useChat sends a stale value in DefaultChatTransport body after React state changes",
+  "symptoms": [
+    "Server always receives the first render value from transport body",
+    "Changing a model or agent selector in the UI has no effect on requests",
+    "Passing body as a function still sends the old value"
+  ],
+  "cause": "useChat creates its Chat instance once and kept the transport from the first render, so values captured in transport body never updated. The fix landed in July 2026 (PR 16546).",
+  "fix": "Upgrade @ai-sdk/react to 3.0.223 or later on the ai 6 line, or 4.0.12 or later on the ai 7 line. On ai 5, which has no fix, pass per request data in the sendMessage options instead of the transport.",
+  "apply": "sendMessage({ text: input }, { body: { subagent } });",
+  "affected": "@ai-sdk/react before 3.0.223 (ai 6 line) and before 4.0.12 (ai 7 line); the ai 5 line has no fix",
+  "sources": [
+    "https://github.com/vercel/ai/issues/7819",
+    "https://github.com/vercel/ai/pull/16546",
+    "https://github.com/vercel/ai/blob/main/packages/react/CHANGELOG.md",
+    "https://github.com/vercel/ai/blob/release-v6.0/packages/react/CHANGELOG.md"
+  ],
+  "tags": [
+    "ai-sdk",
+    "react",
+    "usechat"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

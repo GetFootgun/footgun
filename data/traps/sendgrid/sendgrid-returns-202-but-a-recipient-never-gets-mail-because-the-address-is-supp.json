@@ -1,0 +1,27 @@
+{
+  "id": "fg-0421",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Suppressions",
+  "title": "SendGrid returns 202 but a recipient never gets mail because the address is suppressed",
+  "symptoms": [
+    "202 Accepted, then a dropped event instead of delivered",
+    "One user never receives password resets while others do",
+    "Credits consumed for messages that were never delivered"
+  ],
+  "cause": "Addresses on the bounce, invalid, spam report, global unsubscribe, or group unsubscribe lists are dropped after the API accepts the request, and each attempt still uses a credit. Bounces and spam reports keep suppressing until removed.",
+  "fix": "Check the suppression lists for the address, remove it only when the user has fixed or confirmed it, and for required transactional mail set bypass flags narrowly.",
+  "apply": "GET /v3/suppression/bounces/{email}  then  DELETE /v3/suppression/bounces/{email}",
+  "affected": "SendGrid v3 Mail Send and Suppressions API, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/ui/sending-email/index-suppressions"
+  ],
+  "tags": [
+    "silent-failure",
+    "deliverability"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

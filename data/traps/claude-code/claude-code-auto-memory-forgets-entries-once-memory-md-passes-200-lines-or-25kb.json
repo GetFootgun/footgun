@@ -1,0 +1,28 @@
+{
+  "id": "fg-0481",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Auto memory, MEMORY.md index",
+  "title": "Claude Code auto memory forgets entries once MEMORY.md passes 200 lines or 25KB",
+  "symptoms": [
+    "Facts saved to auto memory are unknown in a new session",
+    "Only entries near the top of MEMORY.md are reflected",
+    "After a write, Claude Code tells Claude the memory index is over its read limit"
+  ],
+  "cause": "Only the first 200 lines or 25KB of MEMORY.md, whichever comes first, load at the start of a session; the rest is dropped. Topic files load only when Claude chooses to read them.",
+  "fix": "Keep MEMORY.md as an index with one short line per entry and move detail into topic files the index points to. Merge or delete stale entries.",
+  "apply": "wc -l -c ~/.claude/projects/*/memory/MEMORY.md   # keep each under 200 lines and 25KB",
+  "affected": "Claude Code auto memory, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/memory"
+  ],
+  "tags": [
+    "memory",
+    "context",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,24 @@
+{
+  "id": "fg-0027",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "OAuth 2.0, out-of-band flow",
+  "title": "Old token helper scripts using the out-of-band OAuth flow no longer work",
+  "symptoms": [
+    "Sign-in fails for redirect_uri urn:ietf:wg:oauth:2.0:oob",
+    "Token helper never shows a code to paste"
+  ],
+  "cause": "Google retired the out-of-band (copy and paste code) flow. Scripts written for it fail at the consent step.",
+  "fix": "Use a loopback redirect. Desktop OAuth clients accept http://localhost on any port. Request offline access and force the consent prompt so a refresh token is returned.",
+  "apply": "Auth URL params: redirect_uri=http://localhost:5051&access_type=offline&prompt=consent; run a local HTTP listener on 5051 to capture the code, then exchange it at https://oauth2.googleapis.com/token",
+  "affected": "Google OAuth 2.0, Desktop clients, June 2026",
+  "sources": [],
+  "tags": [
+    "oauth",
+    "deprecated"
+  ],
+  "verified_on": "2026-06-29",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

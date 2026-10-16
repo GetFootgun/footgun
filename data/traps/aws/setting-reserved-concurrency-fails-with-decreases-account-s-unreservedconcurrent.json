@@ -1,0 +1,30 @@
+{
+  "id": "fg-0183",
+  "provider": "aws",
+  "surface_type": "billing",
+  "surface_name": "Lambda account concurrency quota",
+  "title": "Setting reserved concurrency fails with decreases account's UnreservedConcurrentExecution below its minimum value on a new AWS account",
+  "symptoms": [
+    "InvalidParameterValueException: Specified ReservedConcurrentExecutions for function decreases account's UnreservedConcurrentExecution below its minimum value",
+    "CloudFormation, SAM, CDK, or Serverless deploy fails on the reservedConcurrency line",
+    "Service Quotas shows a concurrent executions value far below the documented 1,000"
+  ],
+  "cause": "New accounts start with a reduced Lambda concurrency quota that AWS raises over time with usage. Reserving concurrency for one function must leave a minimum unreserved pool, which a small quota cannot cover.",
+  "fix": "Remove or lower reserved concurrency until the quota is raised, and request a Concurrent executions increase in Service Quotas.",
+  "apply": "aws service-quotas get-service-quota --service-code lambda --quota-code L-B99A9384\naws service-quotas request-service-quota-increase --service-code lambda --quota-code L-B99A9384 --desired-value 1000",
+  "affected": "New AWS accounts with the reduced default Lambda concurrency quota; any Region",
+  "sources": [
+    "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html",
+    "https://docs.aws.amazon.com/lambda/latest/dg/troubleshooting-deployment.html"
+  ],
+  "tags": [
+    "lambda",
+    "concurrency",
+    "quota",
+    "new-account"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

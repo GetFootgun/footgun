@@ -1,0 +1,29 @@
+{
+  "id": "fg-0435",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Webhooks",
+  "title": "Airtable webhook stops sending notifications after seven days with no error",
+  "symptoms": [
+    "Notification pings stop exactly one week after the webhook was created",
+    "expirationTime on the webhook is in the past",
+    "Ping arrives but contains no changed records"
+  ],
+  "cause": "Webhooks created with a personal access token or OAuth expire and turn off after 7 days unless refreshed. Pings carry no data, the changes have to be pulled from the payloads endpoint, and payloads are deleted after one week.",
+  "fix": "Call list webhook payloads on every ping (which also extends the webhook) and run a daily refresh call as a backstop. Store the cursor between calls.",
+  "apply": "curl -X POST \"https://api.airtable.com/v0/bases/$BASE_ID/webhooks/$WEBHOOK_ID/refresh\" -H \"Authorization: Bearer $AIRTABLE_PAT\"",
+  "affected": "Airtable Web API webhooks created with personal access tokens or OAuth, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/create-a-webhook",
+    "https://airtable.com/developers/web/api/list-webhook-payloads"
+  ],
+  "tags": [
+    "webhooks",
+    "expiry",
+    "sync"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

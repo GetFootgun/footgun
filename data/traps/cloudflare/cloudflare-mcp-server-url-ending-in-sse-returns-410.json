@@ -1,0 +1,23 @@
+{
+  "id": "fg-0011",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Cloudflare MCP server endpoint",
+  "title": "Cloudflare MCP server URL ending in /sse returns 410",
+  "symptoms": [
+    "410 Gone from https://observability.mcp.cloudflare.com/sse"
+  ],
+  "cause": "The SSE transport endpoint was retired in favor of streamable HTTP.",
+  "fix": "Point the client at the /mcp endpoint with HTTP transport and authorize again.",
+  "apply": "{\"type\": \"http\", \"url\": \"https://observability.mcp.cloudflare.com/mcp\"}",
+  "affected": "Cloudflare MCP servers, September 2026",
+  "sources": [],
+  "tags": [
+    "mcp",
+    "deprecated"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

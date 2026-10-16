@@ -1,0 +1,30 @@
+{
+  "id": "fg-0310",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "redirect() and notFound() in try/catch",
+  "title": "redirect() in a Server Action does nothing, or logs NEXT_REDIRECT, when it sits inside try/catch",
+  "symptoms": [
+    "Error: NEXT_REDIRECT",
+    "The action finishes but the browser stays on the same page",
+    "The catch block reports a failure for a request that succeeded"
+  ],
+  "cause": "redirect(), permanentRedirect() and notFound() work by throwing a special error that the framework catches higher up. A surrounding try/catch intercepts it first, so the navigation never happens.",
+  "fix": "Call redirect() after the try/catch block, or rethrow framework errors at the top of the catch with unstable_rethrow.",
+  "apply": "import { redirect, unstable_rethrow } from 'next/navigation'\n\ntry {\n  await save(data)\n} catch (err) {\n  unstable_rethrow(err)\n  return { error: 'Save failed' }\n}\nredirect('/done')",
+  "affected": "Next.js App Router 13.4 to 16.4, Server Actions, Route Handlers and Server Components",
+  "sources": [
+    "https://nextjs.org/docs/app/api-reference/functions/redirect",
+    "https://nextjs.org/docs/app/api-reference/functions/unstable_rethrow",
+    "https://github.com/vercel/next.js/issues/55586"
+  ],
+  "tags": [
+    "server-actions",
+    "redirect",
+    "errors"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

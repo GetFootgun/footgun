@@ -1,0 +1,31 @@
+{
+  "id": "fg-0413",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Mail Send sender identity",
+  "title": "SendGrid 403 'The from address does not match a verified Sender Identity'",
+  "symptoms": [
+    "403 Forbidden: The from address does not match a verified Sender Identity",
+    "Twilio error 60222",
+    "Same code works from another SendGrid account",
+    "Sends fail after a plugin or env change swaps the from address"
+  ],
+  "cause": "Every from address must be a verified Single Sender or sit on an authenticated domain in the same account or subuser. Single Sender verification covers one address only and is meant for testing.",
+  "fix": "Authenticate the sending domain (one per domain, subdomains do not inherit from the root) and make the app's from address match it exactly. Log error.response.body to see the field that failed.",
+  "apply": "SendGrid console > Settings > Sender Authentication > Authenticate Your Domain",
+  "affected": "SendGrid v3 Mail Send API and SMTP relay, all plans, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/api/errors/60222",
+    "https://www.twilio.com/docs/sendgrid/for-developers/sending-email/sender-identity",
+    "https://github.com/sendgrid/sendgrid-nodejs/issues/1090"
+  ],
+  "tags": [
+    "email",
+    "sender-identity",
+    "auth"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

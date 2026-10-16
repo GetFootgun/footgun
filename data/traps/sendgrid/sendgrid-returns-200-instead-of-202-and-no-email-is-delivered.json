@@ -1,0 +1,29 @@
+{
+  "id": "fg-0420",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Sandbox mode",
+  "title": "SendGrid returns 200 instead of 202 and no email is delivered",
+  "symptoms": [
+    "Mail Send responds 200 OK, not 202 Accepted",
+    "Nothing in Email Activity and no Event Webhook events",
+    "400 The sandbox mode enable param should be a boolean value"
+  ],
+  "cause": "With mail_settings.sandbox_mode.enable true, SendGrid only validates the request and returns 200, and the message is never delivered. A flag left on from tests, or a string true, causes silent non-delivery or a 400.",
+  "fix": "Drive sandbox mode from an explicit test flag, send a real boolean, and treat a 200 from Mail Send in production as an alarm.",
+  "apply": "mail_settings: { sandbox_mode: { enable: process.env.NODE_ENV === 'test' } }  // expect 202 in production",
+  "affected": "SendGrid v3 Mail Send, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/for-developers/sending-email/sandbox-mode",
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/errors"
+  ],
+  "tags": [
+    "silent-failure",
+    "testing",
+    "email"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

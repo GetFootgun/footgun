@@ -1,0 +1,24 @@
+{
+  "id": "fg-0032",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Bigin by Zoho app modules",
+  "title": "Bigin module fails with 'Provided account is not compatible'",
+  "symptoms": [
+    "Provided account is not compatible",
+    "Scenario create fails with ActionMakeAnAPICall or ActionCreateDeal"
+  ],
+  "cause": "The Bigin by Zoho app has two generations. Connections of type bigin-by-zoho2 only work with the second-generation modules, which have lowercase names such as makeAnAPICall, createAPipeline, searchContacts and updateAPipeline and must be declared as version 2.",
+  "fix": "Use the version 2 module names and set version 2 on each module. Copy module ids from a working scenario's blueprint.",
+  "apply": "{\"module\": \"bigin-by-zoho:makeAnAPICall\", \"version\": 2, \"parameters\": {\"__IMTCONN__\": 1234567}}",
+  "affected": "Make Bigin by Zoho app, July 2026",
+  "sources": [],
+  "tags": [
+    "modules",
+    "versions"
+  ],
+  "verified_on": "2026-07-18",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

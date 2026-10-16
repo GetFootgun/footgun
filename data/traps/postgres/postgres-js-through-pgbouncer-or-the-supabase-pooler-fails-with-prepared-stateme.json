@@ -1,0 +1,29 @@
+{
+  "id": "fg-0277",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "postgres.js prepared statements",
+  "title": "postgres.js through PgBouncer or the Supabase pooler fails with 'prepared statement already exists'",
+  "symptoms": [
+    "PostgresError: prepared statement \"p1\" already exists",
+    "Works on the direct port and fails on the transaction pooler port 6543"
+  ],
+  "cause": "postgres.js prepares static queries by default and expects them to stay on the same server session, but a transaction-mode pooler hands each transaction to any session. Supabase states its transaction mode does not support prepared statements.",
+  "fix": "Set prepare: false when connecting through a transaction-mode pooler, or use PgBouncer 1.21 or later with max_prepared_statements configured.",
+  "apply": "import postgres from 'postgres'\nconst sql = postgres(process.env.DATABASE_URL, { prepare: false })",
+  "affected": "postgres.js 3.x (prepare defaults to true) with Supavisor transaction mode or PgBouncer transaction mode before 1.21, as of October 2026; vendor policy, re-check by 2026-12-15",
+  "sources": [
+    "https://github.com/porsager/postgres/blob/master/README.md",
+    "https://github.com/porsager/postgres/issues/40",
+    "https://supabase.com/docs/guides/database/connecting-to-postgres"
+  ],
+  "tags": [
+    "postgres-js",
+    "pgbouncer",
+    "prepared-statements"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

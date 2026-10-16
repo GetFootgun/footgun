@@ -1,0 +1,28 @@
+{
+  "id": "fg-0527",
+  "provider": "mcp-protocol",
+  "surface_type": "api",
+  "surface_name": "Tool names across MCP and LLM APIs",
+  "title": "MCP tool names with dots are valid in MCP but rejected when forwarded to the Claude API",
+  "symptoms": [
+    "400 invalid_request_error on a tools[].name when a custom client passes MCP tools straight to Claude",
+    "A tool such as admin.tools.list works in one MCP client and breaks a home-grown agent"
+  ],
+  "cause": "The MCP spec lets tool names use letters, digits, underscore, hyphen, and dot, up to 128 characters. The Claude API requires names to match ^[a-zA-Z0-9_-]{1,128}$, so a dot fails.",
+  "fix": "Name tools with letters, digits, underscores, and hyphens only, or map names in the client before sending them to the model and map them back on tool_use.",
+  "apply": "const safe = (n) => n.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 128); // keep a map from safe name to original",
+  "affected": "MCP protocol 2025-11-25 and later tool naming; Claude Messages API tool name pattern, as of 2026-10",
+  "sources": [
+    "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+    "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools"
+  ],
+  "tags": [
+    "tools",
+    "naming",
+    "interop"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

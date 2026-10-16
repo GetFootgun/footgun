@@ -1,0 +1,28 @@
+{
+  "id": "fg-0154",
+  "provider": "stripe",
+  "surface_type": "sdk",
+  "surface_name": "stripe-node NodeHttpClient",
+  "title": "stripe-node calls hang or bypass MSW and Nock 14 mocks in tests",
+  "symptoms": [
+    "Stripe requests hang until timeout when MSW is active",
+    "Requests reach the real Stripe API instead of the mock under nock 14"
+  ],
+  "cause": "The default Node HTTP client defers ending the request in a way that @mswjs/interceptors, which MSW and nock 14 use, did not see. 23.0.0 fixed the client.",
+  "fix": "Upgrade to stripe-node 23, or switch the client to the fetch based HTTP client in tests.",
+  "apply": "const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { httpClient: Stripe.createFetchHttpClient() });",
+  "affected": "stripe-node before 23.0.0 with msw or nock 14; fixed in 23.0.0, 2026-09-30",
+  "sources": [
+    "https://github.com/stripe/stripe-node/issues/2211",
+    "https://github.com/stripe/stripe-node/blob/master/CHANGELOG.md"
+  ],
+  "tags": [
+    "testing",
+    "msw",
+    "mocking"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

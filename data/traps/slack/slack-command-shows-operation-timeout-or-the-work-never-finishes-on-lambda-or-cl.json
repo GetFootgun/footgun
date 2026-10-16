@@ -1,0 +1,30 @@
+{
+  "id": "fg-0363",
+  "provider": "slack",
+  "surface_type": "sdk",
+  "surface_name": "Bolt on AWS Lambda and other FaaS",
+  "title": "Slack command shows operation_timeout or the work never finishes on Lambda or Cloud Functions",
+  "symptoms": [
+    "/command failed with the error \"operation_timeout\"",
+    "ack() runs but the follow-up message is never posted",
+    "Works locally, fails only after deploy to a function runtime"
+  ],
+  "cause": "Bolt acknowledges first and keeps working afterwards, but function runtimes freeze or stop once the HTTP response is sent. Without process_before_response the rest of the listener never runs, and with it the whole listener must still finish within three seconds.",
+  "fix": "Set processBeforeResponse in Bolt JS (or use AwsLambdaReceiver), and in Bolt Python set process_before_response=True and move slow work into lazy listeners.",
+  "apply": "app = App(process_before_response=True)\napp.command(\"/report\")(ack=lambda ack: ack(), lazy=[build_and_post_report])",
+  "affected": "Bolt for JavaScript and Bolt for Python on AWS Lambda, Google Cloud Functions and similar runtimes, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/tools/bolt-python/concepts/lazy-listeners",
+    "https://docs.slack.dev/tools/bolt-js/deployments/aws-lambda",
+    "https://github.com/slackapi/bolt-js/issues/1548"
+  ],
+  "tags": [
+    "faas",
+    "bolt",
+    "timeouts"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

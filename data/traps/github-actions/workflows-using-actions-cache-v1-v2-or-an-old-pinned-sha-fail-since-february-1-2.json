@@ -1,0 +1,29 @@
+{
+  "id": "fg-0237",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "actions/cache version retirement",
+  "title": "Workflows using actions/cache v1, v2, or an old pinned SHA fail since February 1, 2025",
+  "symptoms": [
+    "Error: This request has been automatically failed because it uses a deprecated version of `actions/cache: v4.0.2`.",
+    "The same error for v1 and v2 tags or SHAs older than v4.2.0 or v3.4.0",
+    "Self hosted runners fail to save or restore caches after the service change"
+  ],
+  "cause": "GitHub moved to a new cache service on February 1, 2025 and sunset the legacy one, so older action versions stopped working. Self hosted runners also need runner 2.231.0 or newer.",
+  "fix": "Use actions/cache v4 (or a SHA at v4.2.0 or later) and update self hosted runners.",
+  "apply": "- uses: actions/cache@v4",
+  "affected": "actions/cache below v4.2.0 or v3.4.0, and self hosted runners below 2.231.0, since 2025-02-01",
+  "sources": [
+    "https://github.com/actions/cache/blob/main/README.md",
+    "https://github.com/actions/toolkit/issues/1952"
+  ],
+  "tags": [
+    "cache",
+    "deprecation",
+    "runners"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

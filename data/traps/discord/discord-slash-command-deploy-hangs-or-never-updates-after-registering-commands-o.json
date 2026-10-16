@@ -1,0 +1,30 @@
+{
+  "id": "fg-0450",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Application command registration",
+  "title": "Discord slash command deploy hangs or never updates after registering commands on every bot start",
+  "symptoms": [
+    "Max number of daily application command creates has been reached (200)",
+    "Error code 30034 with HTTP 429",
+    "discord.js deploy script waits silently with no error output"
+  ],
+  "cause": "Each guild allows 200 application command creates per day, and creating commands one by one on every restart burns through it. discord.js queues 429 responses and waits them out by default, so the deploy looks stuck instead of failing.",
+  "fix": "Register commands from a separate deploy script run only when commands change, using the bulk overwrite PUT so unchanged commands do not count as new creates. Note that bulk PUT replaces the whole list.",
+  "apply": "await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands.map(c => c.toJSON()) });",
+  "affected": "Discord application commands API, as of 2026-10; discord.js 14 with @discordjs/rest default rate limit handling",
+  "sources": [
+    "https://docs.discord.com/developers/interactions/application-commands",
+    "https://docs.discord.com/developers/topics/opcodes-and-status-codes",
+    "https://github.com/discordjs/discord.js/issues/10458"
+  ],
+  "tags": [
+    "slash-commands",
+    "rate-limit",
+    "deploy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

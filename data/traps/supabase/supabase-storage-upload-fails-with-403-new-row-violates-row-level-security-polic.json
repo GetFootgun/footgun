@@ -1,0 +1,28 @@
+{
+  "id": "fg-0206",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Storage uploads and storage.objects policies",
+  "title": "Supabase Storage upload fails with 403 new row violates row-level security policy despite an INSERT policy",
+  "symptoms": [
+    "StorageApiError: new row violates row-level security policy (403)",
+    "INSERT policy on storage.objects matches the bucket and auth.uid()",
+    "upsert: true uploads fail even when first uploads work"
+  ],
+  "cause": "The Storage API inserts the object row and reads it back in the same statement, so a missing SELECT policy fails the whole upload. Overwrites with upsert also need an UPDATE policy.",
+  "fix": "Add SELECT (and UPDATE if you overwrite) policies on storage.objects that mirror the INSERT policy's bucket and path checks.",
+  "apply": "create policy \"read own files\" on storage.objects for select to authenticated\n  using (bucket_id = 'avatars' and (storage.foldername(name))[1] = (select auth.uid())::text);\ncreate policy \"update own files\" on storage.objects for update to authenticated\n  using (bucket_id = 'avatars' and (storage.foldername(name))[1] = (select auth.uid())::text);",
+  "affected": "Supabase Storage on all plans with RLS on storage.objects",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/storage-error-403-forbidden-new-row-violates-row-level-security-policy-on-upload-a94384"
+  ],
+  "tags": [
+    "storage",
+    "rls",
+    "uploads"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

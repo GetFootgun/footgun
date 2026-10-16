@@ -1,0 +1,28 @@
+{
+  "id": "fg-0315",
+  "provider": "playwright",
+  "surface_type": "infra",
+  "surface_name": "Chromium in Docker shared memory",
+  "title": "Chromium crashes mid-test in Docker with 'Target page, context or browser has been closed'",
+  "symptoms": [
+    "page.goto: Target page, context or browser has been closed",
+    "Page crashed",
+    "Crashes appear on heavy pages or with several workers, never on a laptop"
+  ],
+  "cause": "Docker gives containers a 64 MB /dev/shm by default, and Chromium uses shared memory for rendering. Without --ipc=host it runs out and the renderer dies.",
+  "fix": "Run the container with --ipc=host and --init, or raise shm size on platforms that do not allow host IPC.",
+  "apply": "docker run --rm --init --ipc=host mcr.microsoft.com/playwright:v1.64.0-noble npx playwright test\n# compose: ipc: host   or   shm_size: 2gb",
+  "affected": "All Playwright versions running Chromium in Docker or Kubernetes",
+  "sources": [
+    "https://playwright.dev/docs/docker"
+  ],
+  "tags": [
+    "docker",
+    "chromium",
+    "crash"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

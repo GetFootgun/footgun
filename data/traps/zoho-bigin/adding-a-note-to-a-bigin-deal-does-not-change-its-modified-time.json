@@ -1,0 +1,23 @@
+{
+  "id": "fg-0108",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, Modified_Time",
+  "title": "Adding a note to a Bigin deal does not change its Modified_Time",
+  "symptoms": [
+    "Deals with fresh notes look untouched when sorted by Modified_Time"
+  ],
+  "cause": "Notes are separate records, and creating one does not update the parent's Modified_Time.",
+  "fix": "Judge activity by the newer of the last edit and the newest note.",
+  "apply": "last_activity = max(deal.Modified_Time, newest Created_Time among notes whose Parent_Id is the deal or its contact)",
+  "affected": "Bigin API v2, September 2026",
+  "sources": [],
+  "tags": [
+    "data-model",
+    "reporting"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

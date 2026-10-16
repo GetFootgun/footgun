@@ -1,0 +1,29 @@
+{
+  "id": "fg-0447",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "GUILD_MEMBERS intent and member cache",
+  "title": "Discord guild member list holds only a handful of users and fetching all members times out",
+  "symptoms": [
+    "guild.members.cache.size is far below the server's member count",
+    "Error [GUILD_MEMBERS_TIMEOUT]: Members didn't arrive in time",
+    "List Guild Members returns an error or nothing for the bot"
+  ],
+  "cause": "Without the privileged GUILD_MEMBERS intent the gateway does not send the member list, so the cache holds only members seen in other events. The List Guild Members endpoint itself requires that intent.",
+  "fix": "Enable Server Members Intent in the portal and request GuildMembers in code before fetching members. Prefer fetching the specific members you need over loading every member.",
+  "apply": "const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });\nconst members = await guild.members.fetch();",
+  "affected": "Discord API v10 gateway; discord.js 12 and later",
+  "sources": [
+    "https://docs.discord.com/developers/events/gateway",
+    "https://github.com/discordjs/discord.js/issues/5123"
+  ],
+  "tags": [
+    "intents",
+    "cache",
+    "members"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,22 @@
+{
+  "id": "fg-0127",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, Notes",
+  "title": "Counting a deal's notes through its related list misses notes attached to the contact",
+  "symptoms": [
+    "Note totals per deal are lower than the notes visible in the app"
+  ],
+  "cause": "Each note attaches to a Parent_Id, which is often the deal's Contact rather than the deal.",
+  "fix": "Read the Notes module itself and match Parent_Id against both deal ids and contact ids.",
+  "apply": "GET /bigin/v2/Notes with fields including Parent_Id, paging per_page=200, then group by Parent_Id.id across deals and their contacts",
+  "affected": "Bigin API v2, September 2026",
+  "sources": [],
+  "tags": [
+    "data-model"
+  ],
+  "verified_on": "2026-09-23",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

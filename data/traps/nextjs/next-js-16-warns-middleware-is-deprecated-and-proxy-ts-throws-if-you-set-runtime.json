@@ -1,0 +1,29 @@
+{
+  "id": "fg-0306",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "middleware renamed to proxy",
+  "title": "Next.js 16 warns middleware is deprecated, and proxy.ts throws if you set runtime = 'edge'",
+  "symptoms": [
+    "The \"middleware\" file convention is deprecated. Please use \"proxy\" instead.",
+    "Build error after renaming to proxy.ts with export const runtime = 'edge' still in the file",
+    "Edge-only code paths in middleware now run on Node.js after the rename"
+  ],
+  "cause": "Next.js 16 renamed middleware to proxy and fixed the proxy runtime to Node.js with no runtime option. Only the deprecated middleware file can still run on the Edge runtime.",
+  "fix": "Rename the file and the exported function to proxy, drop the runtime export, and rename config flags like skipMiddlewareUrlNormalize. Stay on middleware.ts if you truly need Edge.",
+  "apply": "npx @next/codemod@canary upgrade latest\n# or by hand\nmv middleware.ts proxy.ts\n# export function proxy(request: NextRequest) { ... }",
+  "affected": "Next.js 16.0 and later",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/upgrading/version-16",
+    "https://nextjs.org/docs/app/api-reference/file-conventions/proxy"
+  ],
+  "tags": [
+    "proxy",
+    "middleware",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

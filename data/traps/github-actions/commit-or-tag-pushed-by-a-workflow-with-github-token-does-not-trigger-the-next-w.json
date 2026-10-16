@@ -1,0 +1,28 @@
+{
+  "id": "fg-0226",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "GITHUB_TOKEN triggered events",
+  "title": "Commit or tag pushed by a workflow with GITHUB_TOKEN does not trigger the next workflow",
+  "symptoms": [
+    "A release or deploy workflow on push or tags never starts after a bot commit",
+    "A pull request opened by a workflow shows checks waiting for approval",
+    "Manual pushes of the same change trigger normally"
+  ],
+  "cause": "Events caused by GITHUB_TOKEN do not start new workflow runs, to prevent loops. workflow_dispatch and repository_dispatch are the exceptions, and pull requests it opens now create runs that need approval from a user with write access.",
+  "fix": "Push with a GitHub App installation token or a fine grained PAT, or chain the next workflow with workflow_dispatch or workflow_run.",
+  "apply": "- uses: actions/create-github-app-token@v2\n  id: app\n  with:\n    app-id: ${{ vars.APP_ID }}\n    private-key: ${{ secrets.APP_PRIVATE_KEY }}\n- uses: actions/checkout@v5\n  with:\n    token: ${{ steps.app.outputs.token }}",
+  "affected": "GitHub Actions on github.com, as of October 2026",
+  "sources": [
+    "https://docs.github.com/en/actions/concepts/security/github_token"
+  ],
+  "tags": [
+    "permissions",
+    "triggers",
+    "tokens"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,26 @@
+{
+  "id": "fg-0473",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Message Batches API results",
+  "title": "Message Batches results come back in a different order than the requests were submitted",
+  "symptoms": [
+    "Answers are attached to the wrong input rows",
+    "The result for the second request arrives before the first"
+  ],
+  "cause": "Batch results can be returned in any order, not in submission order, so pairing results with inputs by position mislabels them.",
+  "fix": "Give every request a unique custom_id (1 to 64 letters, digits, hyphens, or underscores) and join results on it. Handle each result type: succeeded, errored, canceled, expired.",
+  "apply": "const byId = new Map(inputs.map(i => [i.custom_id, i]));\nfor await (const r of await client.messages.batches.results(batchId)) {\n  const input = byId.get(r.custom_id);\n  if (r.result.type !== 'succeeded') { console.warn(r.custom_id, r.result.type); continue; }\n}",
+  "affected": "Message Batches API, all models, as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+  ],
+  "tags": [
+    "batches",
+    "ordering"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

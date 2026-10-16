@@ -1,0 +1,28 @@
+{
+  "id": "fg-0208",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Proxied DNS ports",
+  "title": "App on port 3000 or 5000 times out once its DNS record is proxied through Cloudflare",
+  "symptoms": [
+    "Connection timed out to https://app.example.com:3000",
+    "Same port works with the record set to DNS only",
+    "Ports 443 and 8443 work while 3000 does not"
+  ],
+  "cause": "Proxied records only accept traffic on a fixed port list: 80, 8080, 8880, 2052, 2082, 2086, 2095 for HTTP and 443, 2053, 2083, 2087, 2096, 8443 for HTTPS. Anything else needs DNS only or Spectrum.",
+  "fix": "Serve the app on a supported port behind a reverse proxy, or set the record to DNS only.",
+  "apply": "server {\n  listen 443 ssl;\n  server_name app.example.com;\n  location / { proxy_pass http://127.0.0.1:3000; }\n}",
+  "affected": "Cloudflare proxied (orange cloud) records on all plans; arbitrary ports need Spectrum (all ports on Enterprise)",
+  "sources": [
+    "https://developers.cloudflare.com/fundamentals/reference/network-ports/"
+  ],
+  "tags": [
+    "dns-proxy",
+    "ports",
+    "timeout"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

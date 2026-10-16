@@ -1,0 +1,26 @@
+{
+  "id": "fg-0502",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Login on headless machines",
+  "title": "codex login on a remote or headless machine never completes the browser sign-in",
+  "symptoms": [
+    "Browser sign-in started over SSH never returns to Codex",
+    "codex login --device-auth is unavailable until device code login is enabled"
+  ],
+  "cause": "The default ChatGPT sign-in opens a browser on the same machine and returns credentials to it. Device code login works remotely but must first be enabled in ChatGPT security settings, or by a workspace admin.",
+  "fix": "Enable device code login and run codex login --device-auth, or sign in on a machine with a browser and copy ~/.codex/auth.json when file credential storage is used. For automation, pipe an API key to codex login --with-api-key.",
+  "apply": "codex login --device-auth",
+  "affected": "Codex CLI, device code authentication in beta, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/auth"
+  ],
+  "tags": [
+    "auth",
+    "headless"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

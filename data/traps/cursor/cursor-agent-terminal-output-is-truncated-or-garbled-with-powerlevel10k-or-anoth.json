@@ -1,0 +1,26 @@
+{
+  "id": "fg-0510",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Agent terminal and shell themes",
+  "title": "Cursor Agent terminal output is truncated or garbled with Powerlevel10k or another heavy prompt",
+  "symptoms": [
+    "Command output looks cut off or misformatted in Agent's terminal",
+    "The same command prints normally in a plain terminal"
+  ],
+  "cause": "Prompt themes such as Powerlevel9k and Powerlevel10k interfere with how Cursor captures inline terminal output for Agent.",
+  "fix": "Skip the theme when the CURSOR_AGENT variable is set, so Agent sessions get a simple prompt.",
+  "apply": "# ~/.zshrc\nif [[ -z \"$CURSOR_AGENT\" ]]; then\n  [[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh\nfi",
+  "affected": "Cursor Agent terminal on zsh and bash, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/agent/tools/terminal"
+  ],
+  "tags": [
+    "terminal",
+    "shell"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

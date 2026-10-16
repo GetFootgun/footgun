@@ -1,0 +1,29 @@
+{
+  "id": "fg-0367",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "views.open trigger_id",
+  "title": "views.open fails with expired_trigger_id when the modal opens after a database call",
+  "symptoms": [
+    "expired_trigger_id from views.open",
+    "Modal opens in local testing but not in production",
+    "Failure only when the handler awaits another API or a cold start first"
+  ],
+  "cause": "A trigger_id expires three seconds after Slack sends it. Any lookup, cold start or queue hop before views.open can push past that window.",
+  "fix": "Call views.open first with a loading view, then fill it in with views.update once the slow data arrives.",
+  "apply": "res = client.views_open(trigger_id=body[\"trigger_id\"], view=loading_view)\ndata = slow_lookup()\nclient.views_update(view_id=res[\"view\"][\"id\"], view=build_view(data))",
+  "affected": "Slack modals opened from shortcuts, slash commands and block actions, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/surfaces/modals",
+    "https://github.com/slackapi/bolt-js/issues/1662"
+  ],
+  "tags": [
+    "modals",
+    "timeouts",
+    "interactivity"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

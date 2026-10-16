@@ -1,0 +1,27 @@
+{
+  "id": "fg-0164",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Programmable Messaging, toll-free verification",
+  "title": "Toll-free number messages to US and Canada fail with error 30032 until verification is approved",
+  "symptoms": [
+    "30032 Toll-Free Number Has Not Been Verified",
+    "Sends from a newly bought toll-free number fail while verification is pending or was rejected"
+  ],
+  "cause": "Since 2024-01-31 Twilio blocks traffic from toll-free numbers whose verification is restricted, pending or rejected. Buying the number does not verify it.",
+  "fix": "Submit Toll-Free Verification in the Console or through the Messaging Compliance API and wait for approval before sending. A rejected request can be edited and resubmitted for seven days.",
+  "apply": "curl -u \"$TWILIO_ACCOUNT_SID:$TWILIO_AUTH_TOKEN\" \"https://messaging.twilio.com/v1/Tollfree/Verifications?PageSize=20\"  # send only when status is TWILIO_APPROVED",
+  "affected": "Toll-free SMS and MMS to US and Canadian mobiles, blocked since 2024-01-31",
+  "sources": [
+    "https://www.twilio.com/docs/api/errors/30032"
+  ],
+  "tags": [
+    "sms",
+    "toll-free",
+    "compliance"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

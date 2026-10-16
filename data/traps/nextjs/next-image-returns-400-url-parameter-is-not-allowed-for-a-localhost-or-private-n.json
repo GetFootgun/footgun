@@ -1,0 +1,29 @@
+{
+  "id": "fg-0305",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "next/image local IP restriction",
+  "title": "next/image returns 400 '\"url\" parameter is not allowed' for a localhost or private-network image source",
+  "symptoms": [
+    "\"url\" parameter is not allowed",
+    "Server log: upstream image ... hostname resolved to private IP",
+    "Images from a local Strapi or WordPress on localhost break after upgrading, though remotePatterns lists the host"
+  ],
+  "cause": "Next.js 16 blocks the image optimizer from fetching any host that resolves to a private IP, as SSRF protection. remotePatterns does not override it, and split-horizon DNS inside a VPC trips it too.",
+  "fix": "Enable images.dangerouslyAllowLocalIP only in development or on a private network you control, or serve the images from a public host.",
+  "apply": "// next.config.ts\nexport default {\n  images: { dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development' },\n}",
+  "affected": "Next.js 16.0 and later (reproduced in 16.4.1 source)",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/upgrading/version-16",
+    "https://github.com/vercel/next.js/issues/88873"
+  ],
+  "tags": [
+    "images",
+    "ssrf",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

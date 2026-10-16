@@ -1,0 +1,30 @@
+{
+  "id": "fg-0418",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Personalizations and recipients",
+  "title": "SendGrid recipients see each other's addresses when the to field is an array",
+  "symptoms": [
+    "Every customer sees the full recipient list in To",
+    "400 Each unique email address in the personalization block should only be included once",
+    "More than 1,000 personalizations in one request rejected"
+  ],
+  "cause": "All addresses in one personalization receive one shared message and can see each other, and an address may appear only once across its to, cc, and bcc. Each request takes at most 1,000 personalizations.",
+  "fix": "Put each recipient in its own personalization, or use sendMultiple or isMultiple in the Node SDK, and split lists over 1,000.",
+  "apply": "await sgMail.sendMultiple({ to: emails, from, subject, html });  // one personalization per address",
+  "affected": "SendGrid v3 Mail Send, @sendgrid/mail 6.x to 8.x, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/for-developers/sending-email/personalizations",
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/errors",
+    "https://github.com/sendgrid/sendgrid-nodejs/blob/main/docs/use-cases/single-email-multiple-recipients.md"
+  ],
+  "tags": [
+    "privacy",
+    "email",
+    "recipients"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

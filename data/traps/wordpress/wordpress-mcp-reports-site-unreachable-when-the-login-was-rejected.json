@@ -1,0 +1,24 @@
+{
+  "id": "fg-0099",
+  "provider": "wordpress",
+  "surface_type": "tool",
+  "surface_name": "mcp-wordpress server, authentication errors",
+  "title": "WordPress MCP reports 'Site unreachable' when the login was rejected",
+  "symptoms": [
+    "Site unreachable while the site loads fine",
+    "Unknown username"
+  ],
+  "cause": "The mcp-wordpress server labels a rejected login as an unreachable site.",
+  "fix": "Test the credentials directly against the REST API before debugging the network.",
+  "apply": "curl -u \"$WP_USER:$WP_APP_PASSWORD\" -A \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\" https://example.com/wp-json/wp/v2/users/me",
+  "affected": "mcp-wordpress, July and September 2026",
+  "sources": [],
+  "tags": [
+    "mcp",
+    "misleading-error"
+  ],
+  "verified_on": "2026-09-22",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,26 @@
+{
+  "id": "fg-0095",
+  "provider": "wordpress",
+  "surface_type": "infra",
+  "surface_name": "Simple Custom CSS and JS plugin with WordPress 7.1",
+  "title": "Tags installed with Simple Custom CSS and JS vanish after WordPress auto-updates to 7.1",
+  "symptoms": [
+    "Page source shows an empty 'start Simple Custom CSS and JS' comment block",
+    "Items stay active with their code intact",
+    "Tracking events drop to zero"
+  ],
+  "cause": "In WordPress 7.1, get_post() returns null for a non-numeric argument. Plugin version 3.53 calls get_post() with a string such as '123.html', so HTML items print nothing. Re-saving the item does not help.",
+  "fix": "Update the plugin to 3.54 or later, then clear page caches and confirm the tag loads.",
+  "apply": "wp plugin update custom-css-js && curl -s -A \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\" \"https://example.com/?cb=$(date +%s)\" | grep -c gtm.js",
+  "affected": "Simple Custom CSS and JS 3.53 on WordPress 7.1.x, fixed in 3.54, October 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "auto-update",
+    "tracking"
+  ],
+  "verified_on": "2026-10-12",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

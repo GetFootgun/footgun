@@ -1,0 +1,24 @@
+{
+  "id": "fg-0046",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "API v2, GET /dlqs",
+  "title": "Incomplete executions endpoint returns 'Missing required parameter scenarioId'",
+  "symptoms": [
+    "400 Missing required parameter scenarioId",
+    "A team-wide or organization-wide /dlqs query fails"
+  ],
+  "cause": "The incomplete executions endpoint cannot list across a team or organization; it requires a scenario id.",
+  "fix": "List active scenarios first, then query each one. A replay resumes from the failed step. The API token needs the dlqs:read and dlqs:write scopes.",
+  "apply": "GET /api/v2/dlqs?scenarioId={id}; POST /api/v2/dlqs/{dlqId}/replay",
+  "affected": "Make API v2, July 2026",
+  "sources": [],
+  "tags": [
+    "api",
+    "replay"
+  ],
+  "verified_on": "2026-07-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

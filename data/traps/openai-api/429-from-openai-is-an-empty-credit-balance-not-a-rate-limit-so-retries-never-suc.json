@@ -1,0 +1,28 @@
+{
+  "id": "fg-0133",
+  "provider": "openai-api",
+  "surface_type": "billing",
+  "surface_name": "Error 429, credit balance exhausted",
+  "title": "429 from OpenAI is an empty credit balance, not a rate limit, so retries never succeed",
+  "symptoms": [
+    "429 with error.type insufficient_quota",
+    "429 Credit balance exhausted with code credit_balance_exhausted",
+    "Backoff loop retries for minutes on a brand new API key"
+  ],
+  "cause": "Billing and quota errors share HTTP 429 with real rate limits. The API is prepaid, so an organization with no credits gets 429 on every call and waiting does not help.",
+  "fix": "Check error.code before retrying. Retry only rate limit codes, and surface credit or quota errors immediately so someone adds credits.",
+  "apply": "except openai.RateLimitError as e:\n    if e.code == \"credit_balance_exhausted\" or e.type == \"insufficient_quota\":\n        raise  # add credits, do not retry\n    time.sleep(backoff)",
+  "affected": "OpenAI API prepaid billing, error codes as documented October 2026",
+  "sources": [
+    "https://developers.openai.com/api/docs/guides/error-codes"
+  ],
+  "tags": [
+    "billing",
+    "rate-limit",
+    "errors"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0289",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "@prisma/adapter-pg SSL",
+  "title": "Prisma 7 with @prisma/adapter-pg fails with P1010 or a certificate error on a database that worked with Prisma 6",
+  "symptoms": [
+    "P1010: User was denied access on the database",
+    "Error: self-signed certificate in certificate chain"
+  ],
+  "cause": "Prisma 7 connects through node-postgres instead of the Rust engine, and node-postgres verifies server certificates by default. sslmode=require in the URL also means full verification there and overrides any ssl object passed alongside it.",
+  "fix": "Remove sslmode from the URL and give the adapter the provider's CA certificate. Turning verification off with rejectUnauthorized false works but skips the identity check.",
+  "apply": "const adapter = new PrismaPg({\n  connectionString: process.env.DATABASE_URL, // without sslmode\n  ssl: { ca: process.env.DATABASE_CA_CERT },\n})",
+  "affected": "Prisma ORM 7.0 and later with @prisma/adapter-pg",
+  "sources": [
+    "https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7",
+    "https://github.com/prisma/orm/issues/28795",
+    "https://github.com/brianc/node-postgres/blob/master/packages/pg-connection-string/README.md"
+  ],
+  "tags": [
+    "prisma-7",
+    "ssl",
+    "driver-adapters"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

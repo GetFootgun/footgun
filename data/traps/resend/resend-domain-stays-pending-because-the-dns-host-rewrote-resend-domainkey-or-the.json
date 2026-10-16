@@ -1,0 +1,29 @@
+{
+  "id": "fg-0404",
+  "provider": "resend",
+  "surface_type": "infra",
+  "surface_name": "Domain DNS records",
+  "title": "Resend domain stays pending because the DNS host rewrote resend._domainkey or the send MX",
+  "symptoms": [
+    "Domain stuck in pending or failed for hours",
+    "nslookup -type=TXT resend._domainkey.example.com returns nothing",
+    "Record exists as resend._domainkey.example.com.example.com"
+  ],
+  "cause": "Many DNS dashboards append the zone name to the host and sometimes to the MX value, and Cloudflare proxying hides CNAME targets. The records Resend checks then never resolve as entered.",
+  "fix": "Enter only the prefix as the host (resend._domainkey, send), add a trailing period to the MX value, set Cloudflare records to DNS only, then use Restart verification.",
+  "apply": "nslookup -type=TXT resend._domainkey.example.com && nslookup -type=MX send.example.com && nslookup -type=TXT send.example.com",
+  "affected": "Resend domain verification with Cloudflare, GoDaddy, Namecheap and similar DNS hosts, as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/knowledge-base/what-if-my-domain-is-not-verifying",
+    "https://resend.com/docs/add-a-domain"
+  ],
+  "tags": [
+    "dns",
+    "dkim",
+    "domains"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

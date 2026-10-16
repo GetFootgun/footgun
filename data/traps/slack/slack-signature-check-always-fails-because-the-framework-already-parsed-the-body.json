@@ -1,0 +1,28 @@
+{
+  "id": "fg-0366",
+  "provider": "slack",
+  "surface_type": "sdk",
+  "surface_name": "Request signature verification",
+  "title": "Slack signature check always fails because the framework already parsed the body",
+  "symptoms": [
+    "Invalid request signature on every request from Slack",
+    "Signature matches in a unit test but not behind Express json() or body-parser",
+    "Requests rejected after the server clock drifts"
+  ],
+  "cause": "The HMAC is computed over v0:timestamp:raw body, so a body that was parsed and serialized again no longer matches byte for byte. Requests whose X-Slack-Request-Timestamp is more than five minutes from local time must be rejected.",
+  "fix": "Capture the raw body before any parser runs, compare with a constant-time function, and keep the server clock in sync with NTP.",
+  "apply": "app.use(\"/slack/events\", express.raw({ type: \"*/*\" }));\nconst base = `v0:${ts}:${req.body.toString(\"utf8\")}`;\nconst sig = \"v0=\" + crypto.createHmac(\"sha256\", secret).update(base).digest(\"hex\");\ncrypto.timingSafeEqual(Buffer.from(sig), Buffer.from(req.get(\"x-slack-signature\")));",
+  "affected": "Slack HTTP request verification with signing secret v0, all versions as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/authentication/verifying-requests-from-slack/"
+  ],
+  "tags": [
+    "security",
+    "signing",
+    "webhooks"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

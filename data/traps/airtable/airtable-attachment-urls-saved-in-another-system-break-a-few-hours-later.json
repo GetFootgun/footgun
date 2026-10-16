@@ -1,0 +1,28 @@
+{
+  "id": "fg-0426",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Attachment fields",
+  "title": "Airtable attachment URLs saved in another system break a few hours later",
+  "symptoms": [
+    "Images stored from the API return an error after about two hours",
+    "Attachment URLs on v5.airtableusercontent.com stop loading"
+  ],
+  "cause": "Attachment download URLs returned by the API are temporary and expire about two hours after they are returned. Only the viewer link inside Airtable stays stable, and it requires base access.",
+  "fix": "Download the file when you read the record and store it in your own storage, or read the record again right before showing the file.",
+  "apply": "const att = record.fields[\"Photo\"]?.[0];\nif (att) await uploadToOwnBucket(await (await fetch(att.url)).arrayBuffer(), att.filename);",
+  "affected": "Airtable Web API attachment fields, download URLs on airtableusercontent.com, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/field-model",
+    "https://support.airtable.com/docs/airtable-attachment-url-behavior"
+  ],
+  "tags": [
+    "attachments",
+    "expiry",
+    "files"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,26 @@
+{
+  "id": "fg-0129",
+  "provider": "zoho-bigin",
+  "surface_type": "infra",
+  "surface_name": "Email authentication, SPF check",
+  "title": "Zoho says 'No SPF record belonging to transmail found' though the include is present",
+  "symptoms": [
+    "No SPF record belonging to transmail found",
+    "The detected record is invalid",
+    "include:one.zoho.com is in the record"
+  ],
+  "cause": "Another include in the same SPF record points at a name that no longer resolves. One dead include makes the whole record a permanent error, so the validator cannot see the Zoho include.",
+  "fix": "Resolve every include in the record and remove dead ones. One include:one.zoho.com covers Bigin, ZeptoMail and Campaigns.",
+  "apply": "dig +short TXT example.com, then dig +short TXT for each include target and remove any that return nothing",
+  "affected": "Zoho sender authentication for Bigin, July 2026",
+  "sources": [],
+  "tags": [
+    "dns",
+    "spf",
+    "email"
+  ],
+  "verified_on": "2026-07-02",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,31 @@
+{
+  "id": "fg-0205",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Auth signup with a trigger on auth.users",
+  "title": "Supabase signUp fails with Database error saving new user after adding a profiles trigger",
+  "symptoms": [
+    "AuthApiError: Database error saving new user (500, unexpected_failure)",
+    "Inviting a user from the dashboard fails with the same message",
+    "Signups worked until a trigger on auth.users was added"
+  ],
+  "cause": "A trigger on auth.users runs inside the signup transaction, so any error in it (missing column, NOT NULL, wrong search_path, missing grant) rolls back the whole signup. The Auth role does not see unqualified public tables unless the function is security definer with a fixed search_path.",
+  "fix": "Declare the function security definer with search_path set to empty, fully qualify every table, make inserted columns nullable or defaulted, and read the real error in the Auth and Postgres logs.",
+  "apply": "create or replace function public.handle_new_user()\nreturns trigger language plpgsql\nsecurity definer set search_path = ''\nas $$\nbegin\n  insert into public.profiles (id, full_name)\n  values (new.id, new.raw_user_meta_data ->> 'full_name');\n  return new;\nend;\n$$;",
+  "affected": "Supabase Auth on hosted and self-hosted projects with triggers or constraints on auth.users",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/database-error-saving-new-user-RU_EwB",
+    "https://supabase.com/docs/guides/auth/managing-user-data",
+    "https://github.com/supabase/supabase/issues/563"
+  ],
+  "tags": [
+    "auth",
+    "triggers",
+    "postgres",
+    "signup"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

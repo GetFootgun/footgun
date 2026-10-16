@@ -1,0 +1,30 @@
+{
+  "id": "fg-0180",
+  "provider": "aws",
+  "surface_type": "sdk",
+  "surface_name": "S3 GetObject response Body",
+  "title": "S3 GetObject Body.toString() returns [object Object] or a stream instead of the file contents in AWS SDK v3",
+  "symptoms": [
+    "response.Body.toString() prints [object Object] or IncomingMessage",
+    "TypeScript types Body as a union of Readable, ReadableStream and Blob",
+    "JSON.parse fails on the object you just downloaded"
+  ],
+  "cause": "In SDK v3 the Body is a runtime stream, not a Buffer as in v2. Later v3 releases attach helper methods to the stream that read it for you.",
+  "fix": "Await Body.transformToString() or transformToByteArray(). Read it once, because the stream is consumed by the first read.",
+  "apply": "const res = await s3.send(new GetObjectCommand({ Bucket, Key }));\nconst text = await res.Body.transformToString();\nconst data = JSON.parse(text);",
+  "affected": "AWS SDK for JavaScript v3, @aws-sdk/client-s3 all versions; transformToString exists in releases from late 2022 onward",
+  "sources": [
+    "https://github.com/aws/aws-sdk-js-v3/issues/1877",
+    "https://github.com/aws/aws-sdk-js-v3/blob/main/README.md"
+  ],
+  "tags": [
+    "s3",
+    "sdk-v3",
+    "streams",
+    "migration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

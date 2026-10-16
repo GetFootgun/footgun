@@ -1,0 +1,29 @@
+{
+  "id": "fg-0236",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "GITHUB_TOKEN default permissions",
+  "title": "Workflow step fails with 403 'Resource not accessible by integration' when commenting, labeling, or releasing",
+  "symptoms": [
+    "HttpError: Resource not accessible by integration",
+    "403 from gh pr comment, gh release create, or actions/github-script",
+    "The same workflow works in an older repository"
+  ],
+  "cause": "New personal repositories, and repositories in organizations with the restricted default, give GITHUB_TOKEN read only access to contents and packages. Write calls need the permission granted in the workflow or the repo setting.",
+  "fix": "Grant the exact write scopes in a permissions block on the job.",
+  "apply": "permissions:\n  contents: write\n  pull-requests: write\n  issues: write",
+  "affected": "GitHub repositories using the restricted Workflow permissions default (personal repos and many org repos), as of October 2026",
+  "sources": [
+    "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository",
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+  ],
+  "tags": [
+    "permissions",
+    "github-token",
+    "403"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

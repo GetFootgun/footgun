@@ -1,0 +1,29 @@
+{
+  "id": "fg-0359",
+  "provider": "slack",
+  "surface_type": "sdk",
+  "surface_name": "files_upload_v2 and filesUploadV2",
+  "title": "files_upload_v2 fails with invalid_channel when given a channel name or user ID",
+  "symptoms": [
+    "{'ok': False, 'error': 'invalid_channel', 'channel': '#my_channel'}",
+    "The same channel value worked with the old files_upload",
+    "Uploaded file exists but is shared to no channel when channel is omitted"
+  ],
+  "cause": "The v2 helpers call files.completeUploadExternal, which accepts only a conversation ID, not a channel name or a user ID. Slack maintainers confirmed name support was left out on purpose. With no channel the file is uploaded but stays private.",
+  "fix": "Resolve the conversation ID first. For a DM, open it with conversations.open and pass the returned channel ID.",
+  "apply": "dm = client.conversations_open(users=user_id)[\"channel\"][\"id\"]\nclient.files_upload_v2(channel=dm, file=\"out.csv\")",
+  "affected": "python-slack-sdk 3.19 and later, Node filesUploadV2, Java uploadV2; all versions as of 2026-10",
+  "sources": [
+    "https://github.com/slackapi/python-slack-sdk/issues/1326",
+    "https://docs.slack.dev/messaging/working-with-files"
+  ],
+  "tags": [
+    "files",
+    "upload",
+    "channels"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

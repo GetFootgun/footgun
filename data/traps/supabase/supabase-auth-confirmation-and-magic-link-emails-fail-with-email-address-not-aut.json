@@ -1,0 +1,29 @@
+{
+  "id": "fg-0198",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Auth built-in email provider",
+  "title": "Supabase Auth confirmation and magic link emails fail with Email address not authorized or hit a rate limit",
+  "symptoms": [
+    "Email address not authorized when signing up anyone outside the project team",
+    "email rate limit exceeded after two or three signups in an hour",
+    "Emails reach team members but never real users"
+  ],
+  "cause": "Without custom SMTP, Supabase sends only to members of the organization's team and caps sending at 2 messages per hour. After you add custom SMTP the cap starts at 30 per hour until you raise it.",
+  "fix": "Configure a custom SMTP provider before launch, then raise the email rate limit on the Auth rate limits page to match expected signups.",
+  "apply": "Dashboard: Authentication > Emails > SMTP Settings > Enable custom SMTP\nDashboard: Authentication > Rate Limits > Rate limit for sending emails",
+  "affected": "Hosted Supabase projects using the built-in email service (no custom SMTP configured)",
+  "sources": [
+    "https://supabase.com/docs/guides/auth/auth-smtp"
+  ],
+  "tags": [
+    "auth",
+    "email",
+    "smtp",
+    "rate-limit"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

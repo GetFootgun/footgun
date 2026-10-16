@@ -1,0 +1,26 @@
+{
+  "id": "fg-0138",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Images API, model shutdowns",
+  "title": "Image generation with dall-e-3 or gpt-image-1 fails after their shutdown dates",
+  "symptoms": [
+    "images.generate with model dall-e-2 or dall-e-3 fails since 2026-05-12",
+    "Calls with model gpt-image-1 stop working on 2026-10-23"
+  ],
+  "cause": "OpenAI shut down dall-e-2 and dall-e-3 on 2026-05-12 and retires gpt-image-1 on 2026-10-23. gpt-image-1-mini and gpt-image-1.5 follow on 2026-12-01.",
+  "fix": "Switch to gpt-image-2.5-sunburst or gpt-image-2.5-flare, and keep the model id in configuration.",
+  "apply": "const img = await client.images.generate({ model: 'gpt-image-2.5-sunburst', prompt, size: '1024x1024' });",
+  "affected": "OpenAI Images API: dall-e shut down 2026-05-12, gpt-image-1 on 2026-10-23, gpt-image-1-mini and gpt-image-1.5 on 2026-12-01",
+  "sources": [
+    "https://developers.openai.com/api/docs/deprecations"
+  ],
+  "tags": [
+    "deprecation",
+    "images"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

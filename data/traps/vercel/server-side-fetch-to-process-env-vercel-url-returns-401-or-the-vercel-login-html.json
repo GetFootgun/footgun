@@ -1,0 +1,28 @@
+{
+  "id": "fg-0244",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Deployment Protection and VERCEL_URL",
+  "title": "Server-side fetch to process.env.VERCEL_URL returns 401 or the Vercel login HTML",
+  "symptoms": [
+    "fetch(`https://${process.env.VERCEL_URL}/api/...`) returns 401 in a deployed app",
+    "JSON.parse fails on an HTML login page",
+    "OG image or internal API calls work in production domain but fail on preview"
+  ],
+  "cause": "VERCEL_URL is the generated deployment URL, and Standard Protection puts that URL behind Vercel Authentication even for production deployments. The server request carries no user cookie, so it is blocked.",
+  "fix": "Call your own routes with a relative path from the client, or build the URL from the incoming request origin and forward its cookie on the server. Use the bypass header only when no user request exists.",
+  "apply": "export async function GET(request: Request) {\n  const { origin } = new URL(request.url);\n  return fetch(`${origin}/api/data`, { headers: { cookie: request.headers.get('cookie') ?? '' } });\n}",
+  "affected": "Vercel projects on Standard Protection, all plans, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/deployment-protection"
+  ],
+  "tags": [
+    "deployment-protection",
+    "vercel-url",
+    "401"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,23 @@
+{
+  "id": "fg-0083",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Messaging webhooks, response body",
+  "title": "People who text your Twilio number get a reply that says 'Accepted'",
+  "symptoms": [
+    "Sender gets a reply containing Accepted or another raw response body"
+  ],
+  "cause": "Twilio treats the incoming-message webhook's response as TwiML. A webhook that answers with plain text, such as a workflow tool's default Accepted, sends that text back to the sender.",
+  "fix": "Respond to the webhook at once with an empty TwiML document and do the processing after that.",
+  "apply": "HTTP 200, Content-Type: text/xml, body: <?xml version=\"1.0\" encoding=\"UTF-8\"?><Response></Response>",
+  "affected": "Twilio Programmable Messaging webhooks, October 2026",
+  "sources": [],
+  "tags": [
+    "webhook",
+    "sms"
+  ],
+  "verified_on": "2026-10-14",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

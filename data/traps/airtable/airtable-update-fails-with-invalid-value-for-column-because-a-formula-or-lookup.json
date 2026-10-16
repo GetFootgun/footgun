@@ -1,0 +1,28 @@
+{
+  "id": "fg-0433",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Computed fields",
+  "title": "Airtable update fails with INVALID_VALUE_FOR_COLUMN because a formula or lookup field is in the payload",
+  "symptoms": [
+    "422 INVALID_VALUE_FOR_COLUMN",
+    "Field \"Total\" cannot accept the provided value: cannot modify a computed field",
+    "Round-trip code that reads a record and writes it back fails"
+  ],
+  "cause": "Formula, rollup, lookup, count, autonumber, created and last modified fields are read only. Sending any of them in a write fails the whole request, even with PATCH and an unchanged value.",
+  "fix": "Write only the fields you changed, and strip read-only fields before sending a record back.",
+  "apply": "const READ_ONLY = new Set([\"Total\", \"Created\", \"Lookup Name\"]);\nconst fields = Object.fromEntries(Object.entries(rec.fields).filter(([k]) => !READ_ONLY.has(k)));\nawait base(\"Orders\").update([{ id: rec.id, fields }]);",
+  "affected": "Airtable Web API, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/field-model"
+  ],
+  "tags": [
+    "computed-fields",
+    "writes",
+    "422"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

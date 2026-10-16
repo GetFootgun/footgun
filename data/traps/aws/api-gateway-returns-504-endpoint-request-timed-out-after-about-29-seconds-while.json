@@ -1,0 +1,31 @@
+{
+  "id": "fg-0171",
+  "provider": "aws",
+  "surface_type": "api",
+  "surface_name": "API Gateway integration timeout",
+  "title": "API Gateway returns 504 Endpoint request timed out after about 29 seconds while the Lambda keeps running",
+  "symptoms": [
+    "{\"message\": \"Endpoint request timed out\"} with HTTP 504",
+    "Lambda logs show the function finishing successfully after 30 or more seconds",
+    "Raising the Lambda timeout to 15 minutes changes nothing"
+  ],
+  "cause": "REST APIs cap integration time at 29 seconds by default and HTTP APIs at 30 seconds, independent of the Lambda timeout. Only Regional and private REST APIs can raise it, through a quota request that may lower the account throttle.",
+  "fix": "Move long work to an async pattern (return 202 and poll, or use a queue), or for a Regional or private REST API request a higher integration timeout quota. Edge-optimized REST APIs and HTTP APIs cannot go higher.",
+  "apply": "# Service Quotas, API Gateway: 'Maximum integration timeout in milliseconds' (L-E5AE38E3)\naws service-quotas request-service-quota-increase \\\n  --service-code apigateway --quota-code L-E5AE38E3 --desired-value 120000",
+  "affected": "API Gateway REST APIs (29 s default; raisable for Regional and private REST APIs since 2024-06-04) and HTTP APIs (30 s hard limit)",
+  "sources": [
+    "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-execution-service-limits-table.html",
+    "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-quotas.html",
+    "https://aws.amazon.com/about-aws/whats-new/2024/06/amazon-api-gateway-integration-timeout-limit-29-seconds/"
+  ],
+  "tags": [
+    "api-gateway",
+    "timeout",
+    "lambda",
+    "quota"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

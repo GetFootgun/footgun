@@ -1,0 +1,28 @@
+{
+  "id": "fg-0326",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Bulk operations concurrency",
+  "title": "bulkOperationRunQuery fails because another bulk operation is already running for the shop",
+  "symptoms": [
+    "A bulk query operation for this app and shop is already in progress",
+    "A second export started by another job or worker never begins",
+    "The bulk result URL stops working about a week after the run"
+  ],
+  "cause": "On API versions before 2026-01 an app can run only one bulk query and one bulk mutation per shop at a time. From 2026-01 the cap is five concurrent bulk queries, and result URLs expire after one week.",
+  "fix": "Move to API 2026-01 or later for concurrent queries, otherwise serialize bulk jobs per shop, and download results promptly.",
+  "apply": "// before starting: check the running operation on pre-2026-01 versions\nquery { currentBulkOperation { id status } }\n// or request against /admin/api/2026-10/graphql.json for up to 5 concurrent queries",
+  "affected": "GraphQL Admin API bulk operations; one at a time before 2026-01, five queries from 2026-01",
+  "sources": [
+    "https://shopify.dev/docs/api/usage/bulk-operations/queries"
+  ],
+  "tags": [
+    "bulk-operations",
+    "graphql",
+    "versioning"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

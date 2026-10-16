@@ -1,0 +1,28 @@
+{
+  "id": "fg-0168",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Verify API, VerificationCheck",
+  "title": "Verify check returns 404 'was not found' when the code was already approved or has expired",
+  "symptoms": [
+    "HTTP 404 from verificationChecks.create with a valid Service SID",
+    "A second check of the same code fails after the first one succeeded",
+    "Checks fail when the user enters the code after 10 minutes"
+  ],
+  "cause": "Twilio deletes a verification once it is approved, expires after 10 minutes, or reaches the maximum check attempts, so any later check finds nothing.",
+  "fix": "Treat a 404 from a check as used or expired, and start a new verification. Do not check twice on retry.",
+  "apply": "try {\n  const check = await client.verify.v2.services(serviceSid).verificationChecks.create({ to, code });\n} catch (err) {\n  if (err.status === 404) return { ok: false, reason: 'expired_or_used' };\n  throw err;\n}",
+  "affected": "Twilio Verify v2, checked October 2026",
+  "sources": [
+    "https://www.twilio.com/docs/verify/api/verification-check",
+    "https://github.com/twilio/twilio-node/issues/461"
+  ],
+  "tags": [
+    "verify",
+    "otp"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

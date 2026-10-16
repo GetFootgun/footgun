@@ -1,0 +1,27 @@
+{
+  "id": "fg-0503",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Sandbox network access",
+  "title": "Codex shell commands cannot reach the network in workspace-write, so npm install and curl fail",
+  "symptoms": [
+    "npm install, pip install, or curl fails with DNS or connection errors inside Codex",
+    "Adding network_proxy domain rules does not enable any access"
+  ],
+  "cause": "The default workspace-write sandbox keeps command network access off unless sandbox_workspace_write.network_access is true. The network_proxy feature only constrains traffic once access is on; with access off it does nothing.",
+  "fix": "Set network_access true under sandbox_workspace_write, and add network_proxy rules if you want an allowlist. Some Codex App versions have been reported to ignore the key, so test from the CLI first.",
+  "apply": "# ~/.codex/config.toml\n[sandbox_workspace_write]\nnetwork_access = true",
+  "affected": "Codex CLI, IDE extension, and ChatGPT desktop app, workspace-write mode, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-approvals-security",
+    "https://github.com/openai/codex/issues/10390"
+  ],
+  "tags": [
+    "sandbox",
+    "network"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

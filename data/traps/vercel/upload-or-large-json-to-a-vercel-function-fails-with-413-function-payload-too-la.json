@@ -1,0 +1,28 @@
+{
+  "id": "fg-0245",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel Functions request and response body limit",
+  "title": "Upload or large JSON to a Vercel Function fails with 413 FUNCTION_PAYLOAD_TOO_LARGE",
+  "symptoms": [
+    "413: FUNCTION_PAYLOAD_TOO_LARGE",
+    "File uploads above about 4.5 MB fail in production but work locally",
+    "Large API responses are cut off with the same error"
+  ],
+  "cause": "Vercel Functions accept at most 4.5 MB in the request body and return at most 4.5 MB in the response body. The limit is enforced at the platform edge, so local dev servers never show it.",
+  "fix": "Send large files straight from the browser to object storage with a presigned or client upload URL, and return only a reference from the function. Page or stream large responses.",
+  "apply": "// client: upload directly to storage, then POST only the resulting URL\nimport { upload } from '@vercel/blob/client';\nconst blob = await upload(file.name, file, { access: 'public', handleUploadUrl: '/api/upload' });\nawait fetch('/api/save', { method: 'POST', body: JSON.stringify({ url: blob.url }) });",
+  "affected": "Vercel Functions on all plans, all runtimes, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/functions/limitations"
+  ],
+  "tags": [
+    "limits",
+    "uploads",
+    "413"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

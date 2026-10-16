@@ -1,0 +1,24 @@
+{
+  "id": "fg-0023",
+  "provider": "google-workspace-apis",
+  "surface_type": "ui",
+  "surface_name": "Google Drive, Add shortcut",
+  "title": "Google Drive 'Add shortcut' into another account's folder fails silently",
+  "symptoms": [
+    "Dialog accepts, spinner runs, nothing is created",
+    "No error message"
+  ],
+  "cause": "Link-based edit access to a folder owned by another account is not enough to create a shortcut in it. The same shortcut into your own My Drive works at once.",
+  "fix": "Do the work from the account that owns the destination, after the source is shared with it. Verify sharing with the permissions API rather than the share dialog.",
+  "apply": "GET https://www.googleapis.com/drive/v3/files/{fileId}/permissions and confirm the expected account is listed",
+  "affected": "Google Drive web, August 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "permissions"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

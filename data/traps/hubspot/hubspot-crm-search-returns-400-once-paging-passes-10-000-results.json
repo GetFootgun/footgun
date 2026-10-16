@@ -1,0 +1,28 @@
+{
+  "id": "fg-0387",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "CRM Search API paging",
+  "title": "HubSpot CRM search returns 400 once paging passes 10,000 results",
+  "symptoms": [
+    "HTTP 400 when after is 10000 or higher",
+    "Full sync stops at exactly 10,000 records",
+    "Same query works again from after=0"
+  ],
+  "cause": "Every CRM search query is capped at 10,000 total results, and asking for a page past that cap is rejected. The after cursor cannot walk further no matter how many records match.",
+  "fix": "Page with a keyset instead of the cursor: sort ascending by hs_object_id, remember the last id, and start a new query with hs_object_id GT that id whenever you near the cap. For full exports use the list or batch read endpoints instead of search.",
+  "apply": "{\"filterGroups\":[{\"filters\":[{\"propertyName\":\"hs_object_id\",\"operator\":\"GT\",\"value\":\"<lastId>\"}]}],\"sorts\":[{\"propertyName\":\"hs_object_id\",\"direction\":\"ASCENDING\"}],\"limit\":200}",
+  "affected": "HubSpot CRM search endpoints (v3 and date-based 2026-09), all tiers, as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/api-reference/search/guide"
+  ],
+  "tags": [
+    "pagination",
+    "search",
+    "limits"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

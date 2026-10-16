@@ -1,0 +1,29 @@
+{
+  "id": "fg-0439",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Message replies and permissions",
+  "title": "Discord bot can send messages in a channel but gets Missing Permissions when replying",
+  "symptoms": [
+    "DiscordAPIError[50013]: Missing Permissions on message.reply()",
+    "channel.send works in the same channel",
+    "Fetching message history returns nothing even though the bot can view the channel"
+  ],
+  "cause": "Replying to a message needs READ_MESSAGE_HISTORY in addition to SEND_MESSAGES, and reading past messages needs it too. Role setups that grant only View Channel and Send Messages miss it.",
+  "fix": "Grant Read Message History to the bot role or channel overwrite, or fall back to channel.send when the permission is missing.",
+  "apply": "if (!message.channel.permissionsFor(client.user).has(PermissionFlagsBits.ReadMessageHistory)) await message.channel.send(text);\nelse await message.reply(text);",
+  "affected": "Discord API v10 create message with message_reference, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/resources/message",
+    "https://docs.discord.com/developers/topics/opcodes-and-status-codes"
+  ],
+  "tags": [
+    "permissions",
+    "messages",
+    "replies"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

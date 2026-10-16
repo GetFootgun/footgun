@@ -1,0 +1,28 @@
+{
+  "id": "fg-0399",
+  "provider": "resend",
+  "surface_type": "sdk",
+  "surface_name": "resend-node on Cloudflare Workers",
+  "title": "Cloudflare Worker deploy fails after upgrading the resend package to 6.9",
+  "symptoms": [
+    "Build errors resolving stream, buffer, string_decoder or crypto",
+    "Worker deploy fails only after bumping resend",
+    "Works locally under Node"
+  ],
+  "cause": "resend 6.9.0 pulled in mailparser, which imports Node built-ins that the Workers runtime lacks without the compatibility flag. 6.9.2 removed the problem.",
+  "fix": "Upgrade to resend 6.9.2 or later. If you must stay on 6.9.0 or 6.9.1, add compatibility_flags = [\"nodejs_compat\"] to wrangler.toml.",
+  "apply": "npm i resend@^6.9.2",
+  "affected": "resend (Node SDK) 6.9.0 and 6.9.1 on Cloudflare Workers, fixed in 6.9.2 (2026-02-10)",
+  "sources": [
+    "https://github.com/resend/resend-node/issues/817"
+  ],
+  "tags": [
+    "cloudflare-workers",
+    "sdk",
+    "dependencies"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

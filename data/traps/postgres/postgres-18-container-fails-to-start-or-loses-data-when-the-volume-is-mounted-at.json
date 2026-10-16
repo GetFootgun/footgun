@@ -1,0 +1,29 @@
+{
+  "id": "fg-0276",
+  "provider": "postgres",
+  "surface_type": "infra",
+  "surface_name": "postgres Docker Official Image",
+  "title": "postgres:18 container fails to start or loses data when the volume is mounted at /var/lib/postgresql/data",
+  "symptoms": [
+    "error mounting \"...\" to rootfs at \"/var/lib/postgresql/data\": ... no such file or directory: unknown",
+    "The database is empty after the container is recreated even though a volume was mounted"
+  ],
+  "cause": "From PostgreSQL 18 the official image sets PGDATA to /var/lib/postgresql/18/docker and declares the volume at /var/lib/postgresql, so a mount at the old data path is not where the server writes.",
+  "fix": "Mount the volume at /var/lib/postgresql for 18 and later. For existing data, move the files into an 18/docker subfolder after a proper upgrade, or keep the 17 tag until then.",
+  "apply": "services:\n  db:\n    image: postgres:18\n    volumes:\n      - pgdata:/var/lib/postgresql",
+  "affected": "Docker Official Image postgres 18 and later (September 2025)",
+  "sources": [
+    "https://github.com/docker-library/docs/blob/master/postgres/content.md",
+    "https://github.com/docker-library/postgres/issues/1364",
+    "https://github.com/docker-library/postgres/issues/1370"
+  ],
+  "tags": [
+    "docker",
+    "postgres-18",
+    "volumes"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

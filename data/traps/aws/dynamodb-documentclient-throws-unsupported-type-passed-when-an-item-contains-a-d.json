@@ -1,0 +1,30 @@
+{
+  "id": "fg-0174",
+  "provider": "aws",
+  "surface_type": "sdk",
+  "surface_name": "DynamoDB DocumentClient marshalling (lib-dynamodb)",
+  "title": "DynamoDB DocumentClient throws Unsupported type passed when an item contains a Date or class instance",
+  "symptoms": [
+    "Error: Unsupported type passed: Tue Oct 14 2026 ... Pass options.convertClassInstanceToMap=true to marshall typeof object as map attribute.",
+    "Writes fail as soon as a createdAt Date object is added",
+    "Items built from ORM or class instances fail while plain objects work"
+  ],
+  "cause": "The v3 marshaller only converts plain objects, arrays, sets, and primitives. A Date is a class instance, and DynamoDB has no date type, so the SDK refuses it.",
+  "fix": "Convert dates to ISO strings or epoch numbers before writing. Use convertClassInstanceToMap only for your own classes, since it would turn a Date into an empty map.",
+  "apply": "await ddb.send(new PutCommand({\n  TableName,\n  Item: { ...item, createdAt: item.createdAt.toISOString() },\n}));",
+  "affected": "@aws-sdk/lib-dynamodb and @aws-sdk/util-dynamodb, all v3 releases",
+  "sources": [
+    "https://github.com/aws/aws-sdk-js-v3/blob/main/packages-internal/util-dynamodb/src/convertToAttr.ts",
+    "https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-dynamodb/README.md"
+  ],
+  "tags": [
+    "dynamodb",
+    "sdk-v3",
+    "marshalling",
+    "dates"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

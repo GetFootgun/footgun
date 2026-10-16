@@ -1,0 +1,26 @@
+{
+  "id": "fg-0051",
+  "provider": "make",
+  "surface_type": "infra",
+  "surface_name": "Scenario scheduler, polling triggers",
+  "title": "Polling scenario stops with 'Invalid type of a module' and never runs again",
+  "symptoms": [
+    "InvalidConfigurationError: Invalid type of a module when processing data, where the type is: 'undefined'",
+    "Email: The scenario has been stopped",
+    "Scenario reads isActive true but nextExec null",
+    "Activating it returns: Scenario is already running."
+  ],
+  "cause": "The scheduler drops the next run of a polling trigger while the scenario stays flagged active. The failed run dies at trigger initialization with 1 operation and 0 transfer, so the module, connection and blueprint are fine. Other scenarios that use the same connection as an action keep running, which rules out the credential.",
+  "fix": "Deactivate the scenario, then activate it again. Activating alone changes nothing because Make believes it is already on. The fix has landed when nextExec is populated again. On restart the trigger resumes from its stored position, so items that arrived during the stall are picked up.",
+  "apply": "Make API: POST /api/v2/scenarios/{id}/stop, then POST /api/v2/scenarios/{id}/start, then GET /api/v2/scenarios/{id} and confirm nextExec is set. Fleet check: flag scenarios where isActive && !isPaused && !nextExec && hookId == null (webhook scenarios legitimately have no nextExec).",
+  "affected": "Make (us2 zone), polling triggers such as Twilio new message, August 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "scheduler"
+  ],
+  "verified_on": "2026-08-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

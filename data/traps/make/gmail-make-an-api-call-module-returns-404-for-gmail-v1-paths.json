@@ -1,0 +1,23 @@
+{
+  "id": "fg-0040",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Google Email app, Make an API call",
+  "title": "Gmail 'Make an API call' module returns 404 for /gmail/v1 paths",
+  "symptoms": [
+    "404 on a path that works in the Gmail API reference",
+    "The request path becomes /gmail/gmail/v1/..."
+  ],
+  "cause": "The module's base URL already ends in /gmail, so a path that starts with /gmail/v1 is doubled.",
+  "fix": "Start the path at /v1.",
+  "apply": "URL: /v1/users/me/labels",
+  "affected": "Make Google Email app, July 2026",
+  "sources": [],
+  "tags": [
+    "url"
+  ],
+  "verified_on": "2026-07-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

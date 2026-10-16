@@ -1,0 +1,23 @@
+{
+  "id": "fg-0026",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "OAuth 2.0, granular consent",
+  "title": "OAuth sign-in succeeds but the app reports 'Missing scope gmail.send'",
+  "symptoms": [
+    "Missing scope gmail.send",
+    "Sign-in completes with no error on Google's side"
+  ],
+  "cause": "Google's consent screen shows a checkbox for each requested scope and the user can leave one unticked. Sign-in still succeeds, with fewer scopes than requested.",
+  "fix": "Repeat the sign-in and tick every scope checkbox on the consent screen. In your own apps, check the granted scopes in the token response and explain what is missing.",
+  "apply": "Compare the scope field of the token response with the scopes you requested before proceeding.",
+  "affected": "Google OAuth 2.0 consent screen, October 2026",
+  "sources": [],
+  "tags": [
+    "oauth-scope"
+  ],
+  "verified_on": "2026-10-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

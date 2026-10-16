@@ -1,0 +1,27 @@
+{
+  "id": "fg-0268",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "Docker Compose variable interpolation",
+  "title": "Variables from the Compose project dotenv file are substituted into the YAML but missing inside the container",
+  "symptoms": [
+    "printenv inside the container does not list the variable",
+    "docker compose config shows the value already substituted into the file"
+  ],
+  "cause": "Compose reads the dotenv file in the project directory only to fill ${VAR} references in the Compose file, and --env-file only changes which file feeds that substitution. Nothing reaches a container unless a service lists it under environment or env_file.",
+  "fix": "Reference each variable under environment, or point the service at the file with env_file.",
+  "apply": "services:\n  api:\n    env_file: app.env\n    environment:\n      DATABASE_URL: ${DATABASE_URL}",
+  "affected": "Docker Compose v2, as of October 2026",
+  "sources": [
+    "https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/"
+  ],
+  "tags": [
+    "compose",
+    "env",
+    "interpolation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

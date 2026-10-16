@@ -1,0 +1,24 @@
+{
+  "id": "fg-0081",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Volumes",
+  "title": "Railway service loses its state file on every redeploy despite STATE_DIR=/data",
+  "symptoms": [
+    "History and state are empty after each deploy",
+    "railway volume list returns nothing"
+  ],
+  "cause": "Setting an environment variable to /data does not create storage. Without a volume mounted there, the container filesystem is discarded on each deploy.",
+  "fix": "Create a volume mounted at that path and confirm the mount in the deploy log.",
+  "apply": "railway service <name> && railway volume add --mount-path /data; then check the deploy log for 'Mounting volume on:' before 'Starting Container'",
+  "affected": "Railway, July 2026",
+  "sources": [],
+  "tags": [
+    "data-loss",
+    "volumes"
+  ],
+  "verified_on": "2026-07-31",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

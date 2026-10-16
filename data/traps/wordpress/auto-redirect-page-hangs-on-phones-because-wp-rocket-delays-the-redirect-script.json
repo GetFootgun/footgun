@@ -1,0 +1,26 @@
+{
+  "id": "fg-0085",
+  "provider": "wordpress",
+  "surface_type": "infra",
+  "surface_name": "WP Rocket, Delay JavaScript Execution",
+  "title": "Auto-redirect page hangs on phones because WP Rocket delays the redirect script",
+  "symptoms": [
+    "Page sits on its 'Redirecting...' message for 13 to 15 seconds or forever",
+    "script type=\"rocketlazyloadscript\" wraps the redirect",
+    "Adding ?nocache= to the URL makes it redirect at once"
+  ],
+  "cause": "Delay JavaScript Execution holds inline scripts until the visitor interacts. Its release events include mousemove, which touch devices never fire, so desktops self-rescue on any mouse twitch and phones on a page with nothing to tap wait indefinitely.",
+  "fix": "Exclude the script from delay with a marker string, and render a visible fallback link.",
+  "apply": "add_filter('rocket_delay_js_exclusions', function ($ex) { $ex[] = 'my-redirect-marker'; return $ex; }); then put /* my-redirect-marker */ inside the inline script",
+  "affected": "WP Rocket with Delay JavaScript Execution on, September 2026",
+  "sources": [],
+  "tags": [
+    "mobile",
+    "conversion",
+    "javascript"
+  ],
+  "verified_on": "2026-09-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

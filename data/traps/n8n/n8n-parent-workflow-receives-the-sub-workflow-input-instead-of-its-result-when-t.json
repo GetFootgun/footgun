@@ -1,0 +1,29 @@
+{
+  "id": "fg-0346",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Execute Sub-workflow with Wait",
+  "title": "n8n parent workflow receives the sub-workflow input instead of its result when the child has a Wait node",
+  "symptoms": [
+    "Execute Workflow node output equals the data passed in",
+    "AI Agent tool returns data from the node before the Wait",
+    "Behavior changes after upgrading from 1.x to 2.0"
+  ],
+  "cause": "In 1.x, when a child went into a waiting state (Wait over 65 seconds, webhook, form or human approval), the parent continued with the child input. n8n 2.0 changed this so the parent gets the child final output.",
+  "fix": "On 1.x store the child result in a data store and read it later, or avoid long waits in children. On 2.x review parents that relied on the old behavior.",
+  "apply": "Child workflow: after the Wait node, write the result to a Data Table keyed by execution id; parent reads it back",
+  "affected": "n8n 1.x (old behavior) and 2.0 and later (new behavior)",
+  "sources": [
+    "https://github.com/n8n-io/n8n/issues/13135",
+    "https://docs.n8n.io/2-0-breaking-changes/"
+  ],
+  "tags": [
+    "sub-workflows",
+    "wait",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

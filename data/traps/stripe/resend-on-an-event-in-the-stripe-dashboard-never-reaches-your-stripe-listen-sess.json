@@ -1,0 +1,28 @@
+{
+  "id": "fg-0150",
+  "provider": "stripe",
+  "surface_type": "tool",
+  "surface_name": "Stripe CLI and Dashboard, event resend",
+  "title": "Resend on an event in the Stripe Dashboard never reaches your stripe listen session",
+  "symptoms": [
+    "Dashboard Resend reports a delivery but nothing arrives at localhost",
+    "Webhook attempts list shows only remote endpoints, no CLI response"
+  ],
+  "cause": "The Dashboard resends to registered webhook endpoints, and a running stripe listen session is not one of them.",
+  "fix": "Resend from the CLI, which targets the local listener by default, or pass --webhook-endpoint for a specific endpoint.",
+  "apply": "stripe events resend evt_123",
+  "affected": "Stripe CLI and Dashboard; reported June 2024, still open October 2026",
+  "sources": [
+    "https://docs.stripe.com/cli/events/resend",
+    "https://github.com/stripe/stripe-cli/issues/1206"
+  ],
+  "tags": [
+    "cli",
+    "webhooks",
+    "testing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

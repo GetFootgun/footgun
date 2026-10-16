@@ -1,0 +1,27 @@
+{
+  "id": "fg-0304",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "next/image quality setting",
+  "title": "next/image quality prop is ignored on Next.js 16 and direct /_next/image?q=90 requests return 400",
+  "symptoms": [
+    "An Image with quality={90} is served at q=75",
+    "GET /_next/image?url=...&w=1080&q=90 returns 400 Bad Request"
+  ],
+  "cause": "Next.js 16 changed the default images.qualities from any value to only [75]. Unlisted quality values are snapped to the nearest allowed one, and the optimizer rejects unlisted q values.",
+  "fix": "List every quality you use in images.qualities.",
+  "apply": "// next.config.ts\nexport default { images: { qualities: [75, 90] } }",
+  "affected": "Next.js 16.0 and later",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/upgrading/version-16",
+    "https://nextjs.org/docs/app/api-reference/components/image"
+  ],
+  "tags": [
+    "images",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

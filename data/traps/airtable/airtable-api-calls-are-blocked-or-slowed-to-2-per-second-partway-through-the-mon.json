@@ -1,0 +1,28 @@
+{
+  "id": "fg-0424",
+  "provider": "airtable",
+  "surface_type": "billing",
+  "surface_name": "Monthly API call limits",
+  "title": "Airtable API calls are blocked or slowed to 2 per second partway through the month",
+  "symptoms": [
+    "Every request returns 429 until the workspace is upgraded or the monthly counter resets (Free plan, after the grace period)",
+    "Team plan integration slows to about 2 requests per second until the 1st of the month",
+    "Usage looks fine per second but the integration still gets throttled"
+  ],
+  "cause": "On top of per-second limits, each workspace has a monthly call allowance: 1,000 on Free and 100,000 on Team. Free workspaces are blocked after a one-time grace period, and Team workspaces are throttled to 2 requests per second until the month resets.",
+  "fix": "Count calls per month, cache reads, batch writes to 10 records per call, and move heavy integrations to a plan with a higher allowance.",
+  "apply": "Workspace settings (owner access) > Summary > Public API calls for the current month; per base: Usage tab > Bases > Public API Usage",
+  "affected": "Airtable Free and Team plans, monthly API call limits as published 2026-10",
+  "sources": [
+    "https://support.airtable.com/docs/managing-api-call-limits-in-airtable"
+  ],
+  "tags": [
+    "billing",
+    "quota",
+    "plans"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

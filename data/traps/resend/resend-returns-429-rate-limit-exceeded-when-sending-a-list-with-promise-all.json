@@ -1,0 +1,28 @@
+{
+  "id": "fg-0410",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "API rate limit",
+  "title": "Resend returns 429 rate_limit_exceeded when sending a list with Promise.all",
+  "symptoms": [
+    "429 rate_limit_exceeded: Too many requests. Please limit the number of requests per second.",
+    "Bulk send drops a fraction of recipients",
+    "Two services with separate API keys throttle each other"
+  ],
+  "cause": "Resend allows 10 requests per second per team with no burst, and every API key on the team shares that pool. Firing one request per recipient in parallel overruns it instantly.",
+  "fix": "Use the batch endpoint for up to 100 emails per call, throttle the rest, and on 429 wait for the retry-after header before retrying.",
+  "apply": "for (const chunk of chunks(emails, 100)) { await resend.batch.send(chunk); await sleep(150); }",
+  "affected": "Resend API, default team limit 10 requests per second as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/api-reference/rate-limit",
+    "https://resend.com/docs/knowledge-base/account-quotas-and-limits"
+  ],
+  "tags": [
+    "rate-limit",
+    "email"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

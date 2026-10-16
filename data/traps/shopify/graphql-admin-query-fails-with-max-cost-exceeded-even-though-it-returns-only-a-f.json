@@ -1,0 +1,29 @@
+{
+  "id": "fg-0329",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "GraphQL Admin API query cost",
+  "title": "GraphQL Admin query fails with MAX_COST_EXCEEDED even though it returns only a few records",
+  "symptoms": [
+    "Query cost is 2003, which exceeds the single query max cost limit (1000).",
+    "extensions.code is MAX_COST_EXCEEDED",
+    "A products query with first: 250 and nested variants(first: 100) is rejected before it runs"
+  ],
+  "cause": "Shopify prices a query by the most data it could return, so nested connections multiply their first values. The real result size does not matter for the up-front check.",
+  "fix": "Lower first on the outer and inner connections, page the inner connection separately, or switch to a bulk operation for full exports.",
+  "apply": "query { products(first: 50) { nodes { id title variants(first: 10) { nodes { id sku } } } } }\n# full catalog: bulkOperationRunQuery",
+  "affected": "GraphQL Admin API, all current versions, 1000 point single query limit",
+  "sources": [
+    "https://shopify.dev/docs/api/admin-graphql",
+    "https://shopify.dev/docs/api/usage/limits"
+  ],
+  "tags": [
+    "graphql",
+    "rate-limit",
+    "cost"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

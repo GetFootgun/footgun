@@ -1,0 +1,27 @@
+{
+  "id": "fg-0485",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "CLAUDE.md @path imports",
+  "title": "CLAUDE.md @import of a path that contains a space silently loads nothing",
+  "symptoms": [
+    "Instructions in the imported file are ignored with no warning",
+    "A quoted import such as @\"Design Docs/guide.md\" is not imported"
+  ],
+  "cause": "An @path import ends at the first space, even on a line of its own, and a path wrapped in quotes is not imported at all.",
+  "fix": "Put a backslash before each space in the path, or rename the folder. Imports inside backticks or code blocks are skipped on purpose.",
+  "apply": "- API conventions @Design\\ Docs/api-conventions.md",
+  "affected": "Claude Code memory imports, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/memory"
+  ],
+  "tags": [
+    "claude-md",
+    "imports",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

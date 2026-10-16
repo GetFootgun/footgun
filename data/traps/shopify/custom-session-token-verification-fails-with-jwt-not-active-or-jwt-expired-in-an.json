@@ -1,0 +1,29 @@
+{
+  "id": "fg-0327",
+  "provider": "shopify",
+  "surface_type": "sdk",
+  "surface_name": "App Bridge session tokens",
+  "title": "Custom session token verification fails with 'jwt not active' or 'jwt expired' in an embedded Shopify app",
+  "symptoms": [
+    "InvalidJwtError: Failed to parse session token",
+    "jwt not active",
+    "Requests fail when a session token is reused after about a minute"
+  ],
+  "cause": "Session tokens live for one minute and carry an nbf claim, so a server clock a few seconds behind rejects them and cached tokens expire quickly. The official library allows 10 seconds of clock skew, while hand-rolled jwt.verify calls allow none.",
+  "fix": "Fetch a fresh token with shopify.idToken() for every request, keep server time synced, and pass a small clock tolerance when verifying yourself.",
+  "apply": "// client\nconst token = await shopify.idToken()\n// server, jose\nawait jwtVerify(token, key, { algorithms: ['HS256'], clockTolerance: 10, audience: process.env.SHOPIFY_API_KEY })",
+  "affected": "Embedded Shopify apps using App Bridge session tokens; @shopify/shopify-api tolerates 10 s, custom verifiers often 0",
+  "sources": [
+    "https://shopify.dev/docs/apps/build/authentication-authorization/session-tokens",
+    "https://github.com/Shopify/shopify-api-js/issues/137"
+  ],
+  "tags": [
+    "auth",
+    "session-tokens",
+    "jwt"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

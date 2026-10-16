@@ -1,0 +1,28 @@
+{
+  "id": "fg-0374",
+  "provider": "zapier",
+  "surface_type": "ui",
+  "surface_name": "Zap auto shutoff",
+  "title": "Zap turns itself off after a run of errors from one broken step",
+  "symptoms": [
+    "Zap found turned off with no user change",
+    "Email that the Zap was turned off due to errors",
+    "Team or Enterprise owner warned 24 or 72 hours before shutoff"
+  ],
+  "cause": "Zapier turns a Zap off when 95 percent of its runs error over the last 7 days. Safely halted runs and runs handled by an error handler path do not turn the Zap off.",
+  "fix": "Add an error handler path or a Filter that halts on expected bad data instead of erroring, fix the step, turn the Zap on, then replay failed runs.",
+  "apply": "Zap editor > step > three dots icon > Add error handler",
+  "affected": "All Zapier plans; grace period 24 hours on Team, 72 hours on Enterprise, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/8496037690637-How-to-troubleshoot-errors-in-Zap-workflows"
+  ],
+  "tags": [
+    "errors",
+    "shutoff",
+    "monitoring"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

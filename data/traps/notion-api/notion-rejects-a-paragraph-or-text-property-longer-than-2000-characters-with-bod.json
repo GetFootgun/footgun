@@ -1,0 +1,28 @@
+{
+  "id": "fg-0462",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Rich text size limit",
+  "title": "Notion rejects a paragraph or text property longer than 2000 characters with body failed validation",
+  "symptoms": [
+    "400 validation_error",
+    "body failed validation: ...rich_text[0].text.content.length should be ≤ `2000`",
+    "Sync of long emails or transcripts into Notion fails only for long records"
+  ],
+  "cause": "Each rich text object caps text.content at 2000 characters, and link URLs at 2000 too. The cap applies per object, so one long string in a single object fails even though the block could hold more.",
+  "fix": "Split long strings into several rich text objects of at most 2000 characters. The rich_text array holds at most 100 items, so very long text needs several blocks.",
+  "apply": "const chunks = text.match(/[\\s\\S]{1,2000}/g) ?? [];\nconst rich_text = chunks.map(c => ({ type: \"text\", text: { content: c } }));",
+  "affected": "Notion REST API, all versions, as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/request-limits"
+  ],
+  "tags": [
+    "limits",
+    "rich-text",
+    "validation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

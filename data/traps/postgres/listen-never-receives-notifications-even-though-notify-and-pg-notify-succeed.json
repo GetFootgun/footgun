@@ -1,0 +1,30 @@
+{
+  "id": "fg-0269",
+  "provider": "postgres",
+  "surface_type": "infra",
+  "surface_name": "PostgreSQL LISTEN and NOTIFY",
+  "title": "LISTEN never receives notifications even though NOTIFY and pg_notify succeed",
+  "symptoms": [
+    "The listener stays silent while pg_notify calls return without error",
+    "Notifications arrive late, only after the sending transaction commits",
+    "ERROR: payload string too long"
+  ],
+  "cause": "NOTIFY inside a transaction is delivered only at commit, and LISTEN belongs to a single server session, so through a transaction-mode pooler the session that ran LISTEN is handed to other clients. Payloads must be shorter than 8000 bytes by default.",
+  "fix": "Keep a dedicated direct or session-mode connection for listeners, commit the sending transaction, and send row ids instead of large payloads.",
+  "apply": "-- listener: direct or session-mode connection, never the transaction pooler\nLISTEN jobs;\n-- sender\nBEGIN; INSERT INTO jobs (id) VALUES (123); SELECT pg_notify('jobs', '123'); COMMIT;",
+  "affected": "PostgreSQL 13 through 18; Supabase Supavisor transaction mode, as of October 2026; vendor policy, re-check by 2026-12-15",
+  "sources": [
+    "https://www.postgresql.org/docs/current/sql-notify.html",
+    "https://supabase.com/docs/guides/database/connecting-to-postgres",
+    "https://github.com/postgres/postgres/blob/REL_17_STABLE/src/backend/commands/async.c"
+  ],
+  "tags": [
+    "postgres",
+    "listen-notify",
+    "pooler"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

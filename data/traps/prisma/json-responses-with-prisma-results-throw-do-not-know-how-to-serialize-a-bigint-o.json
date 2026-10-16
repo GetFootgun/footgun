@@ -1,0 +1,27 @@
+{
+  "id": "fg-0284",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "Prisma BigInt and Decimal fields",
+  "title": "JSON responses with Prisma results throw 'Do not know how to serialize a BigInt' or turn Decimals into strings",
+  "symptoms": [
+    "TypeError: Do not know how to serialize a BigInt",
+    "A Decimal(10,2) value of 1.50 arrives in the JSON as the string \"1.5\""
+  ],
+  "cause": "BigInt columns come back as JavaScript bigint, which JSON.stringify cannot encode. Decimal columns come back as Decimal.js objects whose JSON form is a string without the column's scale.",
+  "fix": "Convert both at the API boundary with a replacer or explicit mapping.",
+  "apply": "const body = JSON.stringify(rows, (_k, v) =>\n  typeof v === 'bigint' ? v.toString() : v)\n// Decimal: row.price.toFixed(2) or row.price.toNumber() when precision allows",
+  "affected": "Prisma ORM 6 and 7, reproduced on 7.10.0 with @prisma/adapter-pg",
+  "sources": [
+    "https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types"
+  ],
+  "tags": [
+    "bigint",
+    "decimal",
+    "serialization"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

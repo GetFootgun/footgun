@@ -1,0 +1,28 @@
+{
+  "id": "fg-0157",
+  "provider": "stripe",
+  "surface_type": "api",
+  "surface_name": "Webhook endpoints, api_version",
+  "title": "Webhook event payloads have a different shape than the objects your upgraded Stripe SDK returns",
+  "symptoms": [
+    "event.data.object still carries fields your SDK types say were removed, or lacks new ones",
+    "Handlers work for direct API calls but break on webhooks after an SDK major upgrade",
+    ".NET, Java or Go SDK fails to deserialize incoming events"
+  ],
+  "cause": "Every webhook endpoint keeps the API version it was created with, and Stripe renders snapshot events in that version. Raising the SDK or its pinned apiVersion leaves the endpoint where it was.",
+  "fix": "Create a second endpoint on the new api_version with a distinguishing query string, process both in parallel while you switch code, then disable the old one. Thin events avoid versioning altogether.",
+  "apply": "curl https://api.stripe.com/v1/webhook_endpoints -u \"$STRIPE_SECRET_KEY:\" \\\n  -d url=\"https://example.com/webhooks?v=endive\" \\\n  -d \"enabled_events[]=checkout.session.completed\" \\\n  -d api_version=2026-09-30.endive",
+  "affected": "All Stripe snapshot webhook endpoints, at every major release: basil 2025-03-31, clover 2025-09-30, dahlia 2026-03-25, endive 2026-09-30",
+  "sources": [
+    "https://docs.stripe.com/webhooks/versioning",
+    "https://github.com/stripe/stripe-node/issues/2353"
+  ],
+  "tags": [
+    "webhooks",
+    "api-version"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

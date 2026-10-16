@@ -1,0 +1,24 @@
+{
+  "id": "fg-0024",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "OAuth 2.0 refresh tokens, consent screen in Testing",
+  "title": "Google refresh token dies every 7 days with invalid_grant",
+  "symptoms": [
+    "invalid_grant",
+    "Agent works for a week after re-authorizing, then fails again"
+  ],
+  "cause": "While the OAuth consent screen's publishing status is Testing, Google expires refresh tokens after 7 days.",
+  "fix": "Publish the consent screen to Production. For a private app this shows an unverified app warning once at sign-in, which is acceptable. If invalid_grant appears on a published app, the token was revoked; mint a new one.",
+  "apply": "Google Cloud console > Google Auth Platform > Audience > Publish app (older console layout: APIs & Services > OAuth consent screen)",
+  "affected": "Google OAuth 2.0, June to August 2026",
+  "sources": [],
+  "tags": [
+    "oauth",
+    "token-expiry"
+  ],
+  "verified_on": "2026-08-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

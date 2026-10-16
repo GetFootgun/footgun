@@ -1,0 +1,28 @@
+{
+  "id": "fg-0515",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Project rules, frontmatter",
+  "title": "Cursor rule with alwaysApply false and no description or globs is never applied",
+  "symptoms": [
+    "The rule is listed but Agent ignores it",
+    "The rule only takes effect when typed as an @-mention in chat",
+    "A globs rule applies only when a matching file is already in context"
+  ],
+  "cause": "With alwaysApply false, no description, and no globs, a rule becomes Apply Manually and loads only when @-mentioned. A rule with globs attaches only when a matching file is in context, and an agent-selected rule needs a description to be chosen.",
+  "fix": "Set alwaysApply true for rules that must always load, give agent-selected rules a clear description, and check globs against the paths Agent actually opens.",
+  "apply": "---\ndescription: RPC service conventions for the backend\nglobs: src/services/**/*.ts\nalwaysApply: false\n---",
+  "affected": "Cursor project rules, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/rules",
+    "https://cursor.com/help/customization/rules"
+  ],
+  "tags": [
+    "rules",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0457",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Multi-source databases on older API versions",
+  "title": "Integration on an older Notion-Version breaks once someone adds a second data source to a database",
+  "symptoms": [
+    "validation_error when retrieving a database that worked the day before",
+    "Creating a page with a database_id parent starts failing",
+    "The database drops out of search results for the integration"
+  ],
+  "cause": "Versions before 2025-09-03 assume one schema per database. When a user adds a second data source in the UI, reads, writes, queries and relation writes against that database can no longer tell which source is meant and fail.",
+  "fix": "Move the integration to Notion-Version 2025-09-03 or later and address data sources by ID. Page creation with a data_source_id parent works on every version, so switch that first.",
+  "apply": "Notion-Version: 2025-09-03\n{ \"parent\": { \"type\": \"data_source_id\", \"data_source_id\": \"DATA_SOURCE_ID\" }, \"properties\": { ... } }",
+  "affected": "Integrations pinned to Notion-Version 2022-06-28 or earlier, from the September 2025 multi-source rollout onward",
+  "sources": [
+    "https://developers.notion.com/docs/upgrade-guide-2025-09-03",
+    "https://developers.notion.com/reference/versioning"
+  ],
+  "tags": [
+    "data-sources",
+    "versioning",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

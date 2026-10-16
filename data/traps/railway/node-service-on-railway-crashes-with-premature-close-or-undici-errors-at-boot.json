@@ -1,0 +1,25 @@
+{
+  "id": "fg-0074",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Nixpacks builder, Node version",
+  "title": "Node service on Railway crashes with 'Premature close' or undici errors at boot",
+  "symptoms": [
+    "Premature close on token or API fetches",
+    "undici crash at startup",
+    "Works locally on Node 22"
+  ],
+  "cause": "Without a pinned engine, Nixpacks built with Node 18.",
+  "fix": "Pin the Node version in package.json.",
+  "apply": "\"engines\": { \"node\": \"22.x\" }",
+  "affected": "Railway Nixpacks, July 2026",
+  "sources": [],
+  "tags": [
+    "build",
+    "node-version"
+  ],
+  "verified_on": "2026-07-05",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

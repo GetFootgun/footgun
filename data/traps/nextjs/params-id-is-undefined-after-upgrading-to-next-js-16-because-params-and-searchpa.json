@@ -1,0 +1,30 @@
+{
+  "id": "fg-0309",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "App Router params and searchParams",
+  "title": "params.id is undefined after upgrading to Next.js 16 because params and searchParams are Promises",
+  "symptoms": [
+    "params.slug is undefined in a page that worked on Next.js 14",
+    "Route \"/blog/[slug]\" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties",
+    "Property 'slug' does not exist on type 'Promise"
+  ],
+  "cause": "Next.js 15 turned params, searchParams, cookies(), headers() and draftMode() into Promises but kept a synchronous fallback with a warning. Next.js 16 removed that fallback, so property reads on the raw prop return undefined.",
+  "fix": "Await the prop in Server Components and unwrap it with React.use() in Client Components. Run the async request API codemod, since the general upgrade codemod skips it.",
+  "apply": "npx @next/codemod@canary next-async-request-api .\n\nexport default async function Page(props: PageProps<'/blog/[slug]'>) {\n  const { slug } = await props.params\n}",
+  "affected": "Next.js 15 (warning) and 16 (sync access removed); also opengraph-image, icon and sitemap id params in 16",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/upgrading/version-16",
+    "https://nextjs.org/docs/messages/sync-dynamic-apis",
+    "https://github.com/vercel/next.js/issues/74406"
+  ],
+  "tags": [
+    "upgrade",
+    "params",
+    "app-router"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

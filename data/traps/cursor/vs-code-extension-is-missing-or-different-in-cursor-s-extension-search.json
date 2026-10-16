@@ -1,0 +1,28 @@
+{
+  "id": "fg-0520",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Extensions, Open VSX registry",
+  "title": "VS Code extension is missing or different in Cursor's extension search",
+  "symptoms": [
+    "A Microsoft Marketplace extension cannot be found in Cursor",
+    "The same publisher.extension ID installs different code than in VS Code",
+    "An Anysphere build appears in place of the familiar extension"
+  ],
+  "cause": "Cursor installs third-party extensions from Open VSX through its own proxy, not from the Microsoft Marketplace. Some Marketplace-only extensions are absent or replaced by Anysphere builds, and an ID can belong to a different publisher on Open VSX.",
+  "fix": "Check the publisher before installing, prefer the Anysphere replacement where one exists, and restrict team installs to approved publishers or IDs.",
+  "apply": "https://cursor.com/dashboard/team-settings   # Allowed extensions, or MDM policy key AllowedExtensions",
+  "affected": "Cursor editor extensions, as of 2026-10",
+  "sources": [
+    "https://cursor.com/help/customization/extensions",
+    "https://cursor.com/help/getting-started/migrate-vscode"
+  ],
+  "tags": [
+    "extensions",
+    "supply-chain"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

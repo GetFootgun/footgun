@@ -1,0 +1,23 @@
+{
+  "id": "fg-0062",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "Instagram Graph API, followers",
+  "title": "Instagram Graph API has no endpoint for the follower or following list",
+  "symptoms": [
+    "Only followers_count is available",
+    "No edge returns follower or following accounts"
+  ],
+  "cause": "The Instagram Graph API exposes counts and insights but not the lists of accounts. The only other route is a manual data export or cookie-driven scraping, which risks action blocks.",
+  "fix": "Build on counts and insights, such as follower delta and reach, instead of account lists.",
+  "apply": "GET /{ig-user-id}?fields=followers_count,follows_count",
+  "affected": "Instagram Graph API, August 2026",
+  "sources": [],
+  "tags": [
+    "limitation"
+  ],
+  "verified_on": "2026-08-03",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

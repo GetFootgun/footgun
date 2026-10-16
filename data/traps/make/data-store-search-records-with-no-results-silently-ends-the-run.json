@@ -1,0 +1,25 @@
+{
+  "id": "fg-0036",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Data store, Search records",
+  "title": "Data store 'Search records' with no results silently ends the run",
+  "symptoms": [
+    "Modules after the search never execute",
+    "Run shows success with fewer operations than usual",
+    "No error is logged"
+  ],
+  "cause": "When Search records returns zero bundles, nothing flows on, so every later module on that route is skipped with no error.",
+  "fix": "Turn on continue-when-no-results for any search that can legitimately miss, or follow it with an array aggregator, which emits once even when empty, and branch on the aggregated length. Comparing operations per run between good and bad runs shows where a flow stopped.",
+  "apply": "datastore:SearchRecord with continueWhenNoRes: true, or SearchRecord followed by builtin:BasicAggregator and a filter on {{length(N.array)}}.",
+  "affected": "Make Data store app, July to October 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "data-store"
+  ],
+  "verified_on": "2026-10-08",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0296",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "Driver adapter connection pool",
+  "title": "Queries hang or fail with 'Unable to start a transaction in the given time' after moving Prisma to driver adapters",
+  "symptoms": [
+    "Transaction API error: Unable to start a transaction in the given time.",
+    "Requests wait forever under load instead of failing with a pool timeout",
+    "connection_limit and pool_timeout in the URL no longer shape the pool"
+  ],
+  "cause": "With driver adapters the pool belongs to the driver. For pg that means 10 connections, no acquire or connect timeout, and a 10 second idle timeout, where Prisma 6 used CPUs times 2 plus 1 connections with a 10 second acquire and 5 second connect timeout.",
+  "fix": "Set pool size and timeouts on the adapter explicitly.",
+  "apply": "const adapter = new PrismaPg({\n  connectionString: process.env.DATABASE_URL,\n  max: 10,\n  connectionTimeoutMillis: 5_000,\n  idleTimeoutMillis: 300_000,\n})",
+  "affected": "Prisma ORM 7.0 and later, and 6.x with the driverAdapters feature",
+  "sources": [
+    "https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/connection-pool",
+    "https://github.com/prisma/orm/issues/27990",
+    "https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7"
+  ],
+  "tags": [
+    "driver-adapters",
+    "connection-pool",
+    "timeouts"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

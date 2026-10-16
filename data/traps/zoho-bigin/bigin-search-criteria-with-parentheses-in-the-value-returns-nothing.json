@@ -1,0 +1,24 @@
+{
+  "id": "fg-0119",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, search criteria",
+  "title": "Bigin search criteria with parentheses in the value returns nothing",
+  "symptoms": [
+    "criteria=(Last_Name:equals:(Provider)) returns no records",
+    "An idempotency check misses existing records and duplicates get created"
+  ],
+  "cause": "Parentheses are part of the criteria syntax, so a value that contains them is not matched.",
+  "fix": "Do not store parentheses in values you will search on; search a plain marker value or a tag instead.",
+  "apply": "GET /bigin/v2/Contacts/search?criteria=(Last_Name:equals:Provider)",
+  "affected": "Bigin API v2, October 2026",
+  "sources": [],
+  "tags": [
+    "search",
+    "duplicates"
+  ],
+  "verified_on": "2026-10-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

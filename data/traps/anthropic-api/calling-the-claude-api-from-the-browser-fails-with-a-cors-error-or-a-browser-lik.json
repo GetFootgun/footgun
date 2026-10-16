@@ -1,0 +1,28 @@
+{
+  "id": "fg-0472",
+  "provider": "anthropic-api",
+  "surface_type": "sdk",
+  "surface_name": "@anthropic-ai/sdk in the browser",
+  "title": "Calling the Claude API from the browser fails with a CORS error or a browser-like environment error",
+  "symptoms": [
+    "It looks like you're running in a browser-like environment. This is disabled by default, as it risks exposing your secret API credentials to attackers.",
+    "fetch to api.anthropic.com from a web page is blocked by CORS"
+  ],
+  "cause": "The TypeScript SDK refuses to run in a browser unless dangerouslyAllowBrowser is set, and the API grants cross-origin requests only when the anthropic-dangerous-direct-browser-access header is present, which that option adds.",
+  "fix": "Call the API from a server route and keep the key there. Only for bring-your-own-key tools where the user supplies their own key, set dangerouslyAllowBrowser true.",
+  "apply": "const client = new Anthropic({ apiKey: userSuppliedKey, dangerouslyAllowBrowser: true }); // raw fetch: add header 'anthropic-dangerous-direct-browser-access': 'true'",
+  "affected": "@anthropic-ai/sdk 0.27.0 and later, as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript",
+    "https://github.com/anthropics/anthropic-sdk-typescript/issues/248"
+  ],
+  "tags": [
+    "cors",
+    "browser",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

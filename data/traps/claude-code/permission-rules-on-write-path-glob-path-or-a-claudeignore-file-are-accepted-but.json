@@ -1,0 +1,28 @@
+{
+  "id": "fg-0490",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Permission rules, file tools",
+  "title": "Permission rules on Write(path), Glob(path), or a .claudeignore file are accepted but never enforced",
+  "symptoms": [
+    "Claude writes into a folder covered by a Write(docs/**) deny rule",
+    "Startup warning that a rule is not matched by file permission checks (v2.1.210 and later)",
+    "Files listed in .claudeignore are still read"
+  ],
+  "cause": "File permission checks consult only Edit(path) and Read(path) rules. Path rules on Write, NotebookEdit, Glob, or MultiEdit load without error and are ignored, and a .claudeignore file has no effect; before v2.1.210 there was no warning.",
+  "fix": "Use Edit(path) for anything that writes and Read(path) for anything that reads or lists, and move .claudeignore entries into Read deny rules.",
+  "apply": "\"permissions\": { \"deny\": [\"Edit(docs/**)\", \"Read(docs/private/**)\"] }",
+  "affected": "Claude Code permission rules, as of 2026-10; startup warning since v2.1.210",
+  "sources": [
+    "https://code.claude.com/docs/en/permissions"
+  ],
+  "tags": [
+    "permissions",
+    "security",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

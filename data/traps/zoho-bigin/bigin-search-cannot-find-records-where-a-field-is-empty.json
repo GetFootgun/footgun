@@ -1,0 +1,23 @@
+{
+  "id": "fg-0118",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, search criteria",
+  "title": "Bigin search cannot find records where a field is empty",
+  "symptoms": [
+    "[400] One of the expected parameter is missing: criteria,email,phone,word",
+    "criteria=(Field:equals:null) fails"
+  ],
+  "cause": "The search API has no operator for empty values.",
+  "fix": "Search a recent window, for example on Created_Time, and filter for the empty field in your own code.",
+  "apply": "GET /bigin/v2/Pipelines/search?criteria=(Created_Time:greater_than:2026-09-15T00:00:00+00:00), then keep records where the field is null",
+  "affected": "Bigin API v2, August 2026",
+  "sources": [],
+  "tags": [
+    "search"
+  ],
+  "verified_on": "2026-08-10",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

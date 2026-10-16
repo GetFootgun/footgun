@@ -1,0 +1,28 @@
+{
+  "id": "fg-0141",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Responses API, max_output_tokens with reasoning",
+  "title": "Reasoning model returns empty text with status incomplete while you are still billed",
+  "symptoms": [
+    "response.output_text is an empty string",
+    "status incomplete with incomplete_details.reason max_output_tokens",
+    "Usage shows many output tokens but no visible answer"
+  ],
+  "cause": "max_output_tokens caps reasoning tokens and visible tokens together, so a small cap can be spent entirely on reasoning before any answer is written. Those reasoning tokens are billed as output.",
+  "fix": "Leave a large budget, OpenAI suggests at least 25000 tokens when starting out, and check status before reading the text.",
+  "apply": "const res = await client.responses.create({ model, input, max_output_tokens: 25000 });\nif (res.status === 'incomplete' && res.incomplete_details?.reason === 'max_output_tokens') {\n  // retry with a larger budget or lower reasoning effort\n}",
+  "affected": "OpenAI Responses and Chat Completions with reasoning models, checked October 2026",
+  "sources": [
+    "https://developers.openai.com/api/docs/guides/reasoning"
+  ],
+  "tags": [
+    "reasoning",
+    "tokens",
+    "cost"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

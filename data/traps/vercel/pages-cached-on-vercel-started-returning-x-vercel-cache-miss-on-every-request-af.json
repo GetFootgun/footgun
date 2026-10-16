@@ -1,0 +1,29 @@
+{
+  "id": "fg-0242",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel CDN Vary handling",
+  "title": "Pages cached on Vercel started returning x-vercel-cache MISS on every request after September 30, 2026",
+  "symptoms": [
+    "x-vercel-cache: MISS on routes that used to HIT",
+    "Runtime logs show cache reason vary_key_denied:cookie",
+    "Origin load and function invocations rise with no code change"
+  ],
+  "cause": "Since September 30, 2026 the Vercel CDN refuses to store any response whose Vary header names Cookie. Middleware or frameworks that add Vary: Cookie globally make those routes uncacheable.",
+  "fix": "Remove Cookie from Vary on routes that do not change per visitor, and set Vary only on the routes that need it.",
+  "apply": "// before: Vary: Cookie, Accept-Encoding\n// after (cacheable):\nheaders: { 'Cache-Control': 'public, s-maxage=600', Vary: 'Accept-Language' }",
+  "affected": "Vercel CDN, since 2026-09-30",
+  "sources": [
+    "https://vercel.com/changelog/vary-cookie-responses-no-longer-cached",
+    "https://vercel.com/docs/caching/cdn-cache"
+  ],
+  "tags": [
+    "caching",
+    "cdn",
+    "vary"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

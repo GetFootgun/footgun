@@ -1,0 +1,29 @@
+{
+  "id": "fg-0271",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "node-postgres (pg) connection strings",
+  "title": "node-postgres ignores the ssl option and fails with 'self-signed certificate in certificate chain' when the URL has sslmode=require",
+  "symptoms": [
+    "Error: self-signed certificate in certificate chain",
+    "Adding ssl: { rejectUnauthorized: false } or a ca next to connectionString changes nothing"
+  ],
+  "cause": "pg parses sslmode from the connection string and the result replaces the ssl option you passed instead of merging with it. In pg-connection-string, prefer, require, and verify-ca all mean full certificate verification unless uselibpqcompat=true is set, which differs from libpq.",
+  "fix": "Drop sslmode from the URL and configure ssl in code, or parse the URL yourself and merge the ssl settings before creating the pool.",
+  "apply": "import pg from 'pg'\nimport parseConnectionString from 'pg-connection-string'\nconst cfg = parseConnectionString(process.env.DATABASE_URL)\ncfg.ssl = { ca: process.env.DATABASE_CA_CERT }\nconst pool = new pg.Pool(cfg)",
+  "affected": "pg 8.x with pg-connection-string 2.x, as of October 2026 (merge issue open since 2021)",
+  "sources": [
+    "https://github.com/brianc/node-postgres/blob/master/packages/pg-connection-string/README.md",
+    "https://github.com/brianc/node-postgres/issues/3355",
+    "https://github.com/brianc/node-postgres/issues/2558"
+  ],
+  "tags": [
+    "node-postgres",
+    "ssl",
+    "connection-string"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

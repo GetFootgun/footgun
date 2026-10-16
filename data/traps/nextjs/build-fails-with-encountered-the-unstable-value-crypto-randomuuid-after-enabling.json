@@ -1,0 +1,30 @@
+{
+  "id": "fg-0298",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "cacheComponents prerender of time, random and crypto",
+  "title": "Build fails with 'encountered the unstable value crypto.randomUUID()' after enabling cacheComponents",
+  "symptoms": [
+    "Route \"/account\": Next.js encountered the unstable value `crypto.randomUUID()` while prerendering.",
+    "The same error for `new Date()`, `Date.now()` or `Math.random()`",
+    "Setting instant = false on the route does not make the error go away"
+  ],
+  "cause": "With cacheComponents, Next.js prerenders a static shell and treats time, randomness and random bytes as IO that would freeze into it. Auth libraries often call crypto before reading headers, so the error points at code you did not write.",
+  "fix": "Wrap the part that needs the value in Suspense and call await connection() before the call so it runs per request, or cache it with use cache, or move it into a Client Component.",
+  "apply": "import { connection } from 'next/server'\n\nasync function Account() {\n  await connection() // mark request-time before auth() touches crypto\n  const session = await auth()\n}\n// render <Account /> inside <Suspense>",
+  "affected": "Next.js 16.x with cacheComponents: true (reproduced on 16.4.1 with Auth.js)",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/migrating-to-cache-components",
+    "https://nextjs.org/docs/messages/blocking-prerender-crypto",
+    "https://nextjs.org/docs/app/api-reference/functions/connection"
+  ],
+  "tags": [
+    "cache-components",
+    "prerender",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0409",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "Idempotency keys",
+  "title": "Resend returns 409 invalid_idempotent_request when a retry reuses the key",
+  "symptoms": [
+    "409 invalid_idempotent_request",
+    "409 concurrent_idempotent_requests during a fast retry",
+    "400 invalid_idempotency_key for keys longer than 256 characters"
+  ],
+  "cause": "An Idempotency-Key is bound to the exact payload for 24 hours, so a retry that rebuilds the body differently, such as a new timestamp in the HTML, is refused. A second request while the first is still running gets a concurrency 409.",
+  "fix": "Derive the key from a stable event id, build the payload deterministically, retry concurrent 409s after a pause, and keep keys under 256 characters.",
+  "apply": "await resend.emails.send(payload, { idempotencyKey: `welcome/${user.id}` });",
+  "affected": "Resend API send and batch endpoints, keys kept 24 hours, as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/dashboard/emails/idempotency-keys",
+    "https://resend.com/docs/api-reference/errors"
+  ],
+  "tags": [
+    "idempotency",
+    "retries"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

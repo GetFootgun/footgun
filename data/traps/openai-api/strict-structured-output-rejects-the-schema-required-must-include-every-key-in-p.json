@@ -1,0 +1,29 @@
+{
+  "id": "fg-0143",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Structured Outputs, strict JSON schema",
+  "title": "Strict structured output rejects the schema: 'required' must include every key in properties",
+  "symptoms": [
+    "Invalid schema for response_format: In context=(), 'required' is required to be supplied and to be an array including every key in properties.",
+    "400 invalid_json_schema for a Pydantic model with an optional or dict field",
+    "Zod discriminated union at the root is rejected"
+  ],
+  "cause": "With strict set to true every property must be listed in required, every object needs additionalProperties false, and the root must be a plain object, not anyOf. Optional fields and open maps break those rules.",
+  "fix": "Make optional fields required but nullable, replace free form dicts with arrays of key and value objects, and wrap unions inside a root object.",
+  "apply": "{\"type\": \"object\", \"additionalProperties\": false,\n \"required\": [\"name\", \"nickname\"],\n \"properties\": {\"name\": {\"type\": \"string\"}, \"nickname\": {\"type\": [\"string\", \"null\"]}}}",
+  "affected": "OpenAI Structured Outputs with strict true, Responses and Chat Completions, checked October 2026",
+  "sources": [
+    "https://developers.openai.com/api/docs/guides/structured-outputs",
+    "https://github.com/openai/openai-python/issues/2533",
+    "https://github.com/openai/openai-java/issues/485"
+  ],
+  "tags": [
+    "structured-outputs",
+    "json-schema"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

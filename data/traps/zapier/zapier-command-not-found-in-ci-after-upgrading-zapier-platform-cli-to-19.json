@@ -1,0 +1,29 @@
+{
+  "id": "fg-0375",
+  "provider": "zapier",
+  "surface_type": "tool",
+  "surface_name": "zapier-platform CLI",
+  "title": "'zapier: command not found' in CI after upgrading zapier-platform-cli to 19",
+  "symptoms": [
+    "zapier: command not found",
+    "CI push or validate step fails right after a dependency bump",
+    "Docs and scripts still call zapier push"
+  ],
+  "cause": "CLI 19.0.0, released 2026-05-18, removed the zapier binary. The command is now zapier-platform, which 18.x already offered alongside the deprecated name.",
+  "fix": "Replace zapier with zapier-platform in scripts, CI jobs and package.json scripts.",
+  "apply": "npx zapier-platform validate && npx zapier-platform push",
+  "affected": "zapier-platform-cli 19.0.0 and later",
+  "sources": [
+    "https://docs.zapier.com/platform/news",
+    "https://github.com/zapier/zapier-platform/blob/main/packages/cli/README.md"
+  ],
+  "tags": [
+    "cli",
+    "ci",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,25 @@
+{
+  "id": "fg-0039",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Formulas (IML)",
+  "title": "Formula with an escaped quote passes validation but fails at run time",
+  "symptoms": [
+    "BlueprintValidationError: Scenario validation failed - 2 problem(s)",
+    "Scenario deactivates itself on the first real run",
+    "Module and blueprint validators reported no problems"
+  ],
+  "cause": "Make formula string literals have no escape characters. A backslash before a quote does not produce a quote; the quote ends the string and the formula cannot be parsed. Static validation does not catch it, only a live run does.",
+  "fix": "Keep quote characters out of formula strings. To match text that contains quotes, use a regex with \\W or . where the quote would be.",
+  "apply": "Regex pattern intent\\W+([a-z]+) instead of a pattern that contains an escaped quote.",
+  "affected": "Make formulas, September 2026",
+  "sources": [],
+  "tags": [
+    "validation",
+    "formulas"
+  ],
+  "verified_on": "2026-09-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,25 @@
+{
+  "id": "fg-0048",
+  "provider": "make",
+  "surface_type": "infra",
+  "surface_name": "Polling triggers",
+  "title": "One bad item makes a polling trigger retry the same item forever and block everything behind it",
+  "symptoms": [
+    "The same error repeats every polling interval",
+    "Newer items are never processed",
+    "BundleValidationError: Validation failed for 1 parameter(s). Missing value of required parameter"
+  ],
+  "cause": "When a run errors, a polling trigger does not advance its position, so the same malformed item is fetched again each cycle and newer items queue behind it. A module that marks an input as required fails on any item that lacks it, even if nothing downstream uses its output.",
+  "fix": "Add a filter right after the trigger that requires every field later modules treat as required, so malformed items are skipped and the position advances. Remove unused modules that declare required inputs.",
+  "apply": "Filter after the trigger with Basic operators: {{1.fieldA}} Exists AND {{1.fieldB}} Exists",
+  "affected": "Make polling triggers (Google Calendar watch events, Gmail, Twilio), July to September 2026",
+  "sources": [],
+  "tags": [
+    "stuck-queue",
+    "polling"
+  ],
+  "verified_on": "2026-09-02",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

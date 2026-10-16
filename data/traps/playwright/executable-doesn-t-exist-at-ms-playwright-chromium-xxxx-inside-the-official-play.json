@@ -1,0 +1,29 @@
+{
+  "id": "fg-0316",
+  "provider": "playwright",
+  "surface_type": "infra",
+  "surface_name": "Official Docker image",
+  "title": "Executable doesn't exist at /ms-playwright/chromium-XXXX inside the official Playwright Docker image",
+  "symptoms": [
+    "browserType.launch: Executable doesn't exist at /ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell",
+    "Looks like Playwright was just installed or updated.",
+    "Tests pass locally and fail in CI the day a new @playwright/test version lands"
+  ],
+  "cause": "Each Playwright release expects one exact browser build number, and the image only ships the builds for its own tag. A caret range in package.json or a floating image tag lets the npm package and the image drift apart.",
+  "fix": "Pin @playwright/test to an exact version and use the image tag with the same version. Upgrade both in one commit.",
+  "apply": "# package.json: \"@playwright/test\": \"1.64.0\"  (no caret)\nFROM mcr.microsoft.com/playwright:v1.64.0-noble",
+  "affected": "All Playwright versions using mcr.microsoft.com/playwright images; browser build numbers change with most minor releases",
+  "sources": [
+    "https://playwright.dev/docs/docker",
+    "https://github.com/microsoft/playwright/issues/39122"
+  ],
+  "tags": [
+    "docker",
+    "ci",
+    "versions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0445",
+  "provider": "discord",
+  "surface_type": "sdk",
+  "surface_name": "Interaction acknowledgement",
+  "title": "Discord bot throws Interaction has already been acknowledged after deferReply",
+  "symptoms": [
+    "DiscordAPIError[40060]: Interaction has already been acknowledged",
+    "InteractionAlreadyReplied error from a second interaction.reply()",
+    "Command handler works alone but fails when a global handler also defers"
+  ],
+  "cause": "An interaction accepts exactly one initial response, and both reply and deferReply count as that response. Every later message has to edit the reply or send a followup.",
+  "fix": "After deferReply or reply, use editReply or followUp. Check interaction.deferred or interaction.replied in shared error handlers.",
+  "apply": "if (interaction.deferred || interaction.replied) await interaction.followUp({ content: msg });\nelse await interaction.reply({ content: msg });",
+  "affected": "Discord interactions; discord.js 13 and 14",
+  "sources": [
+    "https://docs.discord.com/developers/topics/opcodes-and-status-codes",
+    "https://github.com/discordjs/discord.js/issues/9052"
+  ],
+  "tags": [
+    "interactions",
+    "replies",
+    "errors"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

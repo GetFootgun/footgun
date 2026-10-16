@@ -1,0 +1,24 @@
+{
+  "id": "fg-0007",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Plugins, local marketplace cache",
+  "title": "Edits to a local Claude Code plugin never show up",
+  "symptoms": [
+    "The plugin behaves like the old version after editing its source",
+    "Reloading plugins changes nothing"
+  ],
+  "cause": "Claude Code runs a frozen copy from ~/.claude/plugins/cache/{marketplace}/{plugin}/{version}/, not the source folder. Without a version bump the cache is never refreshed.",
+  "fix": "Bump the version in .claude-plugin/plugin.json, update the marketplace and the plugin, then restart or reload plugins.",
+  "apply": "claude plugin marketplace update <marketplace> && claude plugin update <plugin>@<marketplace>",
+  "affected": "Claude Code 2.1, October 2026",
+  "sources": [],
+  "tags": [
+    "plugins",
+    "cache"
+  ],
+  "verified_on": "2026-10-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

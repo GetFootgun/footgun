@@ -1,0 +1,24 @@
+{
+  "id": "fg-0071",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Service variables, manual run flags",
+  "title": "A RUN_NOW style variable reruns the job on every Railway redeploy",
+  "symptoms": [
+    "The job runs and emails again after every deploy",
+    "Unexpected runs right after variable changes"
+  ],
+  "cause": "Setting a variable triggers a redeploy, and a flag read at boot fires on every later boot too. Deleting a variable does not trigger a redeploy.",
+  "fix": "Delete the flag right after the manual run. Audit services for leftover flags.",
+  "apply": "railway variables --json | node -e \"const v=JSON.parse(require('fs').readFileSync(0)); for (const k of Object.keys(v)) if (/RUN.*NOW/.test(k)) console.log(k, v[k] === 'true')\"",
+  "affected": "Railway, July 2026",
+  "sources": [],
+  "tags": [
+    "env-vars",
+    "cron"
+  ],
+  "verified_on": "2026-07-05",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

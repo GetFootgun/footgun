@@ -1,0 +1,27 @@
+{
+  "id": "fg-0294",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "Prisma Json fields",
+  "title": "Prisma rejects null for a Json field: Type 'null' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue'",
+  "symptoms": [
+    "Type 'null' is not assignable to type 'NullableJsonNullValueInput | InputJsonValue | undefined'.",
+    "where: { meta: null } fails type checking with Type 'null' is not assignable to type 'JsonNullableFilter'"
+  ],
+  "cause": "A nullable Json column can hold two different nulls, SQL NULL and the JSON value null, so Prisma refuses a bare null and makes you choose. Filters on them also need the explicit equals form.",
+  "fix": "Write Prisma.DbNull or Prisma.JsonNull, and filter with equals and Prisma.AnyNull. In Prisma 7 import Prisma from the generated client.",
+  "apply": "import { Prisma } from './generated/prisma/client'\nawait prisma.item.create({ data: { meta: Prisma.DbNull } })\nawait prisma.item.findMany({ where: { meta: { equals: Prisma.AnyNull } } })",
+  "affected": "Prisma ORM 6 and 7, reproduced on 7.10.0",
+  "sources": [
+    "https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields"
+  ],
+  "tags": [
+    "json",
+    "null",
+    "typescript"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0333",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Expiring offline access tokens",
+  "title": "Shopify offline access token stops working after an hour, or on January 1 2027 if it never expires",
+  "symptoms": [
+    "[API] Invalid API key or access token about an hour after install",
+    "Token exchange returns a non-expiring token because expiring defaults to 0",
+    "A background job's refresh token stops working after another process refreshed or re-acquired the token for that store"
+  ],
+  "cause": "Public apps must use expiring offline tokens for the GraphQL Admin API: new apps already, existing apps by 2027-01-01. Expiring tokens last one hour with a 90 day refresh token; a newly acquired token retires older ones, which stay valid until they expire, and a presented refresh token stops working once the newer one is used.",
+  "fix": "Request expiring=1 in token exchange, store the rotating refresh token, and refresh from one place per shop before expires_in runs out. Apps on the official templates refresh automatically.",
+  "apply": "POST https://{shop}.myshopify.com/admin/oauth/access_token\ngrant_type=refresh_token&client_id=...&client_secret=...&refresh_token=STORED_REFRESH_TOKEN\n# persist the new access_token, expires_in, refresh_token, refresh_token_expires_in\n# token exchange: add expiring=1",
+  "affected": "Public Shopify apps calling the GraphQL Admin API; enforced for existing apps on 2027-01-01; not custom or merchant-created apps",
+  "sources": [
+    "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/offline-access-tokens",
+    "https://shopify.dev/docs/apps/build/authentication-authorization/implement-token-exchange",
+    "https://shopify.dev/docs/apps/build/authentication-authorization/migrate-to-expiring-offline-access-tokens"
+  ],
+  "tags": [
+    "auth",
+    "access-tokens",
+    "deprecation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

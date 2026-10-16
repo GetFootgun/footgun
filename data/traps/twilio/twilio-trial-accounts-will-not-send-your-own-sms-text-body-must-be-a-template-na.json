@@ -1,0 +1,27 @@
+{
+  "id": "fg-0166",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Trial accounts, Messages resource",
+  "title": "Twilio trial accounts will not send your own SMS text; Body must be a template name such as sms_2fa",
+  "symptoms": [
+    "Quickstart send code with a custom Body fails on a new trial account",
+    "Only to, body and statusCallback can be set on a trial send"
+  ],
+  "cause": "Trial accounts may only send Twilio provided message templates, chosen by name in the body parameter, to verified US numbers. Custom text arrives only after upgrading.",
+  "fix": "During the trial pass a template name as body, or upgrade the account before testing real copy.",
+  "apply": "await client.messages.create({ to: '+15551234567', body: 'sms_2fa' });",
+  "affected": "Twilio trial accounts; trial SMS rules as published 2026-08-13; trials also expire after 30 days",
+  "sources": [
+    "https://www.twilio.com/docs/usage/trials/try-out-sms",
+    "https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account"
+  ],
+  "tags": [
+    "trial",
+    "sms"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

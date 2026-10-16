@@ -1,0 +1,28 @@
+{
+  "id": "fg-0368",
+  "provider": "zapier",
+  "surface_type": "tool",
+  "surface_name": "Code by Zapier output",
+  "title": "Code by Zapier fails with 'Scripting payload too large' or the 250 item output limit",
+  "symptoms": [
+    "Scripting payload too large",
+    "You cannot return more than 250 items from a Code action",
+    "Process exited before completing request"
+  ],
+  "cause": "Code steps run on AWS Lambda with a 6 MB cap on code plus data, and output is limited to 250 items. A fetch chain without a catch can also exit silently.",
+  "fix": "Return only the fields you need, split large arrays across steps, and await fetch inside try and catch.",
+  "apply": "try {\n  const r = await fetch(url);\n  const all = await r.json();\n  return { ids: all.items.slice(0, 250).map(i => i.id).join(',') };\n} catch (err) {\n  return { error: String(err) };\n}",
+  "affected": "Code by Zapier JavaScript and Python, all plans, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/8495980256141-Common-Problems-with-Code-Javascript-on-Zapier"
+  ],
+  "tags": [
+    "code",
+    "limits",
+    "payload"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

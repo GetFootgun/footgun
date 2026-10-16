@@ -1,0 +1,27 @@
+{
+  "id": "fg-0506",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Project config layers and trust",
+  "title": "Settings in a repo's .codex/config.toml are ignored by Codex",
+  "symptoms": [
+    "sandbox_mode or model set in the project .codex/config.toml has no effect",
+    "Project hooks and rules under .codex do not run"
+  ],
+  "cause": "Codex loads project .codex/ layers, including config, hooks, and rules, only for trusted projects. A project marked untrusted, or never trusted, gets user and system config only.",
+  "fix": "Trust the project when Codex asks, or mark it trusted in user config.",
+  "apply": "# ~/.codex/config.toml\n[projects.\"/Users/alice/code/app\"]\ntrust_level = \"trusted\"",
+  "affected": "Codex CLI, IDE extension, and ChatGPT desktop app, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/config-file/config-basic",
+    "https://learn.chatgpt.com/docs/config-file/config-reference"
+  ],
+  "tags": [
+    "config",
+    "trust"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

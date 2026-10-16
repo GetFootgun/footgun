@@ -1,0 +1,28 @@
+{
+  "id": "fg-0345",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Expressions and paired items",
+  "title": "n8n expression errors with 'Multiple matching items for expression' after an Aggregate or Merge",
+  "symptoms": [
+    "ERROR: Multiple matching items for expression",
+    "ERROR: Info for expression missing from previous node",
+    "Expression resolves to null with a note that the node is on another branch"
+  ],
+  "cause": "$('Node').item follows each item back through the item links, and that thread breaks after nodes that combine items, after Code nodes that drop pairing, or across merged branches.",
+  "fix": "Use .first(), .last() or .all()[index] when you know the position, or set pairedItem in Code node output so links survive.",
+  "apply": "{{ $('Get customer').first().json.email }}\n// Code node: return items.map((it, i) => ({ json: {...}, pairedItem: i }));  // index of the input item",
+  "affected": "n8n 1.x and 2.x, as of 2026-10",
+  "sources": [
+    "https://docs.n8n.io/data/data-mapping/data-item-linking/item-linking-errors/"
+  ],
+  "tags": [
+    "expressions",
+    "items",
+    "merge"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

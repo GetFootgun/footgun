@@ -1,0 +1,28 @@
+{
+  "id": "fg-0292",
+  "provider": "prisma",
+  "surface_type": "tool",
+  "surface_name": "prisma migrate dev vs deploy",
+  "title": "prisma migrate dev in CI or against a shared database detects drift and wants to reset the schema",
+  "symptoms": [
+    "Drift detected: Your database schema is not in sync with your migration history.",
+    "We need to reset the \"public\" schema at ... All data will be lost.",
+    "The CI step stops at the reset prompt or exits without applying anything"
+  ],
+  "cause": "migrate dev is a development command that replays history in a shadow database and offers to reset when the live schema differs. migrate deploy only applies pending migrations and never checks drift, resets, or uses a shadow database.",
+  "fix": "Use migrate deploy in CI, staging, and production, and keep migrate dev for local databases you can wipe.",
+  "apply": "npx prisma migrate deploy",
+  "affected": "Prisma ORM 6 and 7; prompt text reproduced on 7.10.0",
+  "sources": [
+    "https://www.prisma.io/docs/orm/reference/prisma-cli-reference"
+  ],
+  "tags": [
+    "migrate",
+    "ci",
+    "production"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0258",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "BuildKit gha cache backend",
+  "title": "Docker layer cache with type=gha never hits when one workflow builds several images",
+  "symptoms": [
+    "Every run rebuilds from the first RUN step although cache-from type=gha is set",
+    "Earlier stages of a multi-stage build are always rebuilt"
+  ],
+  "cause": "The gha backend writes every image to one default scope named buildkit, so each export overwrites the previous image's cache. The default min mode also caches only layers of the final stage.",
+  "fix": "Give each image its own scope and export with mode=max.",
+  "apply": "cache-from: type=gha,scope=api\ncache-to: type=gha,scope=api,mode=max",
+  "affected": "BuildKit gha cache backend, as of October 2026",
+  "sources": [
+    "https://docs.docker.com/build/cache/backends/gha/"
+  ],
+  "tags": [
+    "github-actions",
+    "build-cache",
+    "buildkit"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

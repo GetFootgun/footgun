@@ -1,0 +1,27 @@
+{
+  "id": "fg-0279",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "psycopg 3 server-side binding",
+  "title": "psycopg 3 raises 'syntax error at or near \"$1\"' on SET or NOTIFY with parameters that worked in psycopg2",
+  "symptoms": [
+    "psycopg.errors.SyntaxError: syntax error at or near \"$1\"",
+    "psycopg.errors.SyntaxError: cannot insert multiple commands into a prepared statement"
+  ],
+  "cause": "psycopg 3 sends parameters to the server separately, and PostgreSQL accepts them only in plain SELECT and data change statements, one statement per call. psycopg2 merged values into the text on the client, so both patterns used to work.",
+  "fix": "Use the function forms set_config and pg_notify, split multi-statement strings into separate execute calls, or use ClientCursor for client-side binding.",
+  "apply": "conn.execute(\"SELECT set_config('TimeZone', %s, false)\", [\"UTC\"])\nconn.execute(\"SELECT pg_notify(%s, %s)\", [\"chan\", \"42\"])",
+  "affected": "psycopg 3.x, when porting code from psycopg2",
+  "sources": [
+    "https://github.com/psycopg/psycopg/blob/master/docs/basic/from_pg2.rst"
+  ],
+  "tags": [
+    "psycopg",
+    "migration",
+    "parameters"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

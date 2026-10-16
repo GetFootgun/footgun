@@ -1,0 +1,28 @@
+{
+  "id": "fg-0312",
+  "provider": "playwright",
+  "surface_type": "sdk",
+  "surface_name": "Test, expect and action timeouts",
+  "title": "A stuck click burns the whole test and fails as 'Test timeout of 30000ms exceeded' instead of naming the locator",
+  "symptoms": [
+    "Test timeout of 30000ms exceeded.",
+    "The error log ends with waiting for getByRole('button', { name: 'Submit' }) rather than a locator timeout",
+    "expect assertions fail after 5 s while actions wait 30 s"
+  ],
+  "cause": "Actions and navigations have no timeout of their own by default, so they wait until the 30 s test timeout ends the test. Assertions use a separate 5 s expect timeout.",
+  "fix": "Set actionTimeout and navigationTimeout below the test timeout so a missing element fails fast with its own error.",
+  "apply": "// playwright.config.ts\nexport default defineConfig({\n  timeout: 60_000,\n  expect: { timeout: 10_000 },\n  use: { actionTimeout: 10_000, navigationTimeout: 30_000 },\n})",
+  "affected": "Playwright Test, all current versions",
+  "sources": [
+    "https://playwright.dev/docs/test-timeouts"
+  ],
+  "tags": [
+    "timeouts",
+    "config",
+    "debugging"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

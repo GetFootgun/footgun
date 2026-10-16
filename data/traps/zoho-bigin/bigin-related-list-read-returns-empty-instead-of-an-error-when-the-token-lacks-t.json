@@ -1,0 +1,25 @@
+{
+  "id": "fg-0116",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, related lists",
+  "title": "Bigin related-list read returns empty instead of an error when the token lacks the scope",
+  "symptoms": [
+    "/v2/Pipelines/{id}/Notes returns no records",
+    "A direct Notes read fails with 401 Invalid oauth scope",
+    "Every record appears to have zero notes"
+  ],
+  "cause": "A token whose scopes cover Pipelines but not Notes, Tasks or Calls gets an empty response from related-list endpoints rather than an error, while direct reads of those modules fail with an invalid scope error.",
+  "fix": "Prove a read can return data before you report an absence: run it on a record you know has notes. Use a token that carries the scopes for every module you read.",
+  "apply": "Self Client scope: ZohoBigin.modules.ALL,ZohoBigin.settings.READ; then GET /bigin/v2/Pipelines/{known_id}/Notes and expect at least one record",
+  "affected": "Bigin API v2, September 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "oauth-scope"
+  ],
+  "verified_on": "2026-09-23",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

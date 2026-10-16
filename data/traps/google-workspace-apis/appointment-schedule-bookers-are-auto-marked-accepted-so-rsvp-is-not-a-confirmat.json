@@ -1,0 +1,23 @@
+{
+  "id": "fg-0018",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "Calendar appointment schedules",
+  "title": "Appointment schedule bookers are auto-marked accepted, so RSVP is not a confirmation",
+  "symptoms": [
+    "Every booked attendee shows responseStatus accepted",
+    "No-shows also show accepted"
+  ],
+  "cause": "People who book through an appointment schedule page are recorded as accepted automatically.",
+  "fix": "Collect confirmation another way, for example a reply to a reminder message.",
+  "apply": "Do not filter on attendees[].responseStatus == 'accepted' for appointment-page bookings.",
+  "affected": "Google Calendar appointment schedules, October 2026",
+  "sources": [],
+  "tags": [
+    "misleading-data"
+  ],
+  "verified_on": "2026-10-08",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

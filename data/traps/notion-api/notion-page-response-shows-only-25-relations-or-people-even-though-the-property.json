@@ -1,0 +1,29 @@
+{
+  "id": "fg-0460",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Page property values",
+  "title": "Notion page response shows only 25 relations or people even though the property holds more",
+  "symptoms": [
+    "Relation array stops at 25 entries",
+    "has_more: true on a relation property in a page object",
+    "Rollup or formula over a large relation gives a wrong total"
+  ],
+  "cause": "Page and query responses include at most 25 references for relation and people properties and at most 25 mentions in title or rich text. Formulas also evaluate only the first 25 relation references.",
+  "fix": "Read the full value through the page property item endpoint and page through every result.",
+  "apply": "let cursor; const ids = [];\ndo {\n  const r = await notion.pages.properties.retrieve({ page_id, property_id, start_cursor: cursor });\n  ids.push(...r.results.map(x => x.relation.id));\n  cursor = r.next_cursor ?? undefined;\n} while (cursor);",
+  "affected": "Notion REST API, all versions, as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/retrieve-a-page",
+    "https://developers.notion.com/reference/query-a-data-source"
+  ],
+  "tags": [
+    "relations",
+    "pagination",
+    "truncation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0332",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "GraphQL Admin API error responses",
+  "title": "Shopify GraphQL throttling and access errors arrive with HTTP 200, so res.ok checks treat them as success",
+  "symptoms": [
+    "HTTP 200 with errors[0].extensions.code THROTTLED and data null",
+    "Sync jobs report success while writing nothing during a burst",
+    "ACCESS_DENIED or protected data errors appear only inside the JSON body"
+  ],
+  "cause": "The GraphQL Admin API returns most failures, including throttling, as a 200 response with an errors array, unlike REST which uses 429 and 4xx codes.",
+  "fix": "Inspect the errors array on every response, retry THROTTLED after waiting for the bucket to refill, and pace requests from extensions.cost.throttleStatus.",
+  "apply": "const body = await res.json()\nconst code = body.errors?.[0]?.extensions?.code\nif (code === 'THROTTLED') { await sleep(1000); return retry() }\nif (body.errors) throw new Error(JSON.stringify(body.errors))\nconst { currentlyAvailable, restoreRate } = body.extensions.cost.throttleStatus",
+  "affected": "GraphQL Admin API, all current versions",
+  "sources": [
+    "https://shopify.dev/docs/api/admin-graphql",
+    "https://shopify.dev/docs/api/usage/limits"
+  ],
+  "tags": [
+    "graphql",
+    "errors",
+    "rate-limit"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0230",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "Reusable workflow with inputs",
+  "title": "Passing env values to a reusable workflow fails with \"Unrecognized named-value: 'env'\"",
+  "symptoms": [
+    "Unrecognized named-value: 'env'. Located at position 1 within expression: env.IMAGE_TAG",
+    "The workflow file is rejected before any job runs",
+    "The same expression works inside a normal step"
+  ],
+  "cause": "The env context is not available in jobs.ID.with for a uses: call, which only allows github, needs, strategy, matrix, inputs, and vars. Workflow level env also does not flow into the called workflow.",
+  "fix": "Compute the value in an earlier job and pass it through needs outputs, or store constants in repository variables and use vars.",
+  "apply": "jobs:\n  prep:\n    runs-on: ubuntu-latest\n    outputs:\n      tag: ${{ steps.t.outputs.tag }}\n    steps:\n      - id: t\n        run: echo \"tag=${GITHUB_SHA::7}\" >> \"$GITHUB_OUTPUT\"\n  deploy:\n    needs: prep\n    uses: ./.github/workflows/deploy.yml\n    with:\n      image_tag: ${{ needs.prep.outputs.tag }}",
+  "affected": "GitHub Actions reusable workflows, by design as of October 2026",
+  "sources": [
+    "https://github.com/actions/runner/issues/2372",
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts"
+  ],
+  "tags": [
+    "reusable-workflows",
+    "contexts",
+    "expressions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,23 @@
+{
+  "id": "fg-0107",
+  "provider": "wordpress",
+  "surface_type": "ui",
+  "surface_name": "Yoast SEO, snippet variables",
+  "title": "Yoast snippet variable adds a space before the following comma",
+  "symptoms": [
+    "SEO title reads 'Product Name , a Brand' with a stray space"
+  ],
+  "cause": "In Yoast's template editor a %%variable%% chip renders with a trailing space.",
+  "fix": "Do not put punctuation directly after a variable; restructure the sentence.",
+  "apply": "Write '%%term_title%% from Brand' rather than '%%term_title%%, Brand'",
+  "affected": "Yoast SEO Search Appearance templates, September 2026",
+  "sources": [],
+  "tags": [
+    "seo",
+    "templates"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

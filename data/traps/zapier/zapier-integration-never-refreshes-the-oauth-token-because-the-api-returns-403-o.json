@@ -1,0 +1,29 @@
+{
+  "id": "fg-0377",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "OAuth2 automatic refresh",
+  "title": "Zapier integration never refreshes the OAuth token because the API returns 403 or 400 on expiry",
+  "symptoms": [
+    "Zaps fail with the API's token expired message until the user reconnects",
+    "autoRefresh is on but refreshAccessToken never runs",
+    "Only APIs that answer 401 refresh correctly"
+  ],
+  "cause": "With autoRefresh, platform core throws RefreshAuthError only for a 401 response. Any other status for an expired token is treated as an ordinary error.",
+  "fix": "Detect the API's expiry response in afterResponse and throw z.errors.RefreshAuthError yourself.",
+  "apply": "const refreshOnExpiry = (response, z) => {\n  if (response.status === 403 && /expired/i.test(response.content)) {\n    throw new z.errors.RefreshAuthError();\n  }\n  return response;\n};\nmodule.exports = { afterResponse: [refreshOnExpiry] };",
+  "affected": "zapier-platform-core with OAuth2 autoRefresh or session auth, as of 2026-10",
+  "sources": [
+    "https://docs.zapier.com/platform/reference/cli-docs",
+    "https://github.com/zapier/zapier-platform/blob/main/packages/core/src/http-middlewares/after/throw-for-stale-auth.js"
+  ],
+  "tags": [
+    "oauth",
+    "refresh",
+    "auth"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

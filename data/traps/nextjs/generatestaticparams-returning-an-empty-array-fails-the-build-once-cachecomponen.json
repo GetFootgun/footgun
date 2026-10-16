@@ -1,0 +1,29 @@
+{
+  "id": "fg-0302",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "generateStaticParams with cacheComponents",
+  "title": "generateStaticParams returning an empty array fails the build once cacheComponents is on",
+  "symptoms": [
+    "Build error linking to /docs/messages/empty-generate-static-params",
+    "A dynamic route that deferred all paths to runtime with return [] stops building",
+    "Removing generateStaticParams makes the build pass but the route renders on every request"
+  ],
+  "cause": "Under cacheComponents, Next.js needs at least one param to prerender and validate the route's static shell. The old pattern of returning [] to defer everything is now an error.",
+  "fix": "Return at least one real param. Unlisted params are still rendered at request time. Keep the export, because deleting it opts the route out of ISR.",
+  "apply": "export async function generateStaticParams() {\n  const posts = await getPosts()\n  return posts.slice(0, 1).map((p) => ({ slug: p.slug }))\n}",
+  "affected": "Next.js 16.x with cacheComponents: true",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/migrating-to-cache-components",
+    "https://nextjs.org/docs/messages/empty-generate-static-params"
+  ],
+  "tags": [
+    "cache-components",
+    "static-params",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

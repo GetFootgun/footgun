@@ -1,0 +1,25 @@
+{
+  "id": "fg-0041",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Google Email app, Search emails module",
+  "title": "Gmail search module returns emails with empty bodies",
+  "symptoms": [
+    "Body is empty in every bundle",
+    "Mapping {{1.text}} returns nothing",
+    "Only subject and snippet are filled"
+  ],
+  "cause": "The module's format parameter defaults to a metadata-only mode that returns no body. The module also has no text field; with format set to full the body arrives in fullTextBody and htmlBody.",
+  "fix": "Set format to full, turn on the HTML body option, and map fullTextBody or htmlBody.",
+  "apply": "google-email:executeEmailSearchQuery: format = full, includeHtmlBody = true; map {{1.fullTextBody}}",
+  "affected": "Make Google Email app version 4, July 2026",
+  "sources": [],
+  "tags": [
+    "email",
+    "parsing"
+  ],
+  "verified_on": "2026-07-08",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

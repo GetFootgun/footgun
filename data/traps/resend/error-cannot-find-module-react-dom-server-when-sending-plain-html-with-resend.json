@@ -1,0 +1,28 @@
+{
+  "id": "fg-0401",
+  "provider": "resend",
+  "surface_type": "sdk",
+  "surface_name": "resend-node optional React dependency",
+  "title": "Error: Cannot find module 'react-dom/server' when sending plain HTML with Resend",
+  "symptoms": [
+    "Error: Cannot find module 'react-dom/server'",
+    "Require stack points at @react-email/render inside resend",
+    "Server crashes at import time, before any email is sent"
+  ],
+  "cause": "Older resend releases loaded React Email rendering at import time, so a backend without react-dom crashed even when it only sent html.",
+  "fix": "Upgrade to resend 4.0.1 or later. If you do pass react, install react and react-dom yourself.",
+  "apply": "npm i resend@latest",
+  "affected": "resend (Node SDK) 3.x up to 4.0.0, fixed in 4.0.1",
+  "sources": [
+    "https://github.com/resend/resend-node/issues/405"
+  ],
+  "tags": [
+    "sdk",
+    "dependencies",
+    "node"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

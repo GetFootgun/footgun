@@ -1,0 +1,29 @@
+{
+  "id": "fg-0325",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Mandatory compliance webhooks",
+  "title": "App Store review rejects the app over the mandatory compliance webhooks it never subscribed to",
+  "symptoms": [
+    "App submission rejected for missing customers/data_request, customers/redact or shop/redact handling",
+    "webhookSubscriptionCreate cannot create the compliance topics",
+    "Automated review fails because a forged HMAC gets a 200 instead of a 401"
+  ],
+  "cause": "Every App Store app must answer the three privacy compliance topics even if it stores no personal data. They can only be configured in shopify.app.toml or the Dev Dashboard, and an invalid HMAC must get a 401.",
+  "fix": "Declare the compliance topics in shopify.app.toml, verify HMAC and return 401 on mismatch, and deploy before submitting.",
+  "apply": "[[webhooks.subscriptions]]\ncompliance_topics = [\"customers/data_request\", \"customers/redact\", \"shop/redact\"]\nuri = \"https://app.example.com/webhooks\"",
+  "affected": "Public apps distributed through the Shopify App Store, all API versions",
+  "sources": [
+    "https://shopify.dev/docs/apps/build/compliance/privacy-law-compliance",
+    "https://shopify.dev/docs/apps/build/webhooks/subscribe"
+  ],
+  "tags": [
+    "compliance",
+    "webhooks",
+    "app-review"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

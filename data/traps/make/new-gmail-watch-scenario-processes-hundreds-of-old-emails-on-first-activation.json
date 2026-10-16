@@ -1,0 +1,24 @@
+{
+  "id": "fg-0047",
+  "provider": "make",
+  "surface_type": "ui",
+  "surface_name": "Google Email app, Watch emails trigger",
+  "title": "New Gmail watch scenario processes hundreds of old emails on first activation",
+  "symptoms": [
+    "The first runs after activation act on historical emails",
+    "A burst of notices goes out the moment the scenario is turned on"
+  ],
+  "cause": "The watch trigger starts from the oldest matching email unless a starting point is chosen before activation.",
+  "fix": "Before turning the scenario on, set the trigger's starting point to From now on.",
+  "apply": "Make editor: right-click the trigger module > Choose where to start > From now on > OK, then switch Scheduling on.",
+  "affected": "Make Google Email app, Watch emails, June 2026",
+  "sources": [],
+  "tags": [
+    "backfill",
+    "email"
+  ],
+  "verified_on": "2026-06-24",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

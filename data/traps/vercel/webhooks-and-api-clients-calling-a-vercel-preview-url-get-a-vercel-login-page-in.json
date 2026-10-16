@@ -1,0 +1,29 @@
+{
+  "id": "fg-0251",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Deployment Protection, preview URLs",
+  "title": "Webhooks and API clients calling a Vercel preview URL get a Vercel login page instead of the function",
+  "symptoms": [
+    "Stripe, Slack, or GitHub webhook deliveries to a preview URL fail with 401 or a redirect to vercel.com/login",
+    "Slack URL verification fails for a preview deployment",
+    "Playwright or curl against a preview sees the Vercel Authentication page"
+  ],
+  "cause": "Standard Protection with Vercel Authentication covers every non production deployment URL, so callers without a Vercel session are redirected to log in. Third party senders cannot pass that check.",
+  "fix": "Create a Protection Bypass for Automation secret and send it as the x-vercel-protection-bypass header, or as a query parameter for services that cannot set headers.",
+  "apply": "https://$PREVIEW_HOST/api/webhook?x-vercel-protection-bypass=$VERCEL_AUTOMATION_BYPASS_SECRET\n\ncurl -H \"x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET\" https://$PREVIEW_HOST/api/health",
+  "affected": "Vercel projects with Standard Protection and Vercel Authentication (the common default), all plans, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation",
+    "https://vercel.com/docs/deployment-protection"
+  ],
+  "tags": [
+    "deployment-protection",
+    "webhooks",
+    "preview"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

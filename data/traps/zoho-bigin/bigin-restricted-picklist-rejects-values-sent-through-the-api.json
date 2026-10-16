@@ -1,0 +1,24 @@
+{
+  "id": "fg-0117",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "Fields, restricted picklists",
+  "title": "Bigin restricted picklist rejects values sent through the API",
+  "symptoms": [
+    "Picklist field stays empty after an API create",
+    "A deleted field's name cannot be reused"
+  ],
+  "cause": "Restricted picklists refuse values from integrations even when the value is in the list. A field's type cannot be changed, and deleted fields move to Unused Fields with their names still reserved.",
+  "fix": "Create a new single line text field under a new name and point the integration at it. Refresh the module's field list in any integration tool that caches it.",
+  "apply": "Bigin Setup > Fields > Pipelines: add a Single Line field with a new name, then map the integration to it",
+  "affected": "Bigin, June to September 2026",
+  "sources": [],
+  "tags": [
+    "fields",
+    "integration"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

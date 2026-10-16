@@ -1,0 +1,24 @@
+{
+  "id": "fg-0022",
+  "provider": "google-workspace-apis",
+  "surface_type": "ui",
+  "surface_name": "Gmail filters, forwarding",
+  "title": "Gmail forward filter seems broken when tested by emailing yourself",
+  "symptoms": [
+    "A test email to the forwarding mailbox never arrives at the destination",
+    "Real external mail forwards fine"
+  ],
+  "cause": "Gmail does not deliver a message back to the account that sent it, so a self-sent test of a forward to that same account is suppressed.",
+  "fix": "Test with a message sent from outside the destination account.",
+  "apply": "Send the test from a different account or service, not from the forward's destination address.",
+  "affected": "Gmail, August 2026",
+  "sources": [],
+  "tags": [
+    "testing",
+    "false-negative"
+  ],
+  "verified_on": "2026-08-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

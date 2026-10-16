@@ -1,0 +1,22 @@
+{
+  "id": "fg-0056",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Tools app, Set multiple variables",
+  "title": "Variables in one 'Set multiple variables' module cannot reference each other",
+  "symptoms": [
+    "A variable built from a sibling variable in the same module comes out empty"
+  ],
+  "cause": "All variables in a single Set multiple variables module are computed from the module's inputs at once, so none can see the others.",
+  "fix": "Compute each variable from the original source fields, or chain two modules.",
+  "apply": "In every variable's formula map {{1.summary}} directly instead of a sibling variable.",
+  "affected": "Make Tools app, util:SetVariables, October 2026",
+  "sources": [],
+  "tags": [
+    "mapping"
+  ],
+  "verified_on": "2026-10-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

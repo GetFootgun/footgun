@@ -1,0 +1,23 @@
+{
+  "id": "fg-0010",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "~/.claude.json, top-level mcpServers",
+  "title": "MCP servers with write access to one project load in every directory",
+  "symptoms": [
+    "Tools for one client's systems are available in an unrelated folder"
+  ],
+  "cause": "Servers in the top-level mcpServers block of ~/.claude.json load in every working directory.",
+  "fix": "Register servers under each project's own block and keep the top-level block empty unless a server truly belongs everywhere.",
+  "apply": "Move entries from mcpServers to projects[\"/path/to/project\"].mcpServers in ~/.claude.json, after backing the file up",
+  "affected": "Claude Code, August 2026",
+  "sources": [],
+  "tags": [
+    "mcp",
+    "isolation"
+  ],
+  "verified_on": "2026-08-03",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

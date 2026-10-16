@@ -1,0 +1,24 @@
+{
+  "id": "fg-0073",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Deployments, redeploy versus up",
+  "title": "New code is not live after 'railway up' because an older redeploy won",
+  "symptoms": [
+    "Logs show the previous version's startup lines",
+    "Several deployments were created within a minute"
+  ],
+  "cause": "Setting variables, adding a volume and running railway up back to back created three concurrent deployments, and a redeploy of the previously built image finished last. A redeploy reuses the latest built image; only railway up builds local code.",
+  "fix": "Let variable and volume changes settle, then run one railway up on its own and confirm a log line that only the new code prints.",
+  "apply": "railway up, then railway logs and look for a startup line unique to the new build",
+  "affected": "Railway, September 2026",
+  "sources": [],
+  "tags": [
+    "deploy",
+    "race"
+  ],
+  "verified_on": "2026-09-10",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

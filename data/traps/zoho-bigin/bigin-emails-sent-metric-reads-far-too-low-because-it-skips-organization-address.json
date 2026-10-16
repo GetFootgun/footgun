@@ -1,0 +1,24 @@
+{
+  "id": "fg-0113",
+  "provider": "zoho-bigin",
+  "surface_type": "ui",
+  "surface_name": "Email Analytics, Emails Sent",
+  "title": "Bigin 'Emails Sent' metric reads far too low because it skips organization address sends",
+  "symptoms": [
+    "Emails Sent shows single digits while workflow emails are visibly going out",
+    "Workflow emails appear on records but not in the Emails Sent drill-down"
+  ],
+  "cause": "The metric counts only mail sent from a user's connected mailbox. Workflow emails sent from organization email addresses have no user attached and are left out. Opens count repeat opens, so opens far above sends is normal and not a bug.",
+  "fix": "Keep Emails Sent off dashboards and confirm workflow sends on the records themselves.",
+  "apply": "Open a deal > Timeline and check the workflow emails listed there.",
+  "affected": "Bigin Email Analytics, July 2026",
+  "sources": [],
+  "tags": [
+    "reporting",
+    "misleading-metric"
+  ],
+  "verified_on": "2026-07-18",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

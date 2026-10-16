@@ -1,0 +1,24 @@
+{
+  "id": "fg-0131",
+  "provider": "wordpress",
+  "surface_type": "infra",
+  "surface_name": "Object cache versus host page cache and CDN",
+  "title": "Clearing the WordPress object cache does not purge page or edge caches",
+  "symptoms": [
+    "Cache clear reports success, or 0 entries cleared, but visitors still see the old page",
+    "A cache-busting query string such as ?cb=123 shows the change",
+    "Response headers show a page cache hit"
+  ],
+  "cause": "Object cache tools, including the mcp-wordpress wp_cache_clear tool, flush stored queries and objects, not rendered pages. The host's page cache keeps serving the old HTML until it expires; in the observed WP Engine setup that was max-age=600, about 10 minutes. A CDN in front of the host can hold its own copy on top.",
+  "fix": "Content stays stale until the host's page cache and the CDN are purged too. Purge the host page cache through its own tool or endpoint, purge the CDN if it caches HTML, and verify with a cache-busting query string before checking the plain URL.",
+  "apply": "POST /wp-json/wpe/cache-plugin/v1/clear_all_caches (WP Engine, application password auth), then curl -sI \"https://example.com/page/?cb=$(date +%s)\" and compare with the plain URL",
+  "affected": "WordPress on WP Engine EverCache, with or without a CDN, July and August 2026",
+  "sources": [],
+  "tags": [
+    "cache"
+  ],
+  "verified_on": "2026-08-07",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

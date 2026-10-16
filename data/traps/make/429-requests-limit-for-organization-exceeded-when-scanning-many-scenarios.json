@@ -1,0 +1,24 @@
+{
+  "id": "fg-0031",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "API v2, organization rate limit",
+  "title": "429 'Requests limit for organization exceeded' when scanning many scenarios",
+  "symptoms": [
+    "429 Requests limit for organization exceeded",
+    "Log reads start failing after a burst of about 30 calls"
+  ],
+  "cause": "The API rate limit is shared by the whole organization, so a tight loop of reads trips it for every client in the org.",
+  "fix": "Retry 429 and 5xx with exponential backoff that honors Retry-After, and pause a few hundred milliseconds between scenarios. Report a throttled read as unchecked, not as a failing scenario.",
+  "apply": "await sleep(350) between scenarios; on 429 wait Retry-After seconds, else 2^attempt seconds capped at 30, and retry up to 5 times",
+  "affected": "Make API v2, Pro plan organization, August 2026",
+  "sources": [],
+  "tags": [
+    "rate-limit",
+    "api"
+  ],
+  "verified_on": "2026-08-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

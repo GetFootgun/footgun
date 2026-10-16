@@ -1,0 +1,27 @@
+{
+  "id": "fg-0389",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "Contacts lifecyclestage property",
+  "title": "HubSpot lifecyclestage will not move back to an earlier stage through the API",
+  "symptoms": [
+    "lifecyclestage keeps the later value after an API update",
+    "Moving a customer back to lead or subscriber never sticks"
+  ],
+  "cause": "Lifecycle stage only moves forward when set by imports, forms, workflows, or the API. Moving it backward requires clearing the value first.",
+  "fix": "Send two updates: first set lifecyclestage to an empty string, then set the earlier stage. Read the record back to confirm.",
+  "apply": "await patch({ properties: { lifecyclestage: '' } }); await patch({ properties: { lifecyclestage: 'lead' } });",
+  "affected": "HubSpot CRM contacts and companies, default lifecyclestage property, as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/guide"
+  ],
+  "tags": [
+    "crm",
+    "properties",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,23 @@
+{
+  "id": "fg-0123",
+  "provider": "zoho-bigin",
+  "surface_type": "ui",
+  "surface_name": "Workflows and email templates",
+  "title": "Bigin workflow and template names cannot contain parentheses",
+  "symptoms": [
+    "Workflow save is rejected for a name with ( )",
+    "Template name with parentheses is rejected"
+  ],
+  "cause": "Bigin restricts special characters in workflow and template names.",
+  "fix": "Use a hyphen or plain words instead.",
+  "apply": "Name: Reminder - 1h before",
+  "affected": "Bigin workflows and email templates, July and October 2026",
+  "sources": [],
+  "tags": [
+    "naming"
+  ],
+  "verified_on": "2026-10-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

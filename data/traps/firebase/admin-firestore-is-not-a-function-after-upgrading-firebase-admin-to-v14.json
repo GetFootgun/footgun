@@ -1,0 +1,30 @@
+{
+  "id": "fg-0184",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "firebase-admin root import",
+  "title": "admin.firestore is not a function after upgrading firebase-admin to v14",
+  "symptoms": [
+    "TypeError: admin.firestore is not a function",
+    "TypeError: Cannot read properties of undefined (reading 'cert') from admin.credential.cert",
+    "admin.apps is undefined in an initializeApp guard"
+  ],
+  "cause": "firebase-admin 14.0.0 removed the legacy namespace API, so the default import no longer carries firestore(), auth(), messaging(), credential, or apps. It also dropped Node.js 18 and 20.",
+  "fix": "Switch to the modular entry points (firebase-admin/app, /firestore, /auth, /messaging) and run on Node.js 22 or later.",
+  "apply": "import { initializeApp, getApps, cert } from 'firebase-admin/app';\nimport { getFirestore } from 'firebase-admin/firestore';\nimport { getAuth } from 'firebase-admin/auth';\nconst app = getApps()[0] ?? initializeApp({ credential: cert(serviceAccount) });\nconst db = getFirestore(app);\nconst auth = getAuth(app);",
+  "affected": "firebase-admin 14.0.0 and later (released 2026-06-08); requires Node.js 22+",
+  "sources": [
+    "https://firebase.google.com/support/release-notes/admin/node",
+    "https://github.com/firebase/firebase-admin-node/pull/3164"
+  ],
+  "tags": [
+    "firebase-admin",
+    "upgrade",
+    "imports",
+    "nodejs"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

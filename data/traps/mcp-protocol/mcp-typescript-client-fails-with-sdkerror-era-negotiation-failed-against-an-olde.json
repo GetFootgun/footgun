@@ -1,0 +1,28 @@
+{
+  "id": "fg-0528",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "TypeScript SDK v2 version negotiation",
+  "title": "MCP TypeScript client fails with SdkError ERA_NEGOTIATION_FAILED against an older server",
+  "symptoms": [
+    "ERA_NEGOTIATION_FAILED: Version negotiation failed: the server did not offer pinned protocol version 2026-07-28 via server/discover (no fallback in pin mode)",
+    "the server gave no modern evidence and this client supports no pre-2026-07-28 protocol version to fall back to"
+  ],
+  "cause": "2026-07-28 drops the initialize handshake and adds server/discover. A v2 client pinned to that version, or one whose supportedProtocolVersions lists only 2026 revisions, has nothing to fall back to when the server still speaks a 2025 revision.",
+  "fix": "Use versionNegotiation mode auto and keep a 2025 revision in the supported list, so the probe falls back to initialize. Use mode legacy for servers that exit on any request before initialize.",
+  "apply": "const client = new Client({ name: 'app', version: '1.0.0' }, { versionNegotiation: { mode: 'auto' } });\nawait client.connect(transport);\nconsole.error(client.getProtocolEra()); // 'legacy' against 2025 servers",
+  "affected": "@modelcontextprotocol/client 2.x with MCP protocol 2026-07-28, as of 2026-10",
+  "sources": [
+    "https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/troubleshooting.md",
+    "https://modelcontextprotocol.io/specification/2026-07-28/changelog"
+  ],
+  "tags": [
+    "versioning",
+    "sdk",
+    "client"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

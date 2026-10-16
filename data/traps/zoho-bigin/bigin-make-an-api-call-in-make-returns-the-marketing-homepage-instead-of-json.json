@@ -1,0 +1,24 @@
+{
+  "id": "fg-0115",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "Make an API call (via Make)",
+  "title": "Bigin 'Make an API call' in Make returns the marketing homepage instead of JSON",
+  "symptoms": [
+    "Status 200 with an HTML body",
+    "The response is the Bigin marketing site"
+  ],
+  "cause": "The module's URL is relative to https://www.zohoapis.com/bigin. A path without /v2, or one that repeats /bigin, resolves to the marketing site and still returns 200.",
+  "fix": "Start every path with /v2/. Pass the fields query parameter on list calls, and check info.more_records because pages cap at 200.",
+  "apply": "url: /v2/Pipelines, qs: fields=Deal_Name,Stage and per_page=200",
+  "affected": "Make Bigin by Zoho app version 2, July 2026",
+  "sources": [],
+  "tags": [
+    "url",
+    "silent-failure"
+  ],
+  "verified_on": "2026-07-16",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

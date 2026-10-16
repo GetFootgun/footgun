@@ -1,0 +1,24 @@
+{
+  "id": "fg-0092",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Yoast SEO, schema graph",
+  "title": "Pasting an Article JSON-LD block into a Yoast site creates a duplicate Article",
+  "symptoms": [
+    "Two Article nodes for the same URL",
+    "Rich result tests show competing entities"
+  ],
+  "cause": "Yoast already outputs a schema graph with Article, Person, Organization, WebPage, BreadcrumbList, ImageObject and WebSite. A hand-written Article block in the content adds a second one.",
+  "fix": "Leave Article schema to Yoast; add only types Yoast does not emit, such as FAQPage.",
+  "apply": "curl -s -A \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\" https://example.com/post/ | grep -o '\"@type\":\"[A-Za-z]*\"' | sort | uniq -c",
+  "affected": "Yoast SEO, September 2026",
+  "sources": [],
+  "tags": [
+    "schema",
+    "seo"
+  ],
+  "verified_on": "2026-09-22",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

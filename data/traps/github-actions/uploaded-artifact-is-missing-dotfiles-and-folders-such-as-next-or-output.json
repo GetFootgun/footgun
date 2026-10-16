@@ -1,0 +1,29 @@
+{
+  "id": "fg-0234",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "actions/upload-artifact hidden files",
+  "title": "Uploaded artifact is missing dotfiles and folders such as .next or .output",
+  "symptoms": [
+    "Artifact zip lacks files whose names start with a dot",
+    "Downstream deploy job fails because the build folder is empty",
+    "Warning that no files were found for a path pointing at a dot folder"
+  ],
+  "cause": "Since September 2, 2024 (upload-artifact v4.4.0), hidden files and anything inside dot folders are excluded by default to avoid leaking credentials.",
+  "fix": "Set include-hidden-files: true and exclude sensitive files explicitly in path.",
+  "apply": "- uses: actions/upload-artifact@v4\n  with:\n    name: build\n    include-hidden-files: true\n    path: |\n      .next/\n      !.next/cache/",
+  "affected": "actions/upload-artifact v4.4.0 and later, since 2024-09-02",
+  "sources": [
+    "https://github.com/actions/upload-artifact/issues/602",
+    "https://github.com/actions/upload-artifact/releases/tag/v4.4.0"
+  ],
+  "tags": [
+    "artifacts",
+    "breaking-change",
+    "dotfiles"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

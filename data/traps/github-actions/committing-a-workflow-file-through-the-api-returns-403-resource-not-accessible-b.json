@@ -1,0 +1,24 @@
+{
+  "id": "fg-0014",
+  "provider": "github-actions",
+  "surface_type": "api",
+  "surface_name": "Contents API on .github/workflows",
+  "title": "Committing a workflow file through the API returns 403 'Resource not accessible by personal access token'",
+  "symptoms": [
+    "403 Resource not accessible by personal access token",
+    "Other files commit fine with the same token"
+  ],
+  "cause": "Writing files under .github/workflows requires the workflow scope on the token.",
+  "fix": "Use a token with the workflow scope, or commit the workflow by hand.",
+  "apply": "Classic PAT: tick workflow. Fine-grained PAT: Repository permissions > Workflows: Read and write",
+  "affected": "GitHub REST API, August 2026",
+  "sources": [],
+  "tags": [
+    "permissions",
+    "tokens"
+  ],
+  "verified_on": "2026-08-26",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

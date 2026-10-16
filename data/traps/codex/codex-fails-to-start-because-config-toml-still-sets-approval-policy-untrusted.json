@@ -1,0 +1,28 @@
+{
+  "id": "fg-0500",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Approval policy",
+  "title": "Codex fails to start because config.toml still sets approval_policy = \"untrusted\"",
+  "symptoms": [
+    "Error loading configuration: approval_policy = \"untrusted\" is no longer supported; remove this setting",
+    "Codex or the ChatGPT app refuses to start after an update although nothing was changed locally"
+  ],
+  "cause": "The untrusted approval policy was retired, and a config that still sets it can keep either client from starting.",
+  "fix": "Remove the setting everywhere it appears. For read-only interactive use set read-only with on-request, or keep the stricter behavior by marking the project untrusted in user config and leaving approval_policy unset.",
+  "apply": "# ~/.codex/config.toml\nsandbox_mode = \"read-only\"\napproval_policy = \"on-request\"\n# or, for strict command approval:\n# [projects.\"/path/to/project\"]\n# trust_level = \"untrusted\"",
+  "affected": "Codex 0.149.0 and later, ChatGPT Work, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-approvals-security",
+    "https://github.com/openai/codex/issues/39973"
+  ],
+  "tags": [
+    "approvals",
+    "config",
+    "migration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

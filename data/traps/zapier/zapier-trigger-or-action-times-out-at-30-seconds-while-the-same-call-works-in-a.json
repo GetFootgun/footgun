@@ -1,0 +1,27 @@
+{
+  "id": "fg-0380",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "Operating constraints",
+  "title": "Zapier trigger or action times out at 30 seconds while the same call works in a local test",
+  "symptoms": [
+    "Step times out in the Zap editor test",
+    "Polling trigger errors on accounts with large data sets",
+    "Action fails only for big payloads"
+  ],
+  "cause": "Polling triggers, create and search actions, REST hook processing and editor tests each get 30 seconds for requests and scripting. Input payloads are capped at 6 MB, or 35 MB from core 17.2.0, and HTTP responses at 20 MB.",
+  "fix": "Fetch only the first page, filter on the server, and move long jobs to an async pattern with a callback.",
+  "apply": "perform: async (z, bundle) => (await z.request({ url, params: { limit: 100, since: bundle.meta.page } })).data",
+  "affected": "Zapier Platform CLI and UI integrations, as of 2026-10",
+  "sources": [
+    "https://docs.zapier.com/platform/build/operating-constraints"
+  ],
+  "tags": [
+    "timeouts",
+    "limits"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

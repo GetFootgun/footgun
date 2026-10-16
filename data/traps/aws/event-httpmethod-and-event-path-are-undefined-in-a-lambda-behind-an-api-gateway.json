@@ -1,0 +1,28 @@
+{
+  "id": "fg-0175",
+  "provider": "aws",
+  "surface_type": "api",
+  "surface_name": "API Gateway HTTP API Lambda payload format",
+  "title": "event.httpMethod and event.path are undefined in a Lambda behind an API Gateway HTTP API",
+  "symptoms": [
+    "event.httpMethod is undefined",
+    "event.multiValueHeaders and event.multiValueQueryStringParameters are missing",
+    "Handler written for a REST API or ALB routes everything to the default branch"
+  ],
+  "cause": "HTTP APIs created in the console use payload format 2.0, which moves the method and path to requestContext.http and rawPath. Format 2.0 also merges duplicate headers and query strings with commas.",
+  "fix": "Read the 2.0 fields, or set the integration payloadFormatVersion to 1.0 if the handler expects the REST API shape. The CLI, CloudFormation and SDKs require you to choose it explicitly.",
+  "apply": "const method = event.requestContext?.http?.method ?? event.httpMethod;\nconst path = event.rawPath ?? event.path;\n\n# or keep the old shape\naws apigatewayv2 update-integration --api-id $API --integration-id $INT --payload-format-version 1.0",
+  "affected": "API Gateway HTTP APIs (apigatewayv2) with payload format version 2.0, the console default",
+  "sources": [
+    "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html"
+  ],
+  "tags": [
+    "api-gateway",
+    "lambda",
+    "event-format"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

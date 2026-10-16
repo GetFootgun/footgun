@@ -1,0 +1,30 @@
+{
+  "id": "fg-0227",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "JavaScript action Node.js runtime",
+  "title": "JavaScript actions that declare node20 now run on Node 24 and the Node 20 opt-out stops working",
+  "symptoms": [
+    "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: ...",
+    "Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: ...",
+    "Older third party actions crash after the runner switch, and self hosted macOS 13.4 or ARM32 runners cannot run them"
+  ],
+  "cause": "GitHub hosted runners switched JavaScript actions to Node 24 by default on June 16, 2026, with ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION as a temporary escape. Node 20 was removed on September 23, 2026, so that escape no longer applies.",
+  "fix": "Upgrade actions to releases that declare node24, test early with FORCE_JAVASCRIPT_ACTIONS_TO_NODE24, and update self hosted runner hosts.",
+  "apply": "env:\n  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true\n# then bump: actions/checkout@v5, actions/setup-node@v5, and other node24 releases",
+  "affected": "GitHub Actions runners from 2026-06-16 (Node 24 default); Node 20 removed 2026-09-23",
+  "sources": [
+    "https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+    "https://github.com/actions/runner/blob/main/src/Runner.Worker/JobExtension.cs",
+    "https://github.com/actions/runner/blob/main/src/Runner.Common/Constants.cs"
+  ],
+  "tags": [
+    "node",
+    "runners",
+    "deprecation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

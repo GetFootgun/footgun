@@ -1,0 +1,29 @@
+{
+  "id": "fg-0458",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Request rate limits",
+  "title": "Notion API returns 429 rate_limited during bulk imports at only a few requests per second",
+  "symptoms": [
+    "429 rate_limited",
+    "additional_data.rate_limit_reason: public_api_request_rate_limit",
+    "Retry-After longer than 60 seconds when the workspace budget is hit"
+  ],
+  "cause": "Each connection gets 180 requests per minute on most plans and 600 on Business and Enterprise, and every connection in a workspace also shares a separate workspace budget. Parallel workers use it up within seconds.",
+  "fix": "Throttle to about 3 requests per second per connection, wait the Retry-After seconds on 429 and 529, and stop retrying when the reason is public_api_request_blocked.",
+  "apply": "if (res.status === 429 || res.status === 529) {\n  const body = await res.json();\n  if (body.additional_data?.rate_limit_reason === \"public_api_request_blocked\") throw new Error(\"blocked\");\n  await new Promise(r => setTimeout(r, Number(res.headers.get(\"retry-after\") ?? 1) * 1000));\n}",
+  "affected": "Notion REST API, limits as published 2026-10 (180 per minute, 600 per minute on Business and Enterprise)",
+  "sources": [
+    "https://developers.notion.com/reference/request-limits",
+    "https://developers.notion.com/reference/errors"
+  ],
+  "tags": [
+    "rate-limit",
+    "429",
+    "bulk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

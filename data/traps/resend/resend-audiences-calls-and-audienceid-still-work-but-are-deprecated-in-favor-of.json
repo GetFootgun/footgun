@@ -1,0 +1,29 @@
+{
+  "id": "fg-0402",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "Audiences API",
+  "title": "Resend Audiences calls and audienceId still work but are deprecated in favor of Segments",
+  "symptoms": [
+    "Docs and SDK types say segments where existing code says audiences",
+    "contacts.create with audienceId produces overload type errors after an SDK upgrade",
+    "Audiences endpoint pages carry a deprecation warning"
+  ],
+  "cause": "In November 2025 Resend made contacts independent of groups and renamed Audiences to Segments. The Audiences API is deprecated and will be removed, and contacts endpoints no longer need an audience id.",
+  "fix": "Create contacts without an audience id, attach them to segments, and move broadcast targeting from audiences to segments.",
+  "apply": "await resend.contacts.create({ email, segments: [{ id: segmentId }] });",
+  "affected": "Resend Contacts and Audiences APIs since November 2025, resend-node 6.x",
+  "sources": [
+    "https://resend.com/docs/dashboard/segments/migrating-from-audiences-to-segments",
+    "https://github.com/resend/resend-node/issues/815"
+  ],
+  "tags": [
+    "contacts",
+    "deprecation",
+    "marketing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

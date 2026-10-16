@@ -1,0 +1,28 @@
+{
+  "id": "fg-0328",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Protected customer data",
+  "title": "Customer email, phone or address comes back null with 'This app is not approved to access the Customer object'",
+  "symptoms": [
+    "This app is not approved to access the Customer object.",
+    "order.customer.email is null in GraphQL while the admin shows it",
+    "Webhook payloads have customer name and address fields redacted"
+  ],
+  "cause": "Customer data and personal fields like name, email, phone and address sit behind protected customer data access levels. Public apps must request them and pass review, and unapproved fields are redacted with a 200 response.",
+  "fix": "Choose a distribution method first, then request protected customer data access in the Partner Dashboard and select each field you use. Development store installs need the selection but not the review.",
+  "apply": "Partner Dashboard > Apps > your app > API access requests > Protected customer data access > Request access, then select Name, Email, Phone, Address as needed",
+  "affected": "Public apps on GraphQL Admin API, REST and webhooks; custom apps have level 1 and 2 by default",
+  "sources": [
+    "https://shopify.dev/docs/apps/launch/protected-customer-data"
+  ],
+  "tags": [
+    "customer-data",
+    "permissions",
+    "privacy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

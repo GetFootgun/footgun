@@ -1,0 +1,28 @@
+{
+  "id": "fg-0386",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "CRM batch create",
+  "title": "HubSpot batch create results come back in a different order than the inputs",
+  "symptoms": [
+    "results[i] does not correspond to inputs[i]",
+    "Local rows get the wrong hs_object_id after a batch create",
+    "More than 100 inputs fails validation"
+  ],
+  "cause": "Batch endpoints accept at most 100 inputs and do not promise that results follow input order. Zipping results to inputs by index cross-links records.",
+  "fix": "Match each result back on a unique property you sent, such as email or your own unique id property, never by array index. Add an objectWriteTraceId per input so partial failures come back as a 207 with per-input errors, and chunk inputs into groups of 100.",
+  "apply": "const byEmail = new Map(res.results.map(r => [r.properties.email, r.id])); rows.forEach(r => { r.hubspotId = byEmail.get(r.email); });",
+  "affected": "HubSpot CRM object batch create and update endpoints, as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/api-reference/crm-objects-v3/guide",
+    "https://github.com/HubSpot/hubspot-api-nodejs/issues/190"
+  ],
+  "tags": [
+    "batch",
+    "data-integrity"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

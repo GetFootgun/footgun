@@ -1,0 +1,28 @@
+{
+  "id": "fg-0400",
+  "provider": "resend",
+  "surface_type": "sdk",
+  "surface_name": "@react-email/render",
+  "title": "Email body shows [object Promise] after upgrading React Email",
+  "symptoms": [
+    "Recipients receive the literal text [object Promise]",
+    "html field is a Promise in logs",
+    "renderAsync is not exported after upgrading"
+  ],
+  "cause": "render became async in @react-email/render 1.0.0 and renderAsync was removed in 2.0.0. Code that passes render() straight into html sends the Promise.",
+  "fix": "Await render, or pass the component through the react field and let the SDK render it.",
+  "apply": "const html = await render(<WelcomeEmail name={name} />); await resend.emails.send({ from, to, subject, html });",
+  "affected": "@react-email/render 1.0.0 and later (renderAsync removed in 2.0.0)",
+  "sources": [
+    "https://github.com/resend/react-email/blob/canary/packages/render/CHANGELOG.md"
+  ],
+  "tags": [
+    "react-email",
+    "async",
+    "rendering"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

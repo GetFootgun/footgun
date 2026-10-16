@@ -1,0 +1,28 @@
+{
+  "id": "fg-0136",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Assistants API",
+  "title": "Assistants API calls stopped working after the 2026-08-26 shutdown",
+  "symptoms": [
+    "Requests to /v1/assistants, /v1/threads and thread runs fail where they used to succeed",
+    "client.beta.assistants and client.beta.threads code from tutorials fails on every call"
+  ],
+  "cause": "OpenAI shut the Assistants API down on 2026-08-26. Its replacements are the Responses API for generation and the Conversations API for stored state.",
+  "fix": "Move runs to responses.create and threads to conversations. Keep assistant settings such as model, tools and instructions in your own code rather than in reusable prompts (v1/prompts), because OpenAI set reusable prompts (v1/prompts) to shut down on 2026-11-30.",
+  "apply": "const conv = await client.conversations.create();\nconst res = await client.responses.create({\n  model: 'gpt-5.6-terra',\n  conversation: conv.id,\n  instructions: SUPPORT_INSTRUCTIONS,\n  input: userText,\n});",
+  "affected": "OpenAI Assistants API, shut down 2026-08-26; OpenAI set reusable prompts (v1/prompts), Evals and Agent Builder to shut down on 2026-11-30",
+  "sources": [
+    "https://developers.openai.com/api/docs/deprecations",
+    "https://developers.openai.com/api/docs/assistants/migration"
+  ],
+  "tags": [
+    "deprecation",
+    "assistants",
+    "responses-api"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

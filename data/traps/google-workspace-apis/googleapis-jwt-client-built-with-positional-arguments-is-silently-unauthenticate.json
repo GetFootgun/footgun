@@ -1,0 +1,24 @@
+{
+  "id": "fg-0025",
+  "provider": "google-workspace-apis",
+  "surface_type": "sdk",
+  "surface_name": "googleapis Node client, JWT auth",
+  "title": "googleapis JWT client built with positional arguments is silently unauthenticated",
+  "symptoms": [
+    "401 or 403 on every call from a service account",
+    "No error when constructing the client"
+  ],
+  "cause": "Newer googleapis versions expect the JWT constructor to take a single options object. Positional arguments are accepted without error but produce a client with no credentials.",
+  "fix": "Pass an options object.",
+  "apply": "new google.auth.JWT({ email: sa.client_email, key: sa.private_key, scopes: ['https://www.googleapis.com/auth/spreadsheets'] })",
+  "affected": "googleapis for Node v173 and later, July 2026",
+  "sources": [],
+  "tags": [
+    "sdk",
+    "auth"
+  ],
+  "verified_on": "2026-07-05",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0285",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "Prisma Client in Next.js dev",
+  "title": "Next.js dev server runs out of database connections because each hot reload creates a new PrismaClient",
+  "symptoms": [
+    "FATAL: sorry, too many clients already while running next dev",
+    "The connection count in pg_stat_activity climbs each time a file is saved"
+  ],
+  "cause": "Next.js re-evaluates modules on hot reload, so a module-level new PrismaClient() builds another client and pool each time. With Prisma 7 each pg adapter pool can hold up to 10 connections.",
+  "fix": "Cache the client on globalThis outside production.",
+  "apply": "const g = globalThis as unknown as { prisma?: PrismaClient }\nexport const prisma = g.prisma ?? new PrismaClient({ adapter })\nif (process.env.NODE_ENV !== 'production') g.prisma = prisma",
+  "affected": "Next.js dev mode with Prisma ORM 6 and 7, as of October 2026",
+  "sources": [
+    "https://www.prisma.io/docs/orm/more/help-and-troubleshooting/nextjs-help"
+  ],
+  "tags": [
+    "nextjs",
+    "connections",
+    "dev"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

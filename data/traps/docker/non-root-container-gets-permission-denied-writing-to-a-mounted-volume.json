@@ -1,0 +1,28 @@
+{
+  "id": "fg-0266",
+  "provider": "docker",
+  "surface_type": "infra",
+  "surface_name": "Docker volumes and bind mounts",
+  "title": "Non-root container gets 'Permission denied' writing to a mounted volume",
+  "symptoms": [
+    "EACCES: permission denied, open '/data/app.db'",
+    "mkdir: cannot create directory '/app/uploads': Permission denied"
+  ],
+  "cause": "A new named volume takes the owner of the directory at that path in the image, so a path missing from the image, or left owned by root, gives a root-owned volume. Bind mounts keep the host's numeric owner and Docker does not remap it.",
+  "fix": "Create and chown the mount path in the Dockerfile before switching USER, then remove the old volume so it is recreated with the new owner. For bind mounts, run the container with the UID that owns the host directory.",
+  "apply": "RUN mkdir -p /data && chown -R node:node /data\nUSER node\n# existing volume keeps old ownership: docker volume rm <name> and start again",
+  "affected": "Docker Engine local volume driver and bind mounts, as of October 2026",
+  "sources": [
+    "https://github.com/moby/moby/issues/2259",
+    "https://docs.docker.com/engine/storage/volumes/"
+  ],
+  "tags": [
+    "volumes",
+    "permissions",
+    "non-root"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

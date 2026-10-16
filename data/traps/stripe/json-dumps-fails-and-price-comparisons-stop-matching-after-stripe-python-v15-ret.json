@@ -1,0 +1,29 @@
+{
+  "id": "fg-0147",
+  "provider": "stripe",
+  "surface_type": "sdk",
+  "surface_name": "stripe-python decimal fields",
+  "title": "json.dumps fails and price comparisons stop matching after stripe-python v15 returns Decimal",
+  "symptoms": [
+    "TypeError: Object of type Decimal is not JSON serializable",
+    "price.unit_amount_decimal == '9.99' is now False",
+    "Type checker rejects a str passed as unit_amount_decimal"
+  ],
+  "cause": "v15 maps every decimal formatted field, in responses and in request params, to Python Decimal instead of str.",
+  "fix": "Serialize with to_dict(for_json=True), compare against Decimal values, and pass Decimal when setting these fields.",
+  "apply": "from decimal import Decimal\npayload = json.dumps(price.to_dict(for_json=True))\nif price.unit_amount_decimal == Decimal(\"9.99\"):\n    ...",
+  "affected": "stripe-python 15.0.0 and later",
+  "sources": [
+    "https://github.com/stripe/stripe-python/wiki/Migration-guide-for-v15",
+    "https://github.com/stripe/stripe-python/issues/1779"
+  ],
+  "tags": [
+    "python",
+    "upgrade",
+    "serialization"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

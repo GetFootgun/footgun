@@ -1,0 +1,24 @@
+{
+  "id": "fg-0064",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "Insights metric lists",
+  "title": "One unknown insights metric voids the whole Graph insights call",
+  "symptoms": [
+    "The entire insights request fails because one metric name is invalid",
+    "A whole platform's posts drop out of a report after a metric is renamed"
+  ],
+  "cause": "When the metric list contains a name the API version does not recognize, the call fails as a whole rather than skipping that metric.",
+  "fix": "Request metrics one at a time, or retry without the failing metric, and keep whatever answers.",
+  "apply": "for m in metrics: GET /{object-id}/insights?metric={m}; keep successes, log the failures",
+  "affected": "Graph API insights, August 2026",
+  "sources": [],
+  "tags": [
+    "insights",
+    "silent-data-loss"
+  ],
+  "verified_on": "2026-08-31",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

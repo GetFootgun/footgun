@@ -1,0 +1,29 @@
+{
+  "id": "fg-0385",
+  "provider": "hubspot",
+  "surface_type": "sdk",
+  "surface_name": "hubspot-api-client (Python) with urllib3",
+  "title": "hubspot-api-client raises AttributeError: 'HTTPResponse' object has no attribute 'getheader'",
+  "symptoms": [
+    "AttributeError: 'HTTPResponse' object has no attribute 'getheader'",
+    "Every HubSpot call fails right after a dependency refresh",
+    "DeprecationWarning about getheader on older urllib3"
+  ],
+  "cause": "The generated Python client calls HTTPResponse.getheader, which urllib3 2.6.0 removed. urllib3 2.6.1 restored it, so only that one release breaks the client.",
+  "fix": "Exclude urllib3 2.6.0 in your requirements and upgrade to 2.6.1 or later.",
+  "apply": "pip install \"urllib3>=2.6.1\"",
+  "affected": "hubspot-api-client 12.0.0 and earlier with urllib3 2.6.0 (released 2025-12-05)",
+  "sources": [
+    "https://github.com/HubSpot/hubspot-api-python/issues/460",
+    "https://github.com/urllib3/urllib3/blob/main/CHANGES.rst"
+  ],
+  "tags": [
+    "python",
+    "dependencies",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

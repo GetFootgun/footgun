@@ -1,0 +1,28 @@
+{
+  "id": "fg-0280",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "psycopg 3 prepared statements",
+  "title": "psycopg 3 through PgBouncer fails after a few runs with 'prepared statement \"_pg3_0\" already exists'",
+  "symptoms": [
+    "psycopg.errors.DuplicatePreparedStatement: prepared statement \"_pg3_0\" already exists",
+    "Errors start only after the same query has run about five times on one connection"
+  ],
+  "cause": "psycopg 3 prepares a query on the server once it has run prepare_threshold times (5 by default) on a connection, and a transaction pooler can send the next use to a session with a different set of statements.",
+  "fix": "Set prepare_threshold to None for pooled connections. psycopg 3.2 can keep them only with PgBouncer 1.22 or later, max_prepared_statements above 0, and libpq 17 or later on the client.",
+  "apply": "conn = psycopg.connect(DSN, prepare_threshold=None)\n# psycopg_pool: ConnectionPool(DSN, kwargs={\"prepare_threshold\": None})",
+  "affected": "psycopg 3.x (default threshold 5); conditional PgBouncer support from psycopg 3.2",
+  "sources": [
+    "https://github.com/psycopg/psycopg/blob/master/docs/advanced/prepare.rst",
+    "https://github.com/psycopg/psycopg/blob/master/psycopg/psycopg/_preparing.py"
+  ],
+  "tags": [
+    "psycopg",
+    "pgbouncer",
+    "prepared-statements"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

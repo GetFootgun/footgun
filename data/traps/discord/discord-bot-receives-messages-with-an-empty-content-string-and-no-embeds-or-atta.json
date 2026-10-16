@@ -1,0 +1,29 @@
+{
+  "id": "fg-0442",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Gateway MESSAGE_CONTENT intent",
+  "title": "Discord bot receives messages with an empty content string and no embeds or attachments",
+  "symptoms": [
+    "message.content is an empty string for messages from other users",
+    "channel.messages.fetch returns messages with empty content even with Administrator",
+    "Prefix commands such as !help stop responding while slash commands still work"
+  ],
+  "cause": "Message content is a privileged intent. Without MESSAGE_CONTENT, Discord blanks content, embeds, attachments, components and poll on other users' messages, except in DMs, messages that mention the bot, and messages used with a message context menu command.",
+  "fix": "Turn on Message Content Intent in the Developer Portal and also request the intent in code. Apps in 100 or more servers must be verified and approved for it.",
+  "apply": "const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });",
+  "affected": "Discord API v10 gateway, every bot without MESSAGE_CONTENT, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/events/gateway",
+    "https://github.com/discord/discord-api-docs/issues/6339"
+  ],
+  "tags": [
+    "intents",
+    "gateway",
+    "messages"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

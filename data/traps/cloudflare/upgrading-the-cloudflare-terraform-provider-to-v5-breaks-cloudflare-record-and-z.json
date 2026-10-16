@@ -1,0 +1,29 @@
+{
+  "id": "fg-0216",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Terraform provider v4 to v5 upgrade",
+  "title": "Upgrading the Cloudflare Terraform provider to v5 breaks cloudflare_record and zone settings resources",
+  "symptoms": [
+    "The provider cloudflare/cloudflare does not support resource type \"cloudflare_record\".",
+    "Old cloudflare_zone_settings_override blocks conflict with the v5 schema",
+    "Plans propose destroying and recreating DNS records"
+  ],
+  "cause": "v5 is a generated provider that renamed and restructured many resources, for example cloudflare_record became cloudflare_dns_record with content replacing value. A plain version bump leaves state and HCL on the old schema.",
+  "fix": "Run tf-migrate in dry run, then apply its HCL rewrites and moved blocks, and follow the zone_settings_override removal steps on the v4 provider before switching.",
+  "apply": "go install github.com/cloudflare/tf-migrate/cmd/tf-migrate@latest\ntf-migrate migrate --dry-run --source-version v4 --target-version v5\ntf-migrate migrate --source-version v4 --target-version v5",
+  "affected": "terraform-provider-cloudflare v4.x to v5.x upgrades",
+  "sources": [
+    "https://github.com/cloudflare/terraform-provider-cloudflare/blob/main/docs/guides/version-5-upgrade.md",
+    "https://github.com/cloudflare/terraform-provider-cloudflare/issues/3590"
+  ],
+  "tags": [
+    "terraform",
+    "migration",
+    "dns"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

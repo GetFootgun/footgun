@@ -1,0 +1,29 @@
+{
+  "id": "fg-0471",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, assistant prefill",
+  "title": "Assistant prefill returns 400 on Claude Opus 4.6 and later models",
+  "symptoms": [
+    "400 invalid_request_error when the messages array ends with an assistant turn",
+    "A prefilled '{' that used to force JSON output stops working after a model upgrade"
+  ],
+  "cause": "Ending messages with a partial assistant turn for the model to continue is rejected on Opus 4.6 and later Opus models and on Haiku 5.5. Code that used prefill to force JSON or skip a preamble fails as soon as the model id changes.",
+  "fix": "End messages with a user turn. Use structured outputs through output_config.format for JSON, or put the format rule in the system field. On Amazon Bedrock, where structured outputs are not offered for Opus 5.5, use instructions and validate the reply.",
+  "apply": "output_config: { format: { type: \"json_schema\", schema: { type: \"object\", properties: { answer: { type: \"string\" } }, required: [\"answer\"], additionalProperties: false } } }",
+  "affected": "Claude Opus 4.6, 4.7, 4.8, 5, 5.5 and Haiku 5.5 (Haiku 4.5 still accepts prefill), as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+    "https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide",
+    "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+  ],
+  "tags": [
+    "prefill",
+    "migration",
+    "400"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

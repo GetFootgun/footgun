@@ -1,0 +1,28 @@
+{
+  "id": "fg-0297",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "Parallel routes default.js",
+  "title": "Build fails on Next.js 16 because a parallel route slot has no default.js",
+  "symptoms": [
+    "Missing required default.js file for parallel route at app/@modal",
+    "An @modal or @sidebar slot that built on Next.js 15 now fails next build"
+  ],
+  "cause": "Next.js 16 requires an explicit default.js in every parallel route slot. Earlier versions fell back quietly when a slot had no match on hard navigation.",
+  "fix": "Add default.tsx to each slot that returns null, or calls notFound() if that is the intended behavior.",
+  "apply": "// app/@modal/default.tsx\nexport default function Default() {\n  return null\n}",
+  "affected": "Next.js 16.0 and later, App Router parallel routes",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/upgrading/version-16",
+    "https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes"
+  ],
+  "tags": [
+    "parallel-routes",
+    "upgrade",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

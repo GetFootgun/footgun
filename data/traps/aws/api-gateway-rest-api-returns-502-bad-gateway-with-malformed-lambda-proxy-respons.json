@@ -1,0 +1,28 @@
+{
+  "id": "fg-0170",
+  "provider": "aws",
+  "surface_type": "api",
+  "surface_name": "API Gateway REST API Lambda proxy integration",
+  "title": "API Gateway REST API returns 502 Bad Gateway with Malformed Lambda proxy response though the Lambda succeeded",
+  "symptoms": [
+    "{\"message\": \"Internal server error\"} with HTTP 502",
+    "Execution log: Execution failed due to configuration error: Malformed Lambda proxy response",
+    "Lambda returns a plain object or a body that is an object"
+  ],
+  "cause": "A REST API proxy integration only accepts a response object with statusCode, optional headers, and body as a string. Any other shape, including an object body, becomes a 502.",
+  "fix": "Return statusCode and a JSON string body from the handler, and add CORS headers there because proxy integrations do not add them.",
+  "apply": "export const handler = async () => ({\n  statusCode: 200,\n  headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },\n  body: JSON.stringify({ ok: true }),\n});",
+  "affected": "REST APIs (v1) with Lambda proxy integration (type AWS_PROXY), whose response shape is fixed; HTTP APIs only when the integration uses payload format version 1.0, since 2.0 infers a response from plain JSON",
+  "sources": [
+    "https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html"
+  ],
+  "tags": [
+    "api-gateway",
+    "lambda",
+    "502"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

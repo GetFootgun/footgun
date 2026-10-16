@@ -1,0 +1,26 @@
+{
+  "id": "fg-0160",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Programmable Messaging, opt-out handling",
+  "title": "Error 21610 after a recipient texts STOP, and the API cannot override it",
+  "symptoms": [
+    "21610 Attempt to send to unsubscribed recipient",
+    "Messages to one number fail while every other number succeeds"
+  ],
+  "cause": "Twilio processes STOP and the other opt-out keywords itself and blocks further messages from that sender or Messaging Service until the person texts START.",
+  "fix": "Catch 21610, record the contact as opted out, and stop retrying. Only the recipient can lift it by texting START.",
+  "apply": "try {\n  await client.messages.create({ from, to, body });\n} catch (err) {\n  if (err.code === 21610) await markOptedOut(to); else throw err;\n}",
+  "affected": "Twilio Programmable Messaging default opt-out handling, checked October 2026",
+  "sources": [
+    "https://www.twilio.com/docs/api/errors/21610"
+  ],
+  "tags": [
+    "sms",
+    "opt-out"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

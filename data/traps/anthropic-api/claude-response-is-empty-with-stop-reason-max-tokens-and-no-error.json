@@ -1,0 +1,24 @@
+{
+  "id": "fg-0001",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, max_tokens with thinking",
+  "title": "Claude response is empty with stop_reason max_tokens and no error",
+  "symptoms": [
+    "stop_reason: max_tokens with zero text blocks",
+    "A report or document arrives blank"
+  ],
+  "cause": "max_tokens covers thinking as well as the visible answer. On a busy prompt the model can spend the whole budget thinking and return no text.",
+  "fix": "Raise max_tokens well above the expected answer length, log stop_reason, and treat empty text or stop_reason max_tokens as a failed attempt that retries with a larger budget.",
+  "apply": "if (res.stop_reason === 'max_tokens' || !text) { retry with max_tokens * 2 }",
+  "affected": "Claude models with thinking, August 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "tokens"
+  ],
+  "verified_on": "2026-08-02",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

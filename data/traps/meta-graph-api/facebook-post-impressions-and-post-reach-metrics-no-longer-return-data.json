@@ -1,0 +1,24 @@
+{
+  "id": "fg-0059",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "Page post insights",
+  "title": "Facebook post_impressions and post reach metrics no longer return data",
+  "symptoms": [
+    "post_impressions, post_impressions_unique, post_views and post_engaged_users return errors or nothing",
+    "post_video_views, post_clicks and post_reactions_by_type_total still answer"
+  ],
+  "cause": "Meta deprecated post-level impressions, unique impressions, views and engaged users for Facebook Page posts on 2026-06-16. It is a platform change, not a token or permission problem.",
+  "fix": "Drop those metrics. Use the ones that still answer, and use Instagram insights for reach.",
+  "apply": "GET /{post-id}/insights?metric=post_clicks,post_reactions_by_type_total",
+  "affected": "Graph API, Facebook Page posts, from 2026-06-16",
+  "sources": [],
+  "tags": [
+    "deprecated",
+    "insights"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

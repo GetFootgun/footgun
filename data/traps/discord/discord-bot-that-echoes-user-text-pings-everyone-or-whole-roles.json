@@ -1,0 +1,28 @@
+{
+  "id": "fg-0444",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Allowed mentions",
+  "title": "Discord bot that echoes user text pings @everyone or whole roles",
+  "symptoms": [
+    "Bot message relaying user input notifies the entire server",
+    "Role mentions in quoted text ping every member of the role",
+    "Same text sent through a webhook or interaction does not ping"
+  ],
+  "cause": "In regular bot messages every mention type, including @everyone, is parsed by default when the bot has the permission to use it. Interactions and webhooks parse only user mentions by default, which hides the problem in testing.",
+  "fix": "Pass allowed_mentions with an empty parse list on any message that contains text you did not write, and list specific user IDs only when a ping is intended.",
+  "apply": "await channel.send({ content: userText, allowedMentions: { parse: [] } });",
+  "affected": "Discord API v10 create message, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/resources/message"
+  ],
+  "tags": [
+    "mentions",
+    "security",
+    "messages"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

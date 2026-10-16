@@ -1,0 +1,23 @@
+{
+  "id": "fg-0019",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "Calendar API, events.get on a deleted event",
+  "title": "Calendar GET on a deleted event returns 200 with status cancelled, not 404",
+  "symptoms": [
+    "200 OK with \"status\": \"cancelled\" for an event removed from the calendar",
+    "A later DELETE of the same event returns 410"
+  ],
+  "cause": "Deleted events remain readable by id with status cancelled. Deleting an event that is already gone returns 410 Gone.",
+  "fix": "Check body.status == \"cancelled\" when testing whether an event still exists, and treat 410 on delete as success.",
+  "apply": "if (res.status === 200 && res.data.status === 'cancelled') { /* event was deleted */ }",
+  "affected": "Google Calendar API v3, October 2026",
+  "sources": [],
+  "tags": [
+    "status-codes"
+  ],
+  "verified_on": "2026-10-14",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

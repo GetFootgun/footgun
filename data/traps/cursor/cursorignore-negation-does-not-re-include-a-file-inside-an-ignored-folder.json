@@ -1,0 +1,26 @@
+{
+  "id": "fg-0518",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": ".cursorignore negation",
+  "title": ".cursorignore negation does not re-include a file inside an ignored folder",
+  "symptoms": [
+    "!public/assets/style.css has no effect after public/*",
+    "The file stays hidden from Agent although a ! line names it"
+  ],
+  "cause": "Excluded directories are not traversed, so a negation for a file below the excluded level is never seen. This matches how gitignore handles nested negation.",
+  "fix": "Exclude the nested folder's contents explicitly, then negate the file, and test the pattern with git check-ignore -v.",
+  "apply": "public/assets/*\n!public/assets/style.css",
+  "affected": "Cursor .cursorignore, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/reference/ignore-file"
+  ],
+  "tags": [
+    "ignore",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

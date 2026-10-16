@@ -1,0 +1,29 @@
+{
+  "id": "fg-0379",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "Polling trigger ordering",
+  "title": "Zapier polling trigger misses new items because the API returns oldest first",
+  "symptoms": [
+    "Zap only triggers for the first page of old items when turned on",
+    "New items created later never trigger",
+    "Trigger works for a small test account, fails once there are more than one page of records"
+  ],
+  "cause": "Zapier reads only the first page of a polling trigger and does not paginate, and by default only 100 new items per poll are taken. If the API sorts ascending, new items sit on later pages and are never seen.",
+  "fix": "Request reverse chronological order with a page size large enough to cover one poll interval, and keep each poll under 30 seconds.",
+  "apply": "params: { sort: '-created_at', per_page: 100 }",
+  "affected": "Zapier Platform polling triggers, as of 2026-10",
+  "sources": [
+    "https://docs.zapier.com/platform/build/deduplication",
+    "https://docs.zapier.com/platform/build/operating-constraints"
+  ],
+  "tags": [
+    "polling",
+    "pagination",
+    "triggers"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

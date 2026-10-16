@@ -1,0 +1,27 @@
+{
+  "id": "fg-0142",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Chat Completions streaming, usage",
+  "title": "Streamed chat completions report no token usage, so cost tracking records zero",
+  "symptoms": [
+    "chunk.usage is null on every streamed chunk",
+    "Token counters stay at zero for streamed requests only"
+  ],
+  "cause": "Streaming responses omit usage unless stream_options.include_usage is set, and then only a final extra chunk with empty choices carries the totals. An interrupted stream never sends it.",
+  "fix": "Set include_usage, read usage from the last chunk, and guard code that indexes choices[0].",
+  "apply": "const stream = await client.chat.completions.create({ model, messages, stream: true, stream_options: { include_usage: true } });\nfor await (const chunk of stream) {\n  if (chunk.usage) recordUsage(chunk.usage);\n  const delta = chunk.choices[0]?.delta?.content;\n}",
+  "affected": "OpenAI Chat Completions streaming, checked October 2026",
+  "sources": [
+    "https://github.com/openai/openai-python/blob/main/src/openai/types/chat/chat_completion_stream_options_param.py"
+  ],
+  "tags": [
+    "streaming",
+    "usage",
+    "cost"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

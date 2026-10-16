@@ -1,0 +1,26 @@
+{
+  "id": "fg-0484",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude mcp add, stdio servers",
+  "title": "claude mcp add treats the MCP server's own flags as Claude Code options",
+  "symptoms": [
+    "error: unknown option '--port'",
+    "The server is not added, so claude mcp get reports no server by that name"
+  ],
+  "cause": "Without a double dash, Claude Code parses everything on the line as its own options, so server flags are consumed or rejected. Everything after -- is passed to the server untouched.",
+  "fix": "Put Claude Code options such as --transport, --env, and --scope before the server name, then -- and the server command with its own flags.",
+  "apply": "claude mcp add --transport stdio --env KEY=value --scope project myserver -- python server.py --port 8080",
+  "affected": "Claude Code claude mcp add, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/mcp"
+  ],
+  "tags": [
+    "mcp",
+    "cli"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

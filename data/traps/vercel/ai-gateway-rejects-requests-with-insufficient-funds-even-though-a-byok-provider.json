@@ -1,0 +1,29 @@
+{
+  "id": "fg-0238",
+  "provider": "vercel",
+  "surface_type": "billing",
+  "surface_name": "Vercel AI Gateway BYOK",
+  "title": "AI Gateway rejects requests with 'Insufficient funds' even though a BYOK provider key is configured",
+  "symptoms": [
+    "Insufficient funds. Please add credits to your account to continue using AI services.",
+    "The dashboard Test Key for the BYOK credential succeeds",
+    "Requests fail only once the gateway credit balance reaches zero"
+  ],
+  "cause": "AI Gateway checks the credit balance before using BYOK credentials because it can fall back to its own providers when the BYOK call fails. A zero balance blocks the request even when your key would have served it.",
+  "fix": "Keep a small positive credit balance on the team, or call the provider directly for traffic that must never touch gateway credits.",
+  "apply": "Vercel dashboard > AI Gateway > Credits: keep a nonzero balance (consider auto top-up)",
+  "affected": "Vercel AI Gateway with BYOK, confirmed as intended behavior in August 2026",
+  "sources": [
+    "https://github.com/vercel/ai/issues/11280"
+  ],
+  "tags": [
+    "ai-sdk",
+    "ai-gateway",
+    "byok",
+    "billing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

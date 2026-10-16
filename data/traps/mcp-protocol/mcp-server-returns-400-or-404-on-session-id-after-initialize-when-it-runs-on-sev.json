@@ -1,0 +1,30 @@
+{
+  "id": "fg-0526",
+  "provider": "mcp-protocol",
+  "surface_type": "infra",
+  "surface_name": "Streamable HTTP sessions (2025 protocol)",
+  "title": "MCP server returns 400 or 404 on session id after initialize when it runs on several instances",
+  "symptoms": [
+    "400 Bad Request on calls after a successful initialize",
+    "404 Not Found for an Mcp-Session-Id after a deploy or restart",
+    "Works locally on one process, fails behind a load balancer or on serverless"
+  ],
+  "cause": "In protocol versions 2025-03-26 to 2025-11-25, a stateful server keeps the session in process memory, so a request routed to another instance has no session. Servers answer a missing id with 400 and an ended one with 404, after which the client must initialize again.",
+  "fix": "Run the server stateless (no session id generator), pin sessions to an instance, or keep session state in a shared store. The 2026-07-28 protocol removes sessions and the Mcp-Session-Id header entirely.",
+  "apply": "new StreamableHTTPServerTransport({ sessionIdGenerator: undefined }) // stateless: any instance can answer",
+  "affected": "MCP protocol 2025-03-26 through 2025-11-25 servers on multi-instance or serverless hosting; sessions removed in 2026-07-28",
+  "sources": [
+    "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports",
+    "https://modelcontextprotocol.io/specification/2026-07-28/changelog",
+    "https://github.com/modelcontextprotocol/typescript-sdk/issues/330"
+  ],
+  "tags": [
+    "http",
+    "sessions",
+    "serverless"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

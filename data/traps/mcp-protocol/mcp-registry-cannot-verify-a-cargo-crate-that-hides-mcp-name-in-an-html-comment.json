@@ -1,0 +1,27 @@
+{
+  "id": "fg-0523",
+  "provider": "mcp-protocol",
+  "surface_type": "api",
+  "surface_name": "MCP Registry, crates.io ownership check",
+  "title": "MCP Registry cannot verify a Cargo crate that hides mcp-name in an HTML comment",
+  "symptoms": [
+    "Publishing a crates.io server fails ownership verification",
+    "The same hidden mcp-name comment works for a PyPI or NuGet package"
+  ],
+  "cause": "For Cargo the registry looks for the mcp-name token in the README as rendered by crates.io, and crates.io strips HTML comments during rendering, so a hidden comment never reaches the validator.",
+  "fix": "Put the mcp-name line in the README as visible text, for example a bullet in a links section.",
+  "apply": "- MCP Registry name: `mcp-name: io.github.username/widget-mcp`",
+  "affected": "Official MCP Registry, crates.io packages, as of 2026-10",
+  "sources": [
+    "https://modelcontextprotocol.io/registry/package-types"
+  ],
+  "tags": [
+    "registry",
+    "cargo",
+    "publishing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0261",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "Buildx docker-container driver",
+  "title": "FROM a locally built image tries to pull from docker.io when the buildx builder uses the docker-container driver",
+  "symptoms": [
+    "load metadata for docker.io/library/my_base_image:latest fails although docker images lists my_base_image",
+    "pull access denied, repository does not exist or may require authorization"
+  ],
+  "cause": "A docker-container builder runs BuildKit inside its own container with its own content store, so it cannot read images from the engine's image store and resolves the name against a registry instead.",
+  "fix": "Build images that depend on local images with the default docker builder, push the base image to a registry first, or switch to the containerd image store. Check which builder is active with docker buildx ls.",
+  "apply": "docker buildx use default\ndocker buildx build -t my_base_image .\ndocker buildx build -f final.dockerfile --build-arg BASE_IMAGE=my_base_image .",
+  "affected": "Docker Buildx with docker-container, kubernetes, or remote drivers (common after docker buildx create --use or in CI with setup-buildx-action), as of October 2026",
+  "sources": [
+    "https://github.com/docker/buildx/issues/1453",
+    "https://docs.docker.com/build/building/multi-platform/"
+  ],
+  "tags": [
+    "buildx",
+    "builder",
+    "local-images"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

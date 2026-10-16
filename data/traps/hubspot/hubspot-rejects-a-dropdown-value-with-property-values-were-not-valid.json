@@ -1,0 +1,28 @@
+{
+  "id": "fg-0390",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "CRM enumeration properties",
+  "title": "HubSpot rejects a dropdown value with 'Property values were not valid'",
+  "symptoms": [
+    "400 Property values were not valid",
+    "was not one of the allowed options",
+    "Value matches the label shown in the HubSpot UI exactly"
+  ],
+  "cause": "Enumeration properties such as dropdowns, radio selects, and checkboxes accept only the internal option value, which often differs from the label people see. Labels, wrong case, or yes and no for booleans are rejected.",
+  "fix": "Read the property definition and map labels to option values before writing, or add the missing option to the property.",
+  "apply": "GET /crm/v3/properties/contacts/{propertyName}  // use options[].value, not options[].label",
+  "affected": "HubSpot CRM v3 object and batch endpoints, all tiers, as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/guide"
+  ],
+  "tags": [
+    "crm",
+    "properties",
+    "validation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

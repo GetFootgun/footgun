@@ -1,0 +1,29 @@
+{
+  "id": "fg-0176",
+  "provider": "aws",
+  "surface_type": "infra",
+  "surface_name": "Lambda Node.js 20 and later, CA certificates",
+  "title": "Lambda cannot connect to RDS over TLS after upgrading from Node.js 18 to Node.js 20 or later",
+  "symptoms": [
+    "Error: self-signed certificate in certificate chain",
+    "SELF_SIGNED_CERT_IN_CHAIN from pg, mysql2, or Prisma when ssl is on",
+    "Same code connects fine on nodejs18.x"
+  ],
+  "cause": "Up to Node.js 18, Lambda loaded Amazon CA certificates, including the RDS ones, automatically. From Node.js 20 it no longer does, so the RDS server chain is not trusted.",
+  "fix": "Bundle the RDS certificate bundle for your Region and point NODE_EXTRA_CA_CERTS at it, or point it at the Amazon CA file the runtime ships. Pass certificate contents, not a path, when you hand a CA to the driver yourself.",
+  "apply": "aws lambda update-function-configuration --function-name my-fn \\\n  --environment 'Variables={NODE_EXTRA_CA_CERTS=/var/runtime/ca-cert.pem}'\n# faster cold starts: ship certificates/rds.pem and use /var/task/certificates/rds.pem",
+  "affected": "Lambda nodejs20.x and every later Node.js runtime; zip and container deployments",
+  "sources": [
+    "https://docs.aws.amazon.com/lambda/latest/dg/lambda-nodejs.html"
+  ],
+  "tags": [
+    "lambda",
+    "rds",
+    "tls",
+    "runtime-upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

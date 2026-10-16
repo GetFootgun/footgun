@@ -1,0 +1,30 @@
+{
+  "id": "fg-0253",
+  "provider": "supabase",
+  "surface_type": "infra",
+  "surface_name": "Supabase Edge Functions built-in JWT check",
+  "title": "Supabase Edge Function returns 401 Invalid JWT for signed-in users after switching to asymmetric JWT signing keys",
+  "symptoms": [
+    "{\"code\":401,\"message\":\"Invalid JWT\"} when the client sends a logged-in user's access token",
+    "{\"code\":401,\"message\":\"Invalid Token or Protected Header formatting\"}",
+    "No function logs, because the request is rejected before your code runs"
+  ],
+  "cause": "The built-in verify_jwt gate only understands legacy HS256 JWTs, so user access tokens signed with the new asymmetric signing keys fail it. Publishable or secret API keys pass the gate for migration compatibility, but passing it does not authenticate the caller.",
+  "fix": "Turn off verify_jwt for the function and authenticate inside the handler, for example with getClaims on a client built from the request's Authorization header, or with the @supabase/server SDK.",
+  "apply": "# supabase/config.toml\n[functions.my-function]\nverify_jwt = false\n\nsupabase functions deploy my-function --no-verify-jwt",
+  "affected": "Supabase projects that rotated to asymmetric JWT signing keys and still rely on the Edge Functions verify_jwt check",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/edge-function-401-error-response",
+    "https://supabase.com/docs/guides/api/api-keys"
+  ],
+  "tags": [
+    "edge-functions",
+    "jwt",
+    "signing-keys",
+    "401"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

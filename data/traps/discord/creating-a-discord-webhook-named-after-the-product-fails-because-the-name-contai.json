@@ -1,0 +1,27 @@
+{
+  "id": "fg-0438",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Webhook names",
+  "title": "Creating a Discord webhook named after the product fails because the name contains discord",
+  "symptoms": [
+    "DiscordAPIError[50035]: Invalid Form Body on create webhook",
+    "Webhook named Discord Alerts or Clyde Bot is rejected",
+    "Same request works with a different name"
+  ],
+  "cause": "Webhook names may not contain the substrings discord or clyde in any letter case. The rule is listed under Create Webhook, not under the username override on Execute Webhook.",
+  "fix": "Pick a name without those substrings and validate user-supplied names before calling the API.",
+  "apply": "if (/discord|clyde/i.test(name)) name = name.replace(/discord|clyde/gi, \"\").trim() || \"Alerts\";",
+  "affected": "Discord API v10 Create Webhook, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/resources/webhook"
+  ],
+  "tags": [
+    "webhooks",
+    "validation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

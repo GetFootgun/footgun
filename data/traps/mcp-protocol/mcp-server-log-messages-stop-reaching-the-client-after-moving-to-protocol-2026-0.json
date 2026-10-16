@@ -1,0 +1,27 @@
+{
+  "id": "fg-0524",
+  "provider": "mcp-protocol",
+  "surface_type": "api",
+  "surface_name": "Logging in protocol 2026-07-28",
+  "title": "MCP server log messages stop reaching the client after moving to protocol 2026-07-28",
+  "symptoms": [
+    "notifications/message from the server no longer appear in the client",
+    "Logs arrive only for requests that carry a log level in _meta"
+  ],
+  "cause": "2026-07-28 removes logging/setLevel and ping. A log level now travels per request in _meta as io.modelcontextprotocol/logLevel, and servers must not emit notifications/message for requests without it; the Logging feature itself is deprecated.",
+  "fix": "Send io.modelcontextprotocol/logLevel in each request's _meta when you want logs, and keep stderr or your own log pipeline as the main record.",
+  "apply": "{ \"method\": \"tools/call\", \"params\": { \"name\": \"sync\", \"_meta\": { \"io.modelcontextprotocol/logLevel\": \"info\" } } }",
+  "affected": "MCP protocol 2026-07-28",
+  "sources": [
+    "https://modelcontextprotocol.io/specification/2026-07-28/changelog",
+    "https://modelcontextprotocol.io/specification/2026-07-28/deprecated"
+  ],
+  "tags": [
+    "logging",
+    "versioning"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

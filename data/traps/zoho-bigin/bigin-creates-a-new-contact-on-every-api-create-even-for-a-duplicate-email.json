@@ -1,0 +1,23 @@
+{
+  "id": "fg-0109",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, Contacts create",
+  "title": "Bigin creates a new contact on every API create, even for a duplicate email",
+  "symptoms": [
+    "Two or more contacts share one email",
+    "Each imported row created its own contact and deal"
+  ],
+  "cause": "The create endpoint does not deduplicate contacts by email.",
+  "fix": "Search by email before creating, and update the existing contact when one is found.",
+  "apply": "GET /bigin/v2/Contacts/search?email=<email>; create only when the response is 204",
+  "affected": "Bigin API v2 and Make createAcontact, July 2026",
+  "sources": [],
+  "tags": [
+    "duplicates"
+  ],
+  "verified_on": "2026-07-18",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

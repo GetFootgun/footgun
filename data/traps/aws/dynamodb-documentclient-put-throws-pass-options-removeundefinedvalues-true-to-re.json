@@ -1,0 +1,29 @@
+{
+  "id": "fg-0173",
+  "provider": "aws",
+  "surface_type": "sdk",
+  "surface_name": "DynamoDB DocumentClient marshalling (lib-dynamodb)",
+  "title": "DynamoDB DocumentClient put throws Pass options.removeUndefinedValues=true to remove undefined values",
+  "symptoms": [
+    "Error: Pass options.removeUndefinedValues=true to remove undefined values from map/array/set.",
+    "Same item shape saved fine with the v2 DocumentClient",
+    "Fails only when an optional field is undefined"
+  ],
+  "cause": "The v3 marshaller refuses undefined values by default instead of dropping them. The option is set when you create the document client, not per call.",
+  "fix": "Create the document client with removeUndefinedValues true, or strip undefined fields before the write.",
+  "apply": "import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';\nconst ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}), {\n  marshallOptions: { removeUndefinedValues: true },\n});",
+  "affected": "@aws-sdk/lib-dynamodb and @aws-sdk/util-dynamodb, all v3 releases",
+  "sources": [
+    "https://github.com/aws/aws-sdk-js-v3/blob/main/lib/lib-dynamodb/README.md",
+    "https://github.com/aws/aws-sdk-js-v3/blob/main/packages-internal/util-dynamodb/src/convertToAttr.ts"
+  ],
+  "tags": [
+    "dynamodb",
+    "sdk-v3",
+    "marshalling"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

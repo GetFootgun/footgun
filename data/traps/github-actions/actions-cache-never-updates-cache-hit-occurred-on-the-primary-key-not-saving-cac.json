@@ -1,0 +1,29 @@
+{
+  "id": "fg-0223",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "actions/cache keys",
+  "title": "actions/cache never updates: 'Cache hit occurred on the primary key, not saving cache'",
+  "symptoms": [
+    "Cache hit occurred on the primary key node-cache, not saving cache.",
+    "Dependencies or build output in the cache stay stale for weeks",
+    "Changing files under the cached path does not change what is restored"
+  ],
+  "cause": "A cache entry is immutable once saved, so a key that never changes is restored forever and never written again. New content needs a new key.",
+  "fix": "Put a content hash in the key and use restore-keys for partial matches.",
+  "apply": "- uses: actions/cache@v4\n  with:\n    path: ~/.npm\n    key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}\n    restore-keys: |\n      npm-${{ runner.os }}-",
+  "affected": "actions/cache v3 and v4 on github.com, as of October 2026",
+  "sources": [
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching",
+    "https://github.com/actions/cache/issues/597"
+  ],
+  "tags": [
+    "cache",
+    "ci",
+    "stale"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

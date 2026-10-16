@@ -1,0 +1,27 @@
+{
+  "id": "fg-0301",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "Server Actions request body limit",
+  "title": "File upload through a Server Action fails with 'Body exceeded 1 MB limit'",
+  "symptoms": [
+    "Error: Body exceeded 1 MB limit.",
+    "Uploads of small images work and larger ones fail with a 413 or an unhandled action error"
+  ],
+  "cause": "Server Actions cap the request body at 1 MB by default to limit parsing cost and abuse. FormData with a file counts toward that cap.",
+  "fix": "Raise serverActions.bodySizeLimit to what you actually need, or upload large files straight to object storage with a presigned URL and send only the key to the action.",
+  "apply": "// next.config.ts\nexport default {\n  experimental: { serverActions: { bodySizeLimit: '10mb' } },\n}",
+  "affected": "Next.js 14 to 16.4, App Router Server Actions",
+  "sources": [
+    "https://nextjs.org/docs/app/api-reference/config/next-config-js/serverActions"
+  ],
+  "tags": [
+    "server-actions",
+    "uploads",
+    "limits"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

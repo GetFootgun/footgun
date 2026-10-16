@@ -1,0 +1,29 @@
+{
+  "id": "fg-0434",
+  "provider": "airtable",
+  "surface_type": "sdk",
+  "surface_name": "replace() and PUT updates",
+  "title": "Airtable update wipes every field that was not in the request",
+  "symptoms": [
+    "Other fields on the record are blank after an update",
+    "airtable.js replace() clears columns that update() left alone",
+    "Data loss only on records touched by one integration"
+  ],
+  "cause": "A PUT to the records endpoint is a destructive update that clears every cell not included. airtable.js replace() sends PUT, while update() sends PATCH.",
+  "fix": "Use PATCH (update() in airtable.js) for partial changes, and reserve PUT for writes that send the full record.",
+  "apply": "await base(\"Contacts\").update([{ id: rec.id, fields: { Status: \"Won\" } }]); // PATCH, other fields kept",
+  "affected": "Airtable Web API; airtable.js 0.12.2 and earlier",
+  "sources": [
+    "https://airtable.com/developers/web/api/update-multiple-records",
+    "https://github.com/Airtable/airtable.js"
+  ],
+  "tags": [
+    "writes",
+    "data-loss",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

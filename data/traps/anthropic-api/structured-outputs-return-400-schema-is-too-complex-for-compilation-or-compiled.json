@@ -1,0 +1,29 @@
+{
+  "id": "fg-0477",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Structured outputs and strict tool use",
+  "title": "Structured outputs return 400 'Schema is too complex for compilation' or 'compiled grammar is too large'",
+  "symptoms": [
+    "The compiled grammar is too large, which would cause performance issues. Simplify your tool schemas or reduce the number of strict tools.",
+    "Schema is too complex for compilation.",
+    "Each schema looks small, but the request fails once several strict tools are combined"
+  ],
+  "cause": "Strict tools and output_config.format compile into one grammar per request, with limits on the combined total: 20 strict tools, 24 optional parameters, and 16 parameters with union types such as type string or null. Internal size limits and a 180 second compile timeout sit on top.",
+  "fix": "Set strict only on the tools that need it, make parameters required with explicit defaults instead of optional, avoid nullable unions, flatten nesting, or split strict tools across requests.",
+  "apply": "// count across ALL strict schemas in one request\nconst optional = schemas.flatMap(s => Object.keys(s.properties).filter(k => !(s.required ?? []).includes(k))).length;\nif (optional > 24) throw new Error('more than 24 optional params across strict schemas');",
+  "affected": "Claude structured outputs (output_config.format) and strict tool use, as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+    "https://github.com/anthropics/anthropic-sdk-python/issues/1185"
+  ],
+  "tags": [
+    "structured-outputs",
+    "schema",
+    "400"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

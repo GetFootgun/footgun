@@ -1,0 +1,27 @@
+{
+  "id": "fg-0498",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "codex exec default sandbox",
+  "title": "codex exec in CI finishes but changes no files",
+  "symptoms": [
+    "The final message describes edits, but git diff is empty",
+    "Commands that write files fail with permission errors inside codex exec"
+  ],
+  "cause": "codex exec runs in a read-only sandbox by default, so automation that expects edits gets none.",
+  "fix": "Pass --sandbox workspace-write for runs that edit, or danger-full-access only on an isolated runner.",
+  "apply": "codex exec --sandbox workspace-write \"fix the failing tests\"",
+  "affected": "Codex CLI codex exec, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/non-interactive-mode"
+  ],
+  "tags": [
+    "exec",
+    "ci",
+    "sandbox"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

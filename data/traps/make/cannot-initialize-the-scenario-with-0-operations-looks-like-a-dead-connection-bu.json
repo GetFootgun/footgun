@@ -1,0 +1,26 @@
+{
+  "id": "fg-0034",
+  "provider": "make",
+  "surface_type": "infra",
+  "surface_name": "Scenario pre-flight",
+  "title": "'Cannot initialize the scenario' with 0 operations looks like a dead connection but self-heals",
+  "symptoms": [
+    "Cannot initialize the scenario because of the reason",
+    "Failed to verify connection. Unexpected error: internal_failure",
+    "Failed to verify account. Please try again later.",
+    "Failed run shows operations 0 and isReplayable false"
+  ],
+  "cause": "The run died at pre-flight, before any module or connection was touched. Several scenarios that share no connection fail inside the same short window and each one succeeds on its next scheduled run. A truly expired token fails on every run, fails at the module with a 401, and uses at least one operation.",
+  "fix": "Check whether the next run of the same scenario succeeded. If it did, do nothing and do not reconnect healthy connections. In monitoring, suppress an isolated failure with this signature when a later run succeeded, and alert only when it repeats on consecutive runs.",
+  "apply": "Classifier: status === 3 && operations === 0 && /Failed to verify (account|connection)|Cannot initialize the scenario|internal_failure|Please try again later/i.test(message) means a platform blip unless two or more occur in a row.",
+  "affected": "Make, July and August 2026",
+  "sources": [],
+  "tags": [
+    "false-alarm",
+    "monitoring"
+  ],
+  "verified_on": "2026-08-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

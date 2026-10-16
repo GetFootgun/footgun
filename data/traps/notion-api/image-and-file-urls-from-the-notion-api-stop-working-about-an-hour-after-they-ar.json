@@ -1,0 +1,28 @@
+{
+  "id": "fg-0456",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "File objects",
+  "title": "Image and file URLs from the Notion API stop working about an hour after they are fetched",
+  "symptoms": [
+    "AccessDenied: Request has expired when opening a stored Notion image URL",
+    "Static site built from Notion shows broken images the next day",
+    "file.expiry_time is about one hour after the request time"
+  ],
+  "cause": "Files uploaded into Notion come back as signed links that are valid for one hour, with the cutoff in expiry_time. Only external files keep a permanent URL.",
+  "fix": "Download and rehost Notion-hosted files at build or sync time, or fetch the block again when expiry_time has passed. Never store the signed URL.",
+  "apply": "const img = block.image;\nconst url = img.type === \"file\" ? img.file.url : img.external.url;\n// for type file: download now; img.file.expiry_time marks when url stops working",
+  "affected": "Notion REST API, Notion-hosted files (type file), as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/file-object"
+  ],
+  "tags": [
+    "files",
+    "expiry",
+    "images"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

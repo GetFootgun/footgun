@@ -1,0 +1,28 @@
+{
+  "id": "fg-0159",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Programmable Messaging, unverified recipients",
+  "title": "Error 21608 still blocks unverified recipients after you upgrade the Twilio account",
+  "symptoms": [
+    "21608 Upgrade and create an approved primary compliance profile to reach unverified numbers",
+    "Messages reach your own phone but no one else's"
+  ],
+  "cause": "Trial accounts can only message verified numbers, and an upgraded account keeps that limit until its primary compliance profile is approved.",
+  "fix": "On trial, verify each recipient. On a paid account, submit the primary compliance profile in Trust Hub and wait for approval; verified caller IDs are only a testing stopgap.",
+  "apply": "await client.validationRequests.create({ phoneNumber: '+15551234567', friendlyName: 'QA phone' });",
+  "affected": "Twilio trial accounts and upgraded accounts without an approved primary compliance profile, documented October 2026",
+  "sources": [
+    "https://www.twilio.com/docs/api/errors/21608",
+    "https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account"
+  ],
+  "tags": [
+    "trial",
+    "compliance",
+    "sms"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

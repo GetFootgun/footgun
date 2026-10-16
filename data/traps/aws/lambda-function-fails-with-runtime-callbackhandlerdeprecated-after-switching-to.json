@@ -1,0 +1,30 @@
+{
+  "id": "fg-0178",
+  "provider": "aws",
+  "surface_type": "infra",
+  "surface_name": "Lambda Node.js 24 runtime, handler signatures",
+  "title": "Lambda function fails with Runtime.CallbackHandlerDeprecated after switching to the Node.js 24 runtime",
+  "symptoms": [
+    "errorType Runtime.CallbackHandlerDeprecated in CloudWatch, invocation returns FunctionError Unhandled",
+    "Init log warning: AWS Lambda plans to remove support for callback-based function handlers starting with Node.js 24",
+    "Handler written as (event, context, callback) worked on nodejs22.x"
+  ],
+  "cause": "The Node.js 24 runtime dropped the handler form that takes a third callback argument. Older runtimes still accept it, so the break appears only on the runtime upgrade.",
+  "fix": "Make the handler async and return the result or throw the error. If the callback parameter is declared but never used, just remove it from the signature.",
+  "apply": "// before\nexport const handler = (event, context, callback) => { callback(null, { statusCode: 200, body: 'ok' }); };\n// after\nexport const handler = async (event, context) => {\n  return { statusCode: 200, body: 'ok' };\n};",
+  "affected": "Lambda nodejs24.x and later, since Node.js 24 became available in Lambda in November 2025; nodejs22.x and earlier unaffected",
+  "sources": [
+    "https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html",
+    "https://github.com/aws/aws-lambda-nodejs-runtime-interface-client/issues/137"
+  ],
+  "tags": [
+    "lambda",
+    "nodejs",
+    "runtime-upgrade",
+    "handler"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

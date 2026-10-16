@@ -1,0 +1,22 @@
+{
+  "id": "fg-0063",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "Marketing API, ads edge paging",
+  "title": "Marketing API /ads request returns 500 unless the page size is 50 or less",
+  "symptoms": [
+    "500 error from /act_{id}/ads with a large limit"
+  ],
+  "cause": "The ads edge fails on larger page sizes for this call shape.",
+  "fix": "Page at limit=50 and follow paging.next.",
+  "apply": "GET /act_{ad_account_id}/ads?fields=id,name,creative{link_url}&limit=50, then follow paging.next",
+  "affected": "Marketing API, October 2026",
+  "sources": [],
+  "tags": [
+    "pagination"
+  ],
+  "verified_on": "2026-10-05",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0229",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "Job outputs",
+  "title": "Job output is empty in the next job with the warning 'Skip output since it may contain secret'",
+  "symptoms": [
+    "Warning: Skip output 'url' since it may contain secret.",
+    "needs.build.outputs.url is an empty string",
+    "Happens when the value includes a secret or a substring that matches one"
+  ],
+  "cause": "The runner redacts any job output that contains a registered secret value and does not send it to later jobs. A short or common secret value can match ordinary output text.",
+  "fix": "Pass non secret identifiers between jobs and fetch the sensitive value again in the job that needs it, or use an artifact for data.",
+  "apply": "# job A\n- run: echo \"deploy_id=$ID\" >> \"$GITHUB_OUTPUT\"\n# job B: look the secret up again\n- run: ./deploy.sh \"${{ needs.a.outputs.deploy_id }}\"\n  env:\n    API_KEY: ${{ secrets.API_KEY }}",
+  "affected": "GitHub Actions job outputs, as of October 2026",
+  "sources": [
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+  ],
+  "tags": [
+    "outputs",
+    "secrets",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

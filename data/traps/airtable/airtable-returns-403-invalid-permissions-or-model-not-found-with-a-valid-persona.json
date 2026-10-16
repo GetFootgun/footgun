@@ -1,0 +1,30 @@
+{
+  "id": "fg-0431",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Personal access token scopes and bases",
+  "title": "Airtable returns 403 INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND with a valid personal access token",
+  "symptoms": [
+    "403 INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND",
+    "Invalid permissions, or the requested model was not found",
+    "Same token works on one base and fails on another"
+  ],
+  "cause": "A personal access token needs both the right scope (such as data.records:write) and the base added as a resource, and it can never do more than its creator can in that base. Missing either one looks the same as a wrong base or table ID.",
+  "fix": "Edit the token, add the base under Access and the needed scopes, and confirm the creator has editor access. On Enterprise, check whether admins block API access to organization-owned bases.",
+  "apply": "https://airtable.com/create/tokens > edit the token > add scopes data.records:read and data.records:write > add the target base as a resource > save",
+  "affected": "Airtable Web API, personal access tokens, as of 2026-10",
+  "sources": [
+    "https://support.airtable.com/docs/creating-personal-access-tokens",
+    "https://airtable.com/developers/web/api/errors",
+    "https://airtable.com/developers/web/api/authentication"
+  ],
+  "tags": [
+    "auth",
+    "permissions",
+    "403"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

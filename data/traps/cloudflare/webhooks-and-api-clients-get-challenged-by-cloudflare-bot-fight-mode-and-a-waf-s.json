@@ -1,0 +1,28 @@
+{
+  "id": "fg-0217",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Bot Fight Mode",
+  "title": "Webhooks and API clients get challenged by Cloudflare Bot Fight Mode and a WAF Skip rule does not help",
+  "symptoms": [
+    "Stripe or GitHub webhook deliveries fail with 403 and a challenge page",
+    "Mobile app or server to server API calls return HTML challenges",
+    "A WAF custom rule with Skip for the webhook path has no effect"
+  ],
+  "cause": "Bot Fight Mode runs outside the Ruleset Engine, so WAF custom rules and Page Rules cannot skip it. It may challenge API and automated traffic that legitimately has no browser.",
+  "fix": "Turn Bot Fight Mode off for the zone, or use Super Bot Fight Mode (Pro and up) which supports Skip rules, or allow the sender's IPs with an IP Access rule.",
+  "apply": "Cloudflare dashboard > your zone > Security > Bots > Bot Fight Mode: Off",
+  "affected": "Cloudflare zones with Bot Fight Mode enabled (Free plan bot product), as of October 2026",
+  "sources": [
+    "https://developers.cloudflare.com/bots/get-started/bot-fight-mode/"
+  ],
+  "tags": [
+    "waf",
+    "bots",
+    "webhooks"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

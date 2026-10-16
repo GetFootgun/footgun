@@ -1,0 +1,28 @@
+{
+  "id": "fg-0293",
+  "provider": "prisma",
+  "surface_type": "tool",
+  "surface_name": "Prisma Migrate shadow database",
+  "title": "prisma migrate dev on a managed database fails with 'permission denied to create database'",
+  "symptoms": [
+    "A migration failed when applied to the shadow database",
+    "Database error: Error querying the database: db error: ERROR: permission denied to create database"
+  ],
+  "cause": "migrate dev creates and drops a temporary shadow database to replay migrations, which needs CREATEDB or superuser on PostgreSQL. Many hosted databases do not grant it.",
+  "fix": "Create a separate empty database for the shadow and point shadowDatabaseUrl at it, never at the main database. In Prisma 7 the setting lives in prisma.config.ts.",
+  "apply": "export default defineConfig({\n  schema: 'prisma/schema.prisma',\n  datasource: {\n    url: process.env.DATABASE_URL,\n    shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL,\n  },\n})",
+  "affected": "prisma migrate dev on PostgreSQL roles without CREATEDB; config location changed in Prisma 7.0",
+  "sources": [
+    "https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/shadow-database",
+    "https://github.com/prisma/orm/issues/4571"
+  ],
+  "tags": [
+    "migrate",
+    "shadow-database",
+    "permissions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

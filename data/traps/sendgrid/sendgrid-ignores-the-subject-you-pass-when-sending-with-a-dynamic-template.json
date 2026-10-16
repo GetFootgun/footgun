@@ -1,0 +1,29 @@
+{
+  "id": "fg-0416",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Dynamic templates subject",
+  "title": "SendGrid ignores the subject you pass when sending with a dynamic template",
+  "symptoms": [
+    "Email arrives with the template's subject, not the one in the request",
+    "Subject is blank when the template version has no subject and only data is passed",
+    "Top-level subject works without templateId and breaks with it"
+  ],
+  "cause": "A dynamic template version that defines a subject overrides any subject set at message or personalization level. To vary it per send, the template subject must itself be a Handlebars expression fed from dynamic_template_data.",
+  "fix": "Set the template version subject to {{{subject}}} and pass subject inside dynamic_template_data.",
+  "apply": "{ templateId: 'd-xxxxxxxx', dynamicTemplateData: { subject: 'Your order shipped', name: 'Ana' } }  // template subject field: {{{subject}}}",
+  "affected": "SendGrid v3 Mail Send with dynamic templates (d- ids), as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/mail-send",
+    "https://github.com/sendgrid/sendgrid-nodejs/issues/843"
+  ],
+  "tags": [
+    "templates",
+    "handlebars",
+    "email"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

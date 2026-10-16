@@ -1,0 +1,28 @@
+{
+  "id": "fg-0489",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "MCP, project .mcp.json approval",
+  "title": ".mcp.json servers stay 'Pending approval' and enableAllProjectMcpServers in the repo is ignored",
+  "symptoms": [
+    "claude mcp list shows the project server as Pending approval (run claude to approve)",
+    "enabledMcpjsonServers committed in .claude/settings.json has no effect in a fresh clone",
+    "Project MCP tools are missing until someone opens an interactive session"
+  ],
+  "cause": "Project-scoped servers need approval, and a cloned repository cannot approve its own servers: approval keys in the committed .claude/settings.json are ignored until the folder is trusted. Since v2.1.207 an untracked .claude/settings.local.json is also applied only in a trusted folder.",
+  "fix": "Run claude once in the folder and accept the trust dialog and the server prompt, or put the approval in your user settings, managed settings, or a --settings argument, which apply even in an untrusted folder.",
+  "apply": "// ~/.claude/settings.json\n{ \"enabledMcpjsonServers\": [\"db-tools\"] }",
+  "affected": "Claude Code, as of 2026-10; trust requirement for settings.local.json approvals since v2.1.207",
+  "sources": [
+    "https://code.claude.com/docs/en/mcp"
+  ],
+  "tags": [
+    "mcp",
+    "trust",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0508",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Models requiring data retention",
+  "title": "Claude Fable 5.1 requests fail in Cursor with Privacy Mode on until data retention is approved",
+  "symptoms": [
+    "Requests to Claude Fable 5 or 5.1 fail for an Enterprise team or a Privacy Mode user",
+    "Some Fable requests are answered by Claude Opus instead"
+  ],
+  "cause": "Fable 5 and 5.1 need provider-side data retention, which falls outside Cursor's zero retention agreements. For Enterprise customers and anyone with Privacy Mode on, requests fail until an admin approves the model's retention policy; requests that trip a Fable guardrail are rerouted to Opus.",
+  "fix": "Have an admin approve the model on the dashboard restricted models page, which applies to the whole team, or pick another model.",
+  "apply": "https://cursor.com/dashboard/restricted_models/claude-fable-5-1",
+  "affected": "Cursor, Claude Fable 5 and 5.1, Enterprise and Privacy Mode accounts, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/enterprise/privacy-and-data-governance",
+    "https://cursor.com/docs/models-and-pricing"
+  ],
+  "tags": [
+    "models",
+    "privacy",
+    "enterprise"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

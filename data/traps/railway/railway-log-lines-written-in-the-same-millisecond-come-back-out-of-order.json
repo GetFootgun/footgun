@@ -1,0 +1,23 @@
+{
+  "id": "fg-0079",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Deploy logs",
+  "title": "Railway log lines written in the same millisecond come back out of order",
+  "symptoms": [
+    "Rows of output are shuffled",
+    "A parser that reads lines in order drops or misplaces rows"
+  ],
+  "cause": "Railway reorders log lines that share a timestamp.",
+  "fix": "Number each line you plan to parse and reassemble by number.",
+  "apply": "console.log(`ROW ${i}/${n} ${JSON.stringify(row)}`)",
+  "affected": "Railway, September 2026",
+  "sources": [],
+  "tags": [
+    "logs"
+  ],
+  "verified_on": "2026-09-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

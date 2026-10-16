@@ -1,0 +1,29 @@
+{
+  "id": "fg-0204",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Data API with row level security",
+  "title": "Supabase select returns an empty array with no error even though the table has rows",
+  "symptoms": [
+    "{ data: [], error: null } for a table that has data in the Table Editor",
+    "Same query returns rows with the service role key or in the SQL editor",
+    "Works after disabling RLS on the table"
+  ],
+  "cause": "With RLS enabled and no policy that matches the caller's role, Postgres filters every row out instead of raising an error. A missing user session makes the request run as anon, which policies for authenticated never match.",
+  "fix": "Add a SELECT policy for the role that actually makes the call, and confirm a user JWT is attached at call time by checking auth.jwt() through an RPC.",
+  "apply": "create policy \"read own rows\" on public.todos\n  for select to authenticated\n  using ((select auth.uid()) = user_id);",
+  "affected": "All Supabase projects with RLS enabled on the queried table, which the dashboard enables by default for new tables",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/why-is-my-select-returning-an-empty-data-array-and-i-have-data-in-the-table-xvOPgx",
+    "https://supabase.com/docs/guides/database/postgres/row-level-security"
+  ],
+  "tags": [
+    "rls",
+    "postgres",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0262",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "BuildKit gha cache backend",
+  "title": "GitHub Actions Docker build fails with 'This legacy service is shutting down, effective April 15, 2025'",
+  "symptoms": [
+    "ERROR: failed to solve: This legacy service is shutting down, effective April 15, 2025. Migrate to the new service ASAP.",
+    "Only builds that use cache-to or cache-from type=gha fail"
+  ],
+  "cause": "GitHub turned off the v1 Actions cache API. BuildKit's gha backend speaks the v2 API only from BuildKit 0.20 and Buildx 0.21, so pinned old builders, self-built binaries, and custom BuildKit images still call v1.",
+  "fix": "Unpin the Buildx and BuildKit versions in the workflow or raise them to at least Buildx 0.21.0 and BuildKit 0.20.0.",
+  "apply": "docker buildx version                       # needs v0.21.0 or later\ndocker buildx inspect --bootstrap | grep -i buildkit   # needs v0.20.0 or later",
+  "affected": "GitHub Actions cache service v1 shut down April 15, 2025; Buildx before 0.21.0 or BuildKit before 0.20.0",
+  "sources": [
+    "https://github.com/docker/build-push-action/issues/1345",
+    "https://docs.docker.com/build/cache/backends/gha/"
+  ],
+  "tags": [
+    "github-actions",
+    "build-cache",
+    "buildkit"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

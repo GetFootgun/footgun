@@ -1,0 +1,29 @@
+{
+  "id": "fg-0352",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Webhook node test and production URLs",
+  "title": "n8n webhook returns 404 'The requested webhook is not registered' on the second call",
+  "symptoms": [
+    "404 The requested webhook \"POST my-path\" is not registered.",
+    "Test URL works once after Listen for test event, then fails",
+    "Production URL calls run but nothing shows on the canvas"
+  ],
+  "cause": "The webhook-test URL is registered only while the editor is listening and accepts a single call. The production URL exists only while the workflow is published or active, and its runs appear only in the Executions list.",
+  "fix": "Point external services at the production URL, publish the workflow, and read results in the Executions tab. Use the test URL only for one manual call at a time.",
+  "apply": "https://n8n.example.com/webhook/my-path      # production, needs the workflow published\nhttps://n8n.example.com/webhook-test/my-path # one call after Listen for test event",
+  "affected": "n8n 1.x and 2.x self-hosted and Cloud, as of 2026-10",
+  "sources": [
+    "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/",
+    "https://github.com/n8n-io/n8n/blob/master/packages/cli/src/errors/response-errors/webhook-not-found.error.ts"
+  ],
+  "tags": [
+    "webhooks",
+    "testing",
+    "publish"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

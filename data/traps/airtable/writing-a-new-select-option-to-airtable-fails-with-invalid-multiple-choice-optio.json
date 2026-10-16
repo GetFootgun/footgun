@@ -1,0 +1,29 @@
+{
+  "id": "fg-0437",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Single and multiple select fields",
+  "title": "Writing a new select option to Airtable fails with INVALID_MULTIPLE_CHOICE_OPTIONS",
+  "symptoms": [
+    "422 INVALID_MULTIPLE_CHOICE_OPTIONS",
+    "Write works for existing options and fails for any new value",
+    "Value with different capitalization or trailing space is rejected"
+  ],
+  "cause": "Select fields accept only values that exactly match an existing option. Creating a new option on write requires typecast, which is off by default.",
+  "fix": "Pass typecast true when the integration may send new option values, or normalize values to the existing option list first.",
+  "apply": "await base(\"Leads\").create([{ fields: { Source: \"Podcast\" } }], { typecast: true });",
+  "affected": "Airtable Web API, singleSelect and multipleSelects fields, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/field-model",
+    "https://airtable.com/developers/web/api/create-records"
+  ],
+  "tags": [
+    "typecast",
+    "select",
+    "422"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

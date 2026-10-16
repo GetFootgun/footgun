@@ -1,0 +1,29 @@
+{
+  "id": "fg-0370",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "429 handling",
+  "title": "Custom 429 handling in a Zapier afterResponse never runs because core throws ThrottledError first",
+  "symptoms": [
+    "The server returned 429 (Too Many Requests)",
+    "afterResponse code that inspects 429 responses is skipped",
+    "Steps retry after a delay instead of failing"
+  ],
+  "cause": "Since 11.2.0 core retries uncaught 429 responses after a delay taken from Retry-After, and a built-in middleware throws ThrottledError before your afterResponse sees the response.",
+  "fix": "Let the built-in retry handle 429 and send a Retry-After from your API, or set throwForThrottlingEarly to false on the request to handle it yourself and throw ThrottledError with a delay.",
+  "apply": "const res = await z.request({ url, throwForThrottlingEarly: false, skipThrowForStatus: true });\nif (res.status === 429) throw new z.errors.ThrottledError('Rate limited', 60);",
+  "affected": "zapier-platform-core 11.2.0 and later, as of 2026-10",
+  "sources": [
+    "https://docs.zapier.com/platform/reference/cli-docs",
+    "https://github.com/zapier/zapier-platform/blob/main/packages/core/src/http-middlewares/after/throw-for-throttling.js"
+  ],
+  "tags": [
+    "rate-limit",
+    "retries",
+    "errors"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

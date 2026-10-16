@@ -1,0 +1,28 @@
+{
+  "id": "fg-0351",
+  "provider": "n8n",
+  "surface_type": "infra",
+  "surface_name": "Webhook URL behind a reverse proxy",
+  "title": "n8n shows webhook URLs as http://localhost:5678 when running behind a reverse proxy",
+  "symptoms": [
+    "Webhook node displays http://localhost:5678/webhook/...",
+    "OAuth callback or app webhook registration points to localhost",
+    "Startup warning that WEBHOOK_URL is deprecated"
+  ],
+  "cause": "n8n builds public URLs from its protocol, host and port settings, which describe the internal listener, not the proxy. From 2.35.0 the override is N8N_WEBHOOK_URL and the old WEBHOOK_URL logs a deprecation warning.",
+  "fix": "Set the public base URL explicitly, set proxy hops to 1, and forward X-Forwarded-For, X-Forwarded-Host and X-Forwarded-Proto from the proxy.",
+  "apply": "# n8n before 2.35.0 reads WEBHOOK_URL; 2.35.0 and later read N8N_WEBHOOK_URL\nWEBHOOK_URL=https://n8n.example.com/\nN8N_WEBHOOK_URL=https://n8n.example.com/\nN8N_PROXY_HOPS=1",
+  "affected": "Self-hosted n8n behind nginx, Traefik, Caddy or a load balancer; N8N_WEBHOOK_URL naming from 2.35.0",
+  "sources": [
+    "https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/"
+  ],
+  "tags": [
+    "webhooks",
+    "proxy",
+    "self-hosting"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

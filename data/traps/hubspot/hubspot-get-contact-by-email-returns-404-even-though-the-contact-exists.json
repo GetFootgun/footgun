@@ -1,0 +1,29 @@
+{
+  "id": "fg-0388",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "Contacts lookup and upsert by email",
+  "title": "HubSpot GET contact by email returns 404 even though the contact exists",
+  "symptoms": [
+    "404 from /crm/v3/objects/contacts/jane@example.com",
+    "SDK getById with an email returns not found",
+    "Batch upsert by email rejects a partial update"
+  ],
+  "cause": "The object path segment is treated as the record id unless idProperty=email is passed. Batch upsert keyed on email also does not support partial upserts.",
+  "fix": "Pass idProperty=email on single and batch reads, and for upserts that only touch some properties use a custom unique property as the key.",
+  "apply": "await client.crm.contacts.basicApi.getById(email, ['email','firstname'], undefined, undefined, false, 'email');",
+  "affected": "HubSpot CRM contacts v3; getById signature as in @hubspot/api-client 14.0.1, as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/guide",
+    "https://github.com/HubSpot/hubspot-api-nodejs/issues/183"
+  ],
+  "tags": [
+    "crm",
+    "lookup",
+    "contacts"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

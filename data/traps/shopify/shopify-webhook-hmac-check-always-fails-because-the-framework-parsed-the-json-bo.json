@@ -1,0 +1,28 @@
+{
+  "id": "fg-0335",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Webhook HMAC verification",
+  "title": "Shopify webhook HMAC check always fails because the framework parsed the JSON body first",
+  "symptoms": [
+    "Computed digest never matches X-Shopify-Hmac-SHA256",
+    "Every webhook gets a 401 from your own handler",
+    "Verification passes only for tiny payloads or never at all"
+  ],
+  "cause": "The signature is computed over the exact raw bytes Shopify sent. Middleware like express.json() parses and drops them, and re-serializing the object changes spacing and key order.",
+  "fix": "Read the raw body for the webhook route only, compute HMAC SHA256 with the app client secret, and compare with a timing-safe check. After rotating the secret, expect the old one in signatures for up to an hour.",
+  "apply": "app.post('/webhooks', express.raw({ type: '*/*' }), (req, res) => {\n  const digest = crypto.createHmac('sha256', process.env.SHOPIFY_API_SECRET).update(req.body).digest('base64')\n  const header = req.get('X-Shopify-Hmac-SHA256') ?? ''\n  const ok = header.length === digest.length && crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(header))\n  if (!ok) return res.sendStatus(401)\n  res.sendStatus(200)\n})",
+  "affected": "Shopify HTTPS webhook delivery, all API versions; Express, Next.js route handlers, any framework with body parsing",
+  "sources": [
+    "https://shopify.dev/docs/apps/build/webhooks/subscribe/https"
+  ],
+  "tags": [
+    "webhooks",
+    "hmac",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

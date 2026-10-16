@@ -1,0 +1,28 @@
+{
+  "id": "fg-0364",
+  "provider": "slack",
+  "surface_type": "infra",
+  "surface_name": "Socket Mode connections",
+  "title": "Slack events go missing in production while a developer runs the same app locally in Socket Mode",
+  "symptoms": [
+    "Some events reach the laptop and never reach the deployed app",
+    "Production misses about half of slash commands while a local copy is running",
+    "refresh_requested or warning disconnects every few hours"
+  ],
+  "cause": "Socket Mode allows up to 10 connections per app and Slack sends each payload to any one of them. A local process using the same app token takes a share of production traffic, and every connection is recycled every few hours.",
+  "fix": "Use a separate Slack app for development, handle reconnects on refresh_requested, and remember Socket Mode apps cannot be listed in the Marketplace.",
+  "apply": "SLACK_APP_TOKEN for local dev must belong to a separate development app, never the production app",
+  "affected": "Slack apps using Socket Mode, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/apis/events-api/using-socket-mode"
+  ],
+  "tags": [
+    "socket-mode",
+    "events",
+    "environments"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

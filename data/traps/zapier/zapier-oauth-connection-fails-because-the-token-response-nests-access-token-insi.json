@@ -1,0 +1,28 @@
+{
+  "id": "fg-0378",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "OAuth token storage",
+  "title": "Zapier OAuth connection fails because the token response nests access_token inside an object",
+  "symptoms": [
+    "bundle.authData.access_token is undefined after connecting",
+    "Connection test fails right after a successful OAuth consent",
+    "Refresh works in Postman but not in the integration"
+  ],
+  "cause": "Zapier stores only top-level keys from the token response in authData. Nested objects cannot be stored, so tokens under a data or token key are lost.",
+  "fix": "Switch the token and refresh requests to code mode and return the tokens at the top level.",
+  "apply": "const r = await z.request({ url: tokenUrl, method: 'POST', body });\nreturn { access_token: r.data.token.access_token, refresh_token: r.data.token.refresh_token };",
+  "affected": "Zapier Platform UI and CLI OAuth2 integrations, as of 2026-10",
+  "sources": [
+    "https://docs.zapier.com/platform/build/oauth"
+  ],
+  "tags": [
+    "oauth",
+    "auth",
+    "tokens"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

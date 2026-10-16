@@ -1,0 +1,27 @@
+{
+  "id": "fg-0156",
+  "provider": "stripe",
+  "surface_type": "sdk",
+  "surface_name": "stripe-python Subscription.items",
+  "title": "subscription.items is a dict method, not the line items, in stripe-python before v15",
+  "symptoms": [
+    "TypeError: 'builtin_function_or_method' object is not iterable",
+    "sub.items prints a bound method instead of a list object"
+  ],
+  "cause": "Before v15 StripeObject subclassed dict, so the attribute name items resolved to dict.items and shadowed the API field.",
+  "fix": "Use bracket access for the field. On v15 and later sub.items returns the line items and key iteration moves to to_dict().",
+  "apply": "for item in subscription[\"items\"][\"data\"]:\n    print(item[\"price\"][\"id\"])",
+  "affected": "stripe-python before 15.0.0; behavior changes in 15.0.0",
+  "sources": [
+    "https://github.com/stripe/stripe-python/issues/504",
+    "https://github.com/stripe/stripe-python/wiki/Migration-guide-for-v15"
+  ],
+  "tags": [
+    "python",
+    "subscriptions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

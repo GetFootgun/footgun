@@ -1,0 +1,27 @@
+{
+  "id": "fg-0320",
+  "provider": "playwright",
+  "surface_type": "tool",
+  "surface_name": "Test output directory",
+  "title": "Screenshots and traces from an earlier Playwright run vanish when a second run starts",
+  "symptoms": [
+    "test-results from the first CI step are gone before the upload step",
+    "Running projects as separate commands leaves only the last project's artifacts"
+  ],
+  "cause": "Playwright Test empties outputDir at the start of every run. Several invocations that share the default test-results folder delete each other's files.",
+  "fix": "Give each invocation its own outputDir, or upload artifacts after each step.",
+  "apply": "npx playwright test --project=chromium --output=test-results/chromium\nnpx playwright test --project=firefox --output=test-results/firefox",
+  "affected": "Playwright Test, all current versions",
+  "sources": [
+    "https://playwright.dev/docs/api/class-testconfig"
+  ],
+  "tags": [
+    "ci",
+    "artifacts",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

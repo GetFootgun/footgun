@@ -1,0 +1,24 @@
+{
+  "id": "fg-0054",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "API v2, GET /scenarios/{id}/logs",
+  "title": "Scenario logs endpoint rejects pg[limit] above 50 and ignores the status filter",
+  "symptoms": [
+    "400 SC400 Available maximum limit 50",
+    "?status=3 still returns runs of every status"
+  ],
+  "cause": "The logs endpoint caps page size at 50 and does not apply a status query parameter. Results are wrapped under scenarioLogs.",
+  "fix": "Page in steps of 50 with pg[offset] and filter for status 3 in your own code.",
+  "apply": "GET /api/v2/scenarios/{id}/logs?from=<ms>&to=<ms>&pg[limit]=50&pg[offset]=0, then response.scenarioLogs.filter(l => l.status === 3)",
+  "affected": "Make API v2, July 2026",
+  "sources": [],
+  "tags": [
+    "pagination",
+    "api"
+  ],
+  "verified_on": "2026-07-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0459",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Integration access and sharing",
+  "title": "Notion API returns object_not_found for a page or database that exists and opens fine in the app",
+  "symptoms": [
+    "404 object_not_found",
+    "Could not find database with ID: 249d19fb-3530-80fc-a7ba-edbe8fde08f4. Make sure the relevant pages and databases are shared with your integration.",
+    "Search with no query returns an empty results array in a workspace full of pages"
+  ],
+  "cause": "An integration token can read nothing until a person connects that integration to a page or database in the Notion UI. The API answers with the same 404 it uses for an ID that does not exist.",
+  "fix": "Connect the integration on the top-level page that holds everything it needs, then retry. Treat a 404 on a known ID as a sharing problem first.",
+  "apply": "Notion page > ••• menu (top right) > scroll down to Add connections > search the connection name > select it from the dropdown list",
+  "affected": "Notion REST API, internal and public integrations, all API versions, as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/errors",
+    "https://developers.notion.com/docs/authorization",
+    "https://github.com/makenotion/notion-sdk-js/issues/612"
+  ],
+  "tags": [
+    "permissions",
+    "sharing",
+    "404"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

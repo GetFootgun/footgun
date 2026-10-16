@@ -1,0 +1,22 @@
+{
+  "id": "fg-0126",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "Make an API call (via Make), writes",
+  "title": "Bigin write through 'Make an API call' fails with expected_data_type jsonobject",
+  "symptoms": [
+    "[400] \"expected_data_type\": jsonobject"
+  ],
+  "cause": "Mapping a webhook's raw body into the module's body encodes the JSON a second time.",
+  "fix": "Use the typed modules for writes: updateAPipeline, deleteAPipeline, deleteAContact.",
+  "apply": "bigin-by-zoho:updateAPipeline with mapper {\"id\": \"{{1.id}}\", \"Description\": \"note text\"}",
+  "affected": "Make Bigin by Zoho app version 2, September 2026",
+  "sources": [],
+  "tags": [
+    "encoding"
+  ],
+  "verified_on": "2026-09-18",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

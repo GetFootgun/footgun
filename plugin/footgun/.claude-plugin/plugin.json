@@ -1,0 +1,14 @@
+{
+  "name": "footgun",
+  "displayName": "Footgun",
+  "version": "0.1.0",
+  "description": "Dated, verified traps for third-party APIs, platforms, and AI tools, loaded before your agent hits them.",
+  "author": { "name": "Footgun" },
+  "homepage": "https://getfootgun.com",
+  "repository": "https://github.com/getfootgun/footgun",
+  "license": "MIT",
+  "keywords": ["mcp", "api", "errors", "gotchas"],
+  "userConfig": {
+    "api_key": { "type": "string", "title": "Footgun API key", "description": "Optional. Needed to file and confirm traps. Create one at https://getfootgun.com/account", "sensitive": true }
+  }
+}

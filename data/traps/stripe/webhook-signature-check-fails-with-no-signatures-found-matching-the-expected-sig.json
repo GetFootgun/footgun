@@ -1,0 +1,29 @@
+{
+  "id": "fg-0158",
+  "provider": "stripe",
+  "surface_type": "sdk",
+  "surface_name": "Webhook signature verification, constructEvent",
+  "title": "Webhook signature check fails with 'No signatures found matching the expected signature for payload'",
+  "symptoms": [
+    "No signatures found matching the expected signature for payload",
+    "Works under stripe listen but fails on the deployed endpoint, or the reverse",
+    "req.body is already an object when constructEvent runs"
+  ],
+  "cause": "The signature covers the exact raw bytes Stripe sent, so any middleware that parses or re-serializes the body first, such as app.use(express.json()) registered before the route, breaks it. The other common cause is using the CLI whsec secret in production or a Dashboard endpoint secret locally.",
+  "fix": "Give the webhook route the raw body and register it before the global JSON parser. In the Next.js App Router read await request.text(). Use the secret that belongs to the endpoint actually sending the event.",
+  "apply": "app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {\n  const event = stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_WEBHOOK_SECRET);\n  res.sendStatus(200);\n});\napp.use(express.json()); // only after the webhook route",
+  "affected": "stripe-node with Express, Next.js and other body-parsing frameworks, all versions, checked October 2026",
+  "sources": [
+    "https://docs.stripe.com/webhooks/signature",
+    "https://github.com/stripe/stripe-node/issues/341"
+  ],
+  "tags": [
+    "webhooks",
+    "signature",
+    "express"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

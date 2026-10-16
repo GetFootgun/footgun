@@ -1,0 +1,29 @@
+{
+  "id": "fg-0290",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "@prisma/adapter-pg schema option",
+  "title": "@prisma/adapter-pg ignores ?schema= in the connection URL and queries the public schema",
+  "symptoms": [
+    "The table `public.Item` does not exist in the current database.",
+    "prisma db push created the tables in the schema named in the URL, but the client looks in public",
+    "Raw queries fail with 42P01 relation does not exist"
+  ],
+  "cause": "The Prisma CLI honors the schema URL parameter, but the pg driver adapter takes the schema only from its own options and falls back to public.",
+  "fix": "Pass schema in the adapter options for model queries, and set search_path through the connection string options parameter so raw queries resolve too. Check that your pooler forwards startup options before relying on search_path through it.",
+  "apply": "const url = process.env.DATABASE_URL\nconst schema = new URL(url).searchParams.get('schema') ?? 'public'\n// model queries: tell the adapter the schema\nconst adapter = new PrismaPg({ connectionString: url }, { schema })\n// raw queries (42P01): also set search_path on the connection string\n// DATABASE_URL=postgres://user:pass@host:5432/db?schema=myschema&options=-c%20search_path%3Dmyschema%2Cpublic",
+  "affected": "prisma-client generator with @prisma/adapter-pg from Prisma 6.15, still open at 7.4 per the issue and reproduced on 7.10.0 on 2026-10-15; open bug, re-check before relying on this trap",
+  "sources": [
+    "https://github.com/prisma/orm/issues/28128",
+    "https://www.prisma.io/docs/orm/overview/databases/postgresql"
+  ],
+  "tags": [
+    "driver-adapters",
+    "postgres",
+    "schema"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

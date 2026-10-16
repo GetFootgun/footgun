@@ -1,0 +1,30 @@
+{
+  "id": "fg-0507",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Model availability with ChatGPT sign-in",
+  "title": "'The model is not supported when using Codex with a ChatGPT account' after a model retirement",
+  "symptoms": [
+    "The 'gpt-5.6-sol' model is not supported when using Codex with a ChatGPT account.",
+    "The same pattern names whichever model is retired or unavailable to the plan, for example 'gpt-5.3-codex-spark'",
+    "Saved config, custom agents, or codex exec --model scripts break on a retirement date",
+    "The same model keeps working for sessions signed in with an API key"
+  ],
+  "cause": "Codex with ChatGPT sign-in serves only the models the plan currently includes, and retires models on fixed dates: gpt-5.4 and gpt-5.4-mini on 2026-08-31, gpt-5.3-codex-spark on 2026-09-14, and gpt-5.5 on 2026-10-14. API-key sessions follow the API model catalog instead.",
+  "fix": "Replace retired model ids in config.toml, profiles, custom agents, scheduled tasks, and scripts with a model available to your plan, and check that the subscription is active.",
+  "apply": "# ~/.codex/config.toml\nmodel = \"gpt-6.1-sol\"",
+  "affected": "Codex with ChatGPT sign-in, retirements 2026-08-31, 2026-09-14, and 2026-10-14",
+  "sources": [
+    "https://learn.chatgpt.com/docs/models",
+    "https://github.com/openai/codex/issues/34027"
+  ],
+  "tags": [
+    "models",
+    "auth",
+    "migration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0357",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "url_private file download",
+  "title": "Downloading a Slack file from url_private saves an HTML sign-in page instead of the file",
+  "symptoms": [
+    "Downloaded file is a few KB of HTML from slack.com",
+    "PDF or image will not open after download",
+    "HTTP 200 with content-type text/html for url_private_download"
+  ],
+  "cause": "Private file URLs need an Authorization header with a bearer token that has files:read. Without it Slack answers with its login page and a 200 status, and the SDK WebClient does not wrap these URLs.",
+  "fix": "Fetch url_private_download with a plain HTTP client and an Authorization: Bearer header using a token that has files:read. Check the response content-type before saving.",
+  "apply": "r = requests.get(f[\"url_private_download\"], headers={\"Authorization\": f\"Bearer {bot_token}\"}, timeout=30)\nassert not r.headers[\"content-type\"].startswith(\"text/html\")",
+  "affected": "Slack Web API file objects, all versions as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/reference/objects/file-object",
+    "https://github.com/slackapi/python-slack-sdk/issues/1434"
+  ],
+  "tags": [
+    "files",
+    "auth",
+    "download"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0428",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "List records filterByFormula",
+  "title": "Airtable list records with a long filterByFormula fails once the URL passes 16,000 characters",
+  "symptoms": [
+    "Lookup by a list of IDs fails only when the list is long",
+    "Request rejected for an OR() formula over a few hundred record IDs",
+    "Same formula works in a POST to listRecords"
+  ],
+  "cause": "Airtable rejects request URLs of 16,000 characters or more, and an encoded filterByFormula grows fast. The GET form of list records puts the formula in the query string.",
+  "fix": "Send long queries as POST to the listRecords path with the parameters in the JSON body, or split the ID list into smaller groups.",
+  "apply": "curl -X POST \"https://api.airtable.com/v0/$BASE_ID/$TABLE/listRecords\" -H \"Authorization: Bearer $AIRTABLE_PAT\" -H \"Content-Type: application/json\" -d '{\"filterByFormula\": \"OR({Email}=\\\"a@x.com\\\", {Email}=\\\"b@x.com\\\")\"}'",
+  "affected": "Airtable Web API list records, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/list-records"
+  ],
+  "tags": [
+    "filterbyformula",
+    "limits",
+    "queries"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

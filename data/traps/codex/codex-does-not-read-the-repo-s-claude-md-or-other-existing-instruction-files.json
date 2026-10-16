@@ -1,0 +1,26 @@
+{
+  "id": "fg-0495",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "AGENTS.md fallback filenames",
+  "title": "Codex does not read the repo's CLAUDE.md or other existing instruction files",
+  "symptoms": [
+    "Codex ignores rules that Claude Code follows from CLAUDE.md",
+    "A TEAM_GUIDE.md or similar file is never loaded"
+  ],
+  "cause": "In each directory Codex reads AGENTS.override.md, then AGENTS.md, and other names only when they are listed in project_doc_fallback_filenames. Fallback names are tried only where no AGENTS.md exists.",
+  "fix": "List the extra filenames in config.toml, or add an AGENTS.md that points to the shared file.",
+  "apply": "# ~/.codex/config.toml\nproject_doc_fallback_filenames = [\"CLAUDE.md\"]",
+  "affected": "Codex CLI, IDE extension, and ChatGPT desktop app, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-configuration/agents-md"
+  ],
+  "tags": [
+    "agents-md",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

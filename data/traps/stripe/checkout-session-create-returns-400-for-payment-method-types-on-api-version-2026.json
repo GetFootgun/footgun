@@ -1,0 +1,30 @@
+{
+  "id": "fg-0146",
+  "provider": "stripe",
+  "surface_type": "api",
+  "surface_name": "Checkout Sessions API, create",
+  "title": "Checkout Session create returns 400 for payment_method_types on API version 2026-09-30.endive",
+  "symptoms": [
+    "400 invalid_request_error naming the payment_method_types parameter on checkout.sessions.create",
+    "Code that worked on 2026-08-26.dahlia breaks right after upgrading to stripe-node 23 or another SDK pinned to endive",
+    "TypeScript: payment_method_types does not exist in type Checkout.SessionCreateParams"
+  ],
+  "cause": "The endive major release removed payment_method_types as a request parameter on Checkout Sessions, and on Payment Intents and Setup Intents too. SDK majors that pin endive, such as stripe-node 23, also drop it from their param types.",
+  "fix": "Remove payment_method_types. Either let dynamic payment methods from the Dashboard decide, or pass allowed_payment_method_types, which quietly filters out methods that do not fit the currency or amount instead of failing.",
+  "apply": "const session = await stripe.checkout.sessions.create({\n  mode: 'payment',\n  line_items: [{ price: priceId, quantity: 1 }],\n  allowed_payment_method_types: ['card'], // replaces payment_method_types\n  success_url: 'https://example.com/success',\n});",
+  "affected": "Stripe API 2026-09-30.endive and later; stripe-node 23.0.0 and other SDK majors pinned to endive, released 2026-09-30",
+  "sources": [
+    "https://docs.stripe.com/changelog/endive/2026-09-30/remove-payment-method-types-checkout-sessions.md",
+    "https://docs.stripe.com/changelog",
+    "https://github.com/stripe/stripe-node/blob/master/CHANGELOG.md"
+  ],
+  "tags": [
+    "checkout",
+    "api-version",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

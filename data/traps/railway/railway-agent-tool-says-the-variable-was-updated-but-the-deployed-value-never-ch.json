@@ -1,0 +1,24 @@
+{
+  "id": "fg-0075",
+  "provider": "railway",
+  "surface_type": "tool",
+  "surface_name": "Railway MCP railway-agent tool",
+  "title": "Railway agent tool says the variable was updated, but the deployed value never changes",
+  "symptoms": [
+    "Agent reports applied or staged for deployment",
+    "Redeploy happens, yet the service still logs the old value"
+  ],
+  "cause": "The railway-agent tool cannot see secret values (hidden from agent), so it cannot verify its own change, and it reported success three times while the live value stayed the same.",
+  "fix": "Set variables with the CLI and verify in the runtime log, not in the agent's reply.",
+  "apply": "railway link --project <id> --environment <env> --service <svc> && railway variables --set \"NAME=value\" && railway redeploy --yes",
+  "affected": "Railway MCP, June 2026",
+  "sources": [],
+  "tags": [
+    "env-vars",
+    "silent-failure"
+  ],
+  "verified_on": "2026-06-12",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

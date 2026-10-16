@@ -1,0 +1,25 @@
+{
+  "id": "fg-0060",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "Meta Pixel, restricted standard events",
+  "title": "fbq('track','Lead') sends nothing while custom events go through",
+  "symptoms": [
+    "fbq('track','Lead') produces zero network requests",
+    "Events Manager shows only PageView and ViewContent",
+    "Pixel config lists restrictedEventNames"
+  ],
+  "cause": "Pixels for some business categories carry a restriction on certain standard events. Lead, Purchase, Schedule, CompleteRegistration and other mid and lower funnel events are dropped in the browser. Custom events are also blocked until they are reviewed and confirmed in Events Manager. Campaigns can then optimize for an unrelated page view without anyone noticing.",
+  "fix": "Inspect the pixel's config for the restricted list. Send neutrally named custom events with no health or condition words, confirm them in Events Manager, build custom conversions on them, and point ad sets at those.",
+  "apply": "curl https://connect.facebook.net/signals/config/<PIXEL_ID> | grep -o 'restrictedEventNames[^]]*'",
+  "affected": "Meta Pixel, health and wellness categories, October 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "conversions"
+  ],
+  "verified_on": "2026-10-12",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0529",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "TypeScript SDK request timeout",
+  "title": "MCP TypeScript client gives 'MCP error -32001: Request timed out' after 60 seconds on a long tool",
+  "symptoms": [
+    "McpError: MCP error -32001: Request timed out",
+    "Long tools fail at exactly 60 seconds even while the server sends progress notifications"
+  ],
+  "cause": "DEFAULT_REQUEST_TIMEOUT_MSEC is 60,000 ms, and progress resets the timer only when resetTimeoutOnProgress is set, and on the low-level request() only when an onprogress callback is passed too.",
+  "fix": "Pass a larger timeout per call, set resetTimeoutOnProgress with an onprogress handler, and cap the total with maxTotalTimeout.",
+  "apply": "await client.callTool({ name: 'export', arguments: {} }, undefined, { timeout: 300_000, resetTimeoutOnProgress: true, onprogress: (p) => console.error(p) });",
+  "affected": "MCP TypeScript SDK clients, v1 and v2, as of 2026-10",
+  "sources": [
+    "https://github.com/modelcontextprotocol/typescript-sdk/issues/245",
+    "https://github.com/modelcontextprotocol/typescript-sdk/issues/2076"
+  ],
+  "tags": [
+    "timeout",
+    "client",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

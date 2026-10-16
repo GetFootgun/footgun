@@ -1,0 +1,28 @@
+{
+  "id": "fg-0190",
+  "provider": "firebase",
+  "surface_type": "billing",
+  "surface_name": "Cloud Storage for Firebase, Spark plan",
+  "title": "Firebase Storage returns 402 or storage/unauthorized for every request on a Spark plan project",
+  "symptoms": [
+    "402: Cloud Storage for Firebase no longer supports Firebase projects that are on the no-cost Spark pricing plan.",
+    "storage/quota-exceeded or storage/unauthorized on uploads and downloads that used to work",
+    "Storage page in the console redirects away and the appspot.com bucket is not listed"
+  ],
+  "cause": "Cloud Storage for Firebase now requires the Blaze plan, both for new default buckets and, since February 3, 2026, for access to existing appspot.com buckets. Data is kept but locked until the project upgrades.",
+  "fix": "Upgrade the project to Blaze, where the no-cost usage tier still applies. New default buckets are named PROJECT_ID.firebasestorage.app, so update storageBucket in config for new projects.",
+  "apply": "initializeApp({\n  // new projects\n  storageBucket: 'PROJECT_ID.firebasestorage.app',\n  // older projects keep 'PROJECT_ID.appspot.com'\n});\n// Console: Project settings > Usage and billing > Modify plan > Blaze",
+  "affected": "Firebase projects on the Spark plan; new default buckets since September 2024; existing appspot.com buckets since 2026-02-03",
+  "sources": [
+    "https://firebase.google.com/docs/storage/faqs-storage-changes-announced-sept-2024"
+  ],
+  "tags": [
+    "storage",
+    "billing",
+    "spark-plan"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

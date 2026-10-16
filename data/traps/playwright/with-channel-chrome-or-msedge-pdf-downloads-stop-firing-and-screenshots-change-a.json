@@ -1,0 +1,29 @@
+{
+  "id": "fg-0324",
+  "provider": "playwright",
+  "surface_type": "sdk",
+  "surface_name": "Headless mode with branded channels",
+  "title": "With channel 'chrome' or 'msedge', PDF downloads stop firing and screenshots change after Playwright 1.49",
+  "symptoms": [
+    "page.waitForEvent('download') times out on a PDF link because the PDF opens inline",
+    "toHaveScreenshot diffs across the whole suite with no app change",
+    "Tests pass in default headless Chromium and fail with channel: 'chrome'"
+  ],
+  "cause": "Chrome and Edge removed old headless, so branded channels now run the new headless mode, which renders PDFs in the page and paints differently. Default Playwright Chromium uses a separate headless shell and is not affected.",
+  "fix": "Assert on the opened PDF page or fetch the file with the request API instead of waiting for a download, and regenerate screenshot baselines per channel.",
+  "apply": "const res = await page.request.get(pdfUrl)\nexpect(res.headers()['content-type']).toContain('application/pdf')\n// then: npx playwright test --update-snapshots --project='Google Chrome'",
+  "affected": "Playwright 1.49 and later with channel chrome, chrome-beta, msedge and similar",
+  "sources": [
+    "https://github.com/microsoft/playwright/issues/33566",
+    "https://playwright.dev/docs/browsers"
+  ],
+  "tags": [
+    "headless",
+    "downloads",
+    "screenshots"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

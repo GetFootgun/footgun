@@ -1,0 +1,27 @@
+{
+  "id": "fg-0509",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Default ignore list",
+  "title": "Cursor Agent cannot see CSV, PDF, SVG, or image files in the project",
+  "symptoms": [
+    "@-mentioning a .csv or .svg file finds nothing",
+    "Agent reports that a data file cannot be read although it is in the workspace",
+    "Lock files, node_modules, and .venv are invisible to Agent"
+  ],
+  "cause": "On top of .gitignore and .cursorignore, Cursor applies a built-in ignore list that includes *.csv, *.pdf, *.svg, common image, audio, video, and archive types, lock files, and folders such as node_modules and .venv.",
+  "fix": "Re-include the files Agent needs with a ! pattern in .cursorignore.",
+  "apply": "# .cursorignore\n!*.csv\n!assets/**/*.svg",
+  "affected": "Cursor editor, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/reference/ignore-file"
+  ],
+  "tags": [
+    "ignore",
+    "context"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

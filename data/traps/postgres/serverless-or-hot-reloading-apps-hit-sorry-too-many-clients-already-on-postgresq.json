@@ -1,0 +1,29 @@
+{
+  "id": "fg-0282",
+  "provider": "postgres",
+  "surface_type": "infra",
+  "surface_name": "PostgreSQL connection limits",
+  "title": "Serverless or hot-reloading apps hit 'sorry, too many clients already' on PostgreSQL",
+  "symptoms": [
+    "FATAL: sorry, too many clients already",
+    "FATAL: remaining connection slots are reserved for roles with the SUPERUSER attribute",
+    "FATAL: remaining connection slots are reserved for non-replication superuser connections (PostgreSQL 15 and older)"
+  ],
+  "cause": "max_connections defaults to 100 with 3 slots held for superusers, while each serverless instance or reloaded module opens its own pool of several connections. PostgreSQL 16 changed the error wording and added reserved_connections for members of pg_use_reserved_connections.",
+  "fix": "Put a pooler in front for app traffic, cap each pool at a small max, and reuse one pool per process.",
+  "apply": "import pg from 'pg'\nconst g = globalThis\nexport const pool = g.pgPool ?? new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 3 })\ng.pgPool = pool",
+  "affected": "All PostgreSQL versions for the limit; message text changed in PostgreSQL 16 (September 2023)",
+  "sources": [
+    "https://www.postgresql.org/docs/current/runtime-config-connection.html",
+    "https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/utils/init/postinit.c"
+  ],
+  "tags": [
+    "postgres",
+    "connections",
+    "serverless"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

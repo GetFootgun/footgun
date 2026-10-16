@@ -1,0 +1,29 @@
+{
+  "id": "fg-0233",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "actions/upload-artifact v4",
+  "title": "upload-artifact v4 fails with 409 Conflict when matrix jobs upload to the same artifact name",
+  "symptoms": [
+    "Failed to CreateArtifact: Received non-retryable error: Failed request: (409) Conflict: an artifact with this name already exists on the workflow run",
+    "Matrix jobs that shared one artifact in v3 fail after a Dependabot bump",
+    "Only the first job's upload succeeds"
+  ],
+  "cause": "Artifacts created by upload-artifact v4 are immutable, so two jobs cannot write to the same name. v3 allowed it and merged the files.",
+  "fix": "Give each job a unique artifact name and merge them with download-artifact using a pattern.",
+  "apply": "- uses: actions/upload-artifact@v4\n  with:\n    name: results-${{ matrix.os }}\n    path: out/\n# later job\n- uses: actions/download-artifact@v4\n  with:\n    pattern: results-*\n    merge-multiple: true",
+  "affected": "actions/upload-artifact v4 and later",
+  "sources": [
+    "https://github.com/actions/upload-artifact/issues/478",
+    "https://github.com/actions/upload-artifact/blob/main/README.md"
+  ],
+  "tags": [
+    "artifacts",
+    "matrix",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

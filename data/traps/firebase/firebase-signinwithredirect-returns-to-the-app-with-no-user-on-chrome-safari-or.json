@@ -1,0 +1,31 @@
+{
+  "id": "fg-0189",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "Firebase Auth web, signInWithRedirect",
+  "title": "Firebase signInWithRedirect returns to the app with no user on Chrome, Safari, or Firefox",
+  "symptoms": [
+    "getRedirectResult() resolves to null after a successful Google sign-in",
+    "Unable to process request due to missing initial state. This may happen if browser sessionStorage is inaccessible or accidentally cleared.",
+    "Works on localhost and in signInWithPopup, fails on the deployed custom domain"
+  ],
+  "cause": "The redirect flow keeps state on the authDomain helper page, and browsers now partition third-party storage, so when authDomain differs from the app's domain the state is lost. Chrome 115 and later enforced this from June 24, 2024, after Safari 16.1 and Firefox 109.",
+  "fix": "Serve the auth helper from your own domain: set authDomain to the app's domain on Firebase Hosting, or reverse proxy /__/auth/ to PROJECT_ID.firebaseapp.com, and add the new redirect URI at the OAuth provider. Otherwise switch to signInWithPopup.",
+  "apply": "initializeApp({\n  apiKey: '...',\n  authDomain: 'app.example.com', // same domain that serves the app, proxying /__/auth/*\n  projectId: '...',\n});\n// OAuth provider redirect URI: https://app.example.com/__/auth/handler",
+  "affected": "Firebase JS SDK redirect sign-in on Chrome 115+ (from 2024-06-24), Safari 16.1+, Firefox 109+, when authDomain is not the app's own domain",
+  "sources": [
+    "https://firebase.google.com/docs/auth/web/redirect-best-practices",
+    "https://github.com/firebase/firebase-js-sdk/issues/6716",
+    "https://github.com/firebase/firebase-js-sdk/issues/4256"
+  ],
+  "tags": [
+    "auth",
+    "oauth",
+    "redirect",
+    "browsers"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

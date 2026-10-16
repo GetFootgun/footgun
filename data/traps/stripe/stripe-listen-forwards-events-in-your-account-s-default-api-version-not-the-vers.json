@@ -1,0 +1,30 @@
+{
+  "id": "fg-0153",
+  "provider": "stripe",
+  "surface_type": "tool",
+  "surface_name": "Stripe CLI, stripe listen",
+  "title": "stripe listen forwards events in your account's default API version, not the version your code pins",
+  "symptoms": [
+    "unknown flag: --api-version",
+    "Local webhook payloads differ in shape from what the production endpoint receives",
+    "Passing --stripe-version to stripe trigger does not change the forwarded event"
+  ],
+  "cause": "The listen command can only render events in the account default API version, or the latest one with --latest. The version used for trigger or other API requests does not control how events are formatted.",
+  "fix": "Use --latest when your code targets the newest version, or upgrade the account default. For an exact older version, tunnel to a real webhook endpoint created with that api_version.",
+  "apply": "stripe listen --latest --forward-to localhost:4242/webhooks",
+  "affected": "Stripe CLI, all versions through October 2026; the request for a version flag on listen is still open",
+  "sources": [
+    "https://docs.stripe.com/cli/listen",
+    "https://github.com/stripe/stripe-cli/issues/1335",
+    "https://github.com/stripe/stripe-cli/issues/213"
+  ],
+  "tags": [
+    "cli",
+    "webhooks",
+    "api-version"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

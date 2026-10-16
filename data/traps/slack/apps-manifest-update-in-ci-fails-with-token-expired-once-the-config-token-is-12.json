@@ -1,0 +1,29 @@
+{
+  "id": "fg-0384",
+  "provider": "slack",
+  "surface_type": "tool",
+  "surface_name": "App manifest API config tokens",
+  "title": "apps.manifest.update in CI fails with token_expired once the config token is 12 hours old",
+  "symptoms": [
+    "token_expired from apps.manifest.update",
+    "missing_scope when the token lacks app_configurations:write",
+    "Deploy pipeline worked yesterday and fails today without changes"
+  ],
+  "cause": "Manifest methods need an app configuration token, not a bot or user token, and config tokens expire 12 hours after they are generated. Each one comes with a refresh token that must be rotated through tooling.tokens.rotate.",
+  "fix": "Store the config refresh token as a CI secret, rotate it at the start of every run, and save the new refresh token the call returns.",
+  "apply": "curl -s -X POST https://slack.com/api/tooling.tokens.rotate -d refresh_token=$SLACK_CONFIG_REFRESH_TOKEN",
+  "affected": "Slack app manifest APIs (apps.manifest.create, update, validate), as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/app-manifests/configuring-apps-with-app-manifests",
+    "https://docs.slack.dev/reference/methods/apps.manifest.update"
+  ],
+  "tags": [
+    "manifest",
+    "ci",
+    "tokens"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

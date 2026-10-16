@@ -1,0 +1,29 @@
+{
+  "id": "fg-0343",
+  "provider": "n8n",
+  "surface_type": "infra",
+  "surface_name": "Task runners and external modules",
+  "title": "n8n Code node throws 'Cannot find module' for an npm package installed in the n8n image",
+  "symptoms": [
+    "Cannot find module 'word-extractor' with a require stack under @n8n/task-runner",
+    "NODE_FUNCTION_ALLOW_EXTERNAL set on the main container has no effect",
+    "Worked in an image before task runners were enabled"
+  ],
+  "cause": "Code now runs inside task runners, which have their own node_modules and a locked allowlist file. Packages and allowlists set on the main n8n container do not reach the runner.",
+  "fix": "Build a custom image from n8nio/runners with the packages installed, allowlist them in n8n-task-runners.json under env-overrides, and mount it at /etc/n8n-task-runners.json.",
+  "apply": "ARG N8N_VERSION\nFROM n8nio/runners:${N8N_VERSION}\nUSER root\nRUN cd /opt/runners/task-runner-javascript && pnpm add word-extractor\nCOPY n8n-task-runners.json /etc/n8n-task-runners.json\nUSER runner\n# n8n-task-runners.json, javascript runner env-overrides: \"NODE_FUNCTION_ALLOW_EXTERNAL\": \"word-extractor\"",
+  "affected": "n8n 2.0 and later (runners on by default), and 1.x with N8N_RUNNERS_ENABLED=true; custom runner images need n8nio/runners 1.121.0 or later",
+  "sources": [
+    "https://docs.n8n.io/hosting/configuration/task-runners/",
+    "https://github.com/n8n-io/n8n/issues/24191"
+  ],
+  "tags": [
+    "task-runners",
+    "code-node",
+    "docker"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

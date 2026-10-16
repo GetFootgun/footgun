@@ -1,0 +1,23 @@
+{
+  "id": "fg-0021",
+  "provider": "google-workspace-apis",
+  "surface_type": "ui",
+  "surface_name": "Gmail settings, Forwarding",
+  "title": "Changing Gmail's forwarding address silently stops mail to the old one",
+  "symptoms": [
+    "A person who used to receive forwarded copies stops getting them with no notice"
+  ],
+  "cause": "The main Forwarding setting holds a single destination, so pointing it at someone new drops the previous recipient.",
+  "fix": "Keep the main forward for one recipient and add a filter with a Forward to action for each additional recipient. The address must already be a verified forwarding address.",
+  "apply": "Gmail Settings > Filters and Blocked Addresses > Create a new filter > To: (address) > Create filter > Forward it to",
+  "affected": "Gmail, August 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "email"
+  ],
+  "verified_on": "2026-08-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

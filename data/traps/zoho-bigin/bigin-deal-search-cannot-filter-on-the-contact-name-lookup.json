@@ -1,0 +1,24 @@
+{
+  "id": "fg-0111",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, Pipelines search",
+  "title": "Bigin deal search cannot filter on the Contact_Name lookup",
+  "symptoms": [
+    "400 asking to verify the parameter when searching Pipelines by Contact_Name",
+    "Fails with both a name and an id"
+  ],
+  "cause": "Lookup fields are not searchable.",
+  "fix": "Find the contact first, then read its related deals.",
+  "apply": "GET /bigin/v2/Contacts/{contact_id}/Pipelines?fields=Deal_Name,Stage",
+  "affected": "Bigin API v2 and Make searchPipelines, July 2026",
+  "sources": [],
+  "tags": [
+    "search",
+    "lookup"
+  ],
+  "verified_on": "2026-07-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

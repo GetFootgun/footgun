@@ -1,0 +1,29 @@
+{
+  "id": "fg-0347",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Python Code node",
+  "title": "n8n Python Code node fails after 2.0 because _input and dot access no longer work",
+  "symptoms": [
+    "Python code that reads _input fails after the upgrade",
+    "item.json.field dot access fails where it worked on Pyodide",
+    "Python Code node does not run without the n8nio/runners sidecar"
+  ],
+  "cause": "n8n 2.0 removed the Pyodide Python node. Native Python runs on task runners, exposes only _items and _item, and accepts bracket access only.",
+  "fix": "Rewrite Python code to use _items or _item with bracket notation, and run the n8nio/runners sidecar.",
+  "apply": "for item in _items:\n    item[\"json\"][\"total\"] = item[\"json\"][\"qty\"] * item[\"json\"][\"price\"]\nreturn _items",
+  "affected": "n8n 2.0 and later; native Python available from 1.111.0",
+  "sources": [
+    "https://docs.n8n.io/code/code-node/",
+    "https://docs.n8n.io/2-0-breaking-changes/"
+  ],
+  "tags": [
+    "python",
+    "code-node",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

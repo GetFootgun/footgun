@@ -1,0 +1,25 @@
+{
+  "id": "fg-0122",
+  "provider": "zoho-bigin",
+  "surface_type": "ui",
+  "surface_name": "Email template rich text editor",
+  "title": "Bigin template editor strips HTML comments, so Outlook conditional blocks disappear",
+  "symptoms": [
+    "Outlook conditional comment blocks ([if mso]) are gone after saving",
+    "Hex colors come back as rgb()",
+    "The template is wrapped in an extra div"
+  ],
+  "cause": "Bigin's rich text editor normalizes stored HTML on save and drops comments. The bgcolor and align attributes survive.",
+  "fix": "Do not rely on conditional comments. Set background colors with bgcolor attributes on tables and cells as well as in CSS, so clients that ignore CSS backgrounds still show the right color.",
+  "apply": "<table bgcolor=\"#FFFFFF\" align=\"center\" style=\"background:#FFFFFF\">",
+  "affected": "Bigin email templates, July 2026",
+  "sources": [],
+  "tags": [
+    "email-templates",
+    "html"
+  ],
+  "verified_on": "2026-07-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

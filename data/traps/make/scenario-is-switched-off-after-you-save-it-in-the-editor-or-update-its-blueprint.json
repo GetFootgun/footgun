@@ -1,0 +1,25 @@
+{
+  "id": "fg-0053",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Scenario editor and API v2 scenario update",
+  "title": "Scenario is switched off after you save it in the editor or update its blueprint",
+  "symptoms": [
+    "Scenario is not activated",
+    "isActive is false after a blueprint PATCH",
+    "Scheduled runs stop after an edit"
+  ],
+  "cause": "Saving a scenario in the web editor, and updating its blueprint through PATCH /scenarios/{id}, can leave the scenario inactive.",
+  "fix": "After every edit, start the scenario again and confirm it is active and that a clean run follows.",
+  "apply": "POST /api/v2/scenarios/{id}/start, then GET /api/v2/scenarios/{id} and check isActive is true.",
+  "affected": "Make web editor and API v2, July to September 2026",
+  "sources": [],
+  "tags": [
+    "deactivation",
+    "deploy"
+  ],
+  "verified_on": "2026-09-02",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

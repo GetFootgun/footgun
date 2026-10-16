@@ -1,0 +1,29 @@
+{
+  "id": "fg-0267",
+  "provider": "docker",
+  "surface_type": "infra",
+  "surface_name": "Docker Engine API version floor",
+  "title": "Tools on the Docker socket fail with 'client version 1.24 is too old' after upgrading to Engine 29",
+  "symptoms": [
+    "Error response from daemon: client version 1.24 is too old. Minimum supported API version is 1.44, please upgrade your client to a newer version",
+    "Traefik, Portainer, or another container that mounts /var/run/docker.sock stops seeing containers right after the engine upgrade"
+  ],
+  "cause": "Engine 29.0 raised the oldest API version the daemon will answer to 1.44, so clients that pin an old API version instead of negotiating are refused. Engine 29.3 lowered the floor to 1.40, which still rejects clients pinned at 1.24.",
+  "fix": "Upgrade the tool to a release that negotiates or speaks API 1.44 or later, or move the engine to 29.3 or later where the floor is 1.40, which covers clients pinned at 1.40 and above. As a temporary stopgap only, operators in the Traefik thread set DOCKER_MIN_API_VERSION=1.24 on the dockerd service through a systemd override; Docker's only mention of that variable is a commented-out block on the engine deprecation page, so remove it once the tool is upgraded.",
+  "apply": "docker version --format '{{.Server.Version}} min API {{.Server.MinAPIVersion}}'\n# then upgrade the failing tool (for example the Traefik or Portainer image tag) to a release that speaks API 1.44+,\n# or upgrade the engine to 29.3+ if the tool pins API 1.40 or later",
+  "affected": "Docker Engine 29.0 and later (November 2025); 29.3 lowered the minimum from 1.44 to 1.40",
+  "sources": [
+    "https://docs.docker.com/engine/release-notes/29/",
+    "https://github.com/traefik/traefik/issues/12253",
+    "https://docs.docker.com/engine/deprecated/"
+  ],
+  "tags": [
+    "engine",
+    "api-version",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0338",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Publish and draft workflows",
+  "title": "Edits to an n8n workflow are saved but the production webhook still runs the old version",
+  "symptoms": [
+    "Production executions show the previous node settings",
+    "Fix works in a manual test, not in live runs",
+    "Schedule trigger keeps the old interval after saving"
+  ],
+  "cause": "From 2.0 the active toggle is replaced by Publish, and autosaved edits stay in draft. Production webhooks, forms, schedules and app triggers keep running the last published version.",
+  "fix": "Click Publish after editing, or publish from the CLI with publish:workflow in deploy scripts.",
+  "apply": "n8n publish:workflow --id=WORKFLOW_ID",
+  "affected": "n8n 2.0 and later, self-hosted and Cloud",
+  "sources": [
+    "https://docs.n8n.io/workflows/publish/",
+    "https://docs.n8n.io/2-0-breaking-changes/"
+  ],
+  "tags": [
+    "publish",
+    "upgrade",
+    "deploy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

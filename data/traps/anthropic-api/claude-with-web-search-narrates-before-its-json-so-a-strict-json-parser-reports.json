@@ -1,0 +1,24 @@
+{
+  "id": "fg-0002",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Web search tool responses",
+  "title": "Claude with web search narrates before its JSON, so a strict JSON parser reports nothing",
+  "symptoms": [
+    "JSON.parse fails or returns an empty list",
+    "Report says zero items checked although the model answered"
+  ],
+  "cause": "With web search on, the model writes prose before the JSON array. A parser that demands the whole reply be JSON discards a correct answer, which then reads like a clean result.",
+  "fix": "Find the first { or [ in the reply, walk forward counting bracket depth while skipping string contents and escaped characters, and parse the slice that closes at depth zero. Fail loudly if none is found.",
+  "apply": "function firstJson(t) { const s = t.search(/[[{]/); if (s < 0) throw new Error('no JSON'); let depth = 0, inStr = false, esc = false; for (let i = s; i < t.length; i++) { const c = t[i]; if (inStr) { if (esc) esc = false; else if (c === '\\\\') esc = true; else if (c === '\"') inStr = false; continue; } if (c === '\"') inStr = true; else if (c === '[' || c === '{') depth++; else if ((c === ']' || c === '}') && --depth === 0) return JSON.parse(t.slice(s, i + 1)); } throw new Error('unclosed JSON'); }",
+  "affected": "Claude with the web search tool, September 2026",
+  "sources": [],
+  "tags": [
+    "parsing",
+    "silent-failure"
+  ],
+  "verified_on": "2026-09-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

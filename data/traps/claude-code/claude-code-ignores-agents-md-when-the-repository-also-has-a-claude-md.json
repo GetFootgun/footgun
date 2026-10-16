@@ -1,0 +1,27 @@
+{
+  "id": "fg-0482",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Instruction files, AGENTS.md",
+  "title": "Claude Code ignores AGENTS.md when the repository also has a CLAUDE.md",
+  "symptoms": [
+    "Rules written in AGENTS.md are not followed while CLAUDE.md rules are",
+    "AGENTS.md is never read at all on Claude Code older than v2.1.277"
+  ],
+  "cause": "Claude Code reads AGENTS.md directly only when no CLAUDE.md or CLAUDE.local.md exists in the working directory or above it, and only from v2.1.277. When both kinds of file exist, only the CLAUDE.md files load.",
+  "fix": "Import AGENTS.md from CLAUDE.md so one file serves Claude Code and the other agents, or set Project instructions to claude-md-and-agents-md in /config (or pluginConfigs in ~/.claude/settings.json) so both load. Update Claude Code first.",
+  "apply": "echo '@AGENTS.md' >> CLAUDE.md && claude update",
+  "affected": "Claude Code before v2.1.277 (no direct AGENTS.md support), and any version when a CLAUDE.md is present, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/memory",
+    "https://github.com/anthropics/claude-code/issues/6235"
+  ],
+  "tags": [
+    "agents-md",
+    "instructions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

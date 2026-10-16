@@ -1,0 +1,30 @@
+{
+  "id": "fg-0454",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion-Version 2026-03-11",
+  "title": "Code that reads page.archived or passes after to append breaks after opting into Notion-Version 2026-03-11",
+  "symptoms": [
+    "page.archived is undefined on every page",
+    "Append block children calls that pass after stop working",
+    "Blocks of type transcription no longer appear; they come back as meeting_notes"
+  ],
+  "cause": "Version 2026-03-11 renamed archived to in_trash in requests and responses, replaced the after parameter with a position object, and renamed the transcription block type to meeting_notes.",
+  "fix": "Update field names and block type checks before switching versions. In the JS SDK, upgrade to 5.12.0 or later and set notionVersion explicitly.",
+  "apply": "await notion.blocks.children.append({\n  block_id: pageId,\n  children,\n  position: { type: \"after_block\", after_block: { id: anchorBlockId } },\n});\nawait notion.pages.update({ page_id, in_trash: true });",
+  "affected": "Notion-Version 2026-03-11; @notionhq/client 5.12.0 and later when notionVersion is set to it",
+  "sources": [
+    "https://developers.notion.com/guides/get-started/upgrade-guide-2026-03-11",
+    "https://developers.notion.com/reference/versioning",
+    "https://developers.notion.com/reference/patch-block-children"
+  ],
+  "tags": [
+    "versioning",
+    "breaking-change",
+    "blocks"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

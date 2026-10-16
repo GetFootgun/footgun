@@ -1,0 +1,28 @@
+{
+  "id": "fg-0224",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "Workflow permissions block",
+  "title": "Adding one permission such as id-token: write makes actions/checkout fail with 'Repository not found'",
+  "symptoms": [
+    "remote: Repository not found.",
+    "fatal: repository ... not found during actions/checkout in a private repo",
+    "Other steps lose access to packages or issues they used before"
+  ],
+  "cause": "As soon as a permissions block lists any scope, every scope not listed is set to none. Adding id-token: write for OIDC silently removes contents: read, which checkout needs on private repositories.",
+  "fix": "List every scope the job uses alongside the new one.",
+  "apply": "permissions:\n  id-token: write\n  contents: read",
+  "affected": "GitHub Actions workflows with a permissions key, private and internal repositories, as of October 2026",
+  "sources": [
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+  ],
+  "tags": [
+    "permissions",
+    "oidc",
+    "checkout"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

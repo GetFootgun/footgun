@@ -1,0 +1,28 @@
+{
+  "id": "fg-0365",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "Block Kit limits",
+  "title": "Slack rejects a generated message with invalid_blocks once the report grows",
+  "symptoms": [
+    "invalid_blocks from chat.postMessage",
+    "msg_blocks_too_long",
+    "Small test reports post fine, large ones fail"
+  ],
+  "cause": "A message holds at most 50 blocks and a modal or Home tab 100. A section text is capped at 3,000 characters and a section takes at most 10 fields of 2,000 characters each.",
+  "fix": "Count blocks and truncate text before posting. Split long reports across threaded messages or attach a file.",
+  "apply": "for chunk in [blocks[i:i+50] for i in range(0, len(blocks), 50)]:\n    client.chat_postMessage(channel=cid, blocks=chunk, text=\"Report\", thread_ts=parent_ts)",
+  "affected": "Slack Block Kit in messages, modals and Home tabs, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/reference/block-kit/blocks",
+    "https://docs.slack.dev/reference/block-kit/blocks/section-block"
+  ],
+  "tags": [
+    "block-kit",
+    "limits"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

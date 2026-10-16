@@ -1,0 +1,31 @@
+{
+  "id": "fg-0308",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "Streaming, notFound and redirect status codes",
+  "title": "notFound() returns HTTP 200 instead of 404 when called inside a Suspense boundary or under loading.tsx",
+  "symptoms": [
+    "curl -I on a missing record returns 200 OK while the page shows the not-found UI",
+    "Search Console indexes soft 404 pages",
+    "redirect() inside a streamed component does not send a 307 or 308 Location header"
+  ],
+  "cause": "Once a Suspense fallback or loading.tsx renders, the response headers and status are already flushed. A later notFound() or redirect() can only patch the streamed HTML, not the status line.",
+  "fix": "Call notFound() and redirect() before any await that sits under Suspense, or move the check into proxy or next.config redirects. With cacheComponents, set instant = false on the segment so it blocks instead of streaming a shell.",
+  "apply": "export const instant = false // with cacheComponents: block instead of streaming a shell\n\nexport default async function Page({ params }: { params: Promise<{ id: string }> }) {\n  const { id } = await params\n  const item = await db.item.findUnique({ where: { id } })\n  if (!item) notFound() // runs before any Suspense boundary, so the status is a real 404\n  return <Item item={item} />\n}",
+  "affected": "Next.js App Router 13.4 to 16.4, any route with loading.tsx or a Suspense boundary above the check",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/streaming",
+    "https://nextjs.org/docs/app/api-reference/file-conventions/loading",
+    "https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant",
+    "https://github.com/vercel/next.js/issues/51021"
+  ],
+  "tags": [
+    "streaming",
+    "seo",
+    "status-codes"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0448",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Embed limits",
+  "title": "Discord rejects a message with several embeds even though each embed is under its own limits",
+  "symptoms": [
+    "400 Bad Request with DiscordAPIError[50035]: Invalid Form Body on a multi-embed message",
+    "Same embeds send fine one per message",
+    "Report embed with 25 long fields fails while short ones work"
+  ],
+  "cause": "Besides per-field caps (title 256, description 4096, 25 fields, field value 1024), the title, description, field names and values, footer and author text across all embeds in one message must total 6000 characters or less. Up to 10 embeds fit in one message.",
+  "fix": "Sum the text of every embed before sending and spill over into another message when the total passes 6000.",
+  "apply": "const len = e => (e.title?.length ?? 0) + (e.description?.length ?? 0) + (e.footer?.text?.length ?? 0) + (e.author?.name?.length ?? 0) + (e.fields ?? []).reduce((n, f) => n + f.name.length + f.value.length, 0);\nif (embeds.reduce((n, e) => n + len(e), 0) > 6000) { /* split across messages */ }",
+  "affected": "Discord API v10 messages and webhooks, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/resources/message",
+    "https://github.com/discord/discord-api-docs/issues/1173"
+  ],
+  "tags": [
+    "embeds",
+    "limits",
+    "validation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0514",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "mcp.json config interpolation",
+  "title": "Cursor MCP server fails authentication when mcp.json uses ${API_KEY} instead of ${env:API_KEY}",
+  "symptoms": [
+    "An MCP server configured with ${API_KEY} in env or headers rejects its credentials",
+    "A config copied from Claude Code or another client works there but not in Cursor",
+    "envFile is ignored for a remote HTTP or SSE server"
+  ],
+  "cause": "Cursor resolves ${env:NAME}, ${userHome}, ${workspaceFolder}, ${workspaceFolderBasename}, and ${pathSeparator} in command, args, env, url, and headers; a bare ${NAME} is not one of its forms. envFile works only for stdio servers.",
+  "fix": "Use ${env:NAME} for environment variables, export them where Cursor can read them, and pass remote server secrets through headers with interpolation instead of envFile.",
+  "apply": "\"env\": { \"API_KEY\": \"${env:API_KEY}\" },\n\"headers\": { \"Authorization\": \"Bearer ${env:MY_SERVICE_TOKEN}\" }",
+  "affected": "Cursor .cursor/mcp.json and ~/.cursor/mcp.json, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/mcp"
+  ],
+  "tags": [
+    "mcp",
+    "config",
+    "env"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

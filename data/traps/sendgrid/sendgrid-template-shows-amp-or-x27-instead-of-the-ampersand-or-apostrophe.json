@@ -1,0 +1,29 @@
+{
+  "id": "fg-0423",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Handlebars escaping",
+  "title": "SendGrid template shows &amp; or &#x27; instead of the ampersand or apostrophe",
+  "symptoms": [
+    "Delivered email shows Smith &amp; Sons",
+    "Apostrophes render as &#x27; in the subject line",
+    "Node SDK logs Content with characters ', \" or & may need to be escaped with three brackets"
+  ],
+  "cause": "Double-brace Handlebars expressions HTML-escape their values, which is visible in subject lines and in values that already contain markup. Triple braces insert the value raw.",
+  "fix": "Use triple braces for values that may contain ampersands, quotes, or trusted HTML, and keep double braces for untrusted user text in the body.",
+  "apply": "Subject: {{{subject}}}   Body: <p>Hi {{{company_name}}}</p>",
+  "affected": "SendGrid dynamic templates, @sendgrid/mail 6.x to 8.x warning, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/for-developers/sending-email/using-handlebars",
+    "https://github.com/sendgrid/sendgrid-nodejs/issues/965"
+  ],
+  "tags": [
+    "templates",
+    "handlebars",
+    "escaping"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

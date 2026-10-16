@@ -1,0 +1,29 @@
+{
+  "id": "fg-0207",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Data API with row level security, UPDATE",
+  "title": "Supabase update returns no error but changes nothing because the table has no SELECT policy",
+  "symptoms": [
+    "update() resolves with error null and status 204 while the row is unchanged",
+    "update().select() returns an empty array",
+    "An UPDATE policy exists and looks correct"
+  ],
+  "cause": "Postgres must be able to see a row before it can update it, so UPDATE under RLS also needs a matching SELECT policy. Rows hidden from SELECT are skipped silently.",
+  "fix": "Add a SELECT policy covering the same rows as the UPDATE policy, and chain .select() in tests so a zero-row update is visible.",
+  "apply": "create policy \"select own\" on public.profiles for select to authenticated\n  using ((select auth.uid()) = id);\ncreate policy \"update own\" on public.profiles for update to authenticated\n  using ((select auth.uid()) = id) with check ((select auth.uid()) = id);",
+  "affected": "All Supabase projects with RLS enabled; any client library",
+  "sources": [
+    "https://supabase.com/docs/guides/database/postgres/row-level-security"
+  ],
+  "tags": [
+    "rls",
+    "postgres",
+    "silent-failure",
+    "update"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0443",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Bot token revocation",
+  "title": "Discord bot suddenly fails to log in after its token was pushed to a public GitHub repo or gist",
+  "symptoms": [
+    "Gateway closed with code 4004 Authentication failed",
+    "401: Unauthorized on every REST call",
+    "Bot worked an hour earlier and nothing changed in the hosting"
+  ],
+  "cause": "Discord bot tokens are a GitHub secret scanning partner pattern, so a token in a public commit, gist, issue or npm package is reported straight to Discord. The provider can revoke it, and the bot then fails with an authentication error.",
+  "fix": "Reset the token in the Developer Portal, store it as a deploy secret, and scrub it from git history. Enable push protection on the repository.",
+  "apply": "https://discord.com/developers/applications > your app > Bot > Reset Token > store the new value in the host's secret manager",
+  "affected": "Discord bot tokens found in public GitHub content, as of 2026-10",
+  "sources": [
+    "https://docs.github.com/en/code-security/secret-scanning/introduction/supported-secret-scanning-patterns",
+    "https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning-for-partners",
+    "https://docs.discord.com/developers/topics/opcodes-and-status-codes"
+  ],
+  "tags": [
+    "tokens",
+    "security",
+    "auth"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

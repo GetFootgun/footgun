@@ -1,0 +1,27 @@
+{
+  "id": "fg-0487",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Print mode, stream-json output",
+  "title": "claude -p --output-format stream-json exits with 'requires --verbose'",
+  "symptoms": [
+    "Error: When using --print, --output-format=stream-json requires --verbose",
+    "The script exits before any request is made"
+  ],
+  "cause": "Print mode refuses stream-json output unless --verbose is also passed. The text and json formats do not need it, and the docs show --verbose in every stream-json example without saying it is required.",
+  "fix": "Add --verbose whenever --output-format stream-json is used with -p.",
+  "apply": "claude -p --output-format stream-json --verbose --include-partial-messages \"query\"",
+  "affected": "Claude Code 2.1.296, reproduced 2026-10-15",
+  "sources": [
+    "https://code.claude.com/docs/en/headless",
+    "https://code.claude.com/docs/en/cli-reference"
+  ],
+  "tags": [
+    "headless",
+    "cli"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

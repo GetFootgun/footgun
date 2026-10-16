@@ -1,0 +1,30 @@
+{
+  "id": "fg-0465",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Retries on server errors",
+  "title": "Retrying a Notion page create after a 502 or 503 leaves duplicate pages in the database",
+  "symptoms": [
+    "Request to Notion API failed with status: 502",
+    "503 service_unavailable followed by two identical rows after a retry",
+    "Bulk import of a few thousand pages ends with more rows than the source"
+  ],
+  "cause": "Notion can save a write and still answer with a timeout, so a blind retry of POST or PATCH repeats it. Notion's guidance is to retry 5xx only for GET and DELETE unless the caller has its own idempotency check, and the JS SDK follows that rule.",
+  "fix": "Before retrying a create, query for the row by a unique property you set on it. On 503, read additional_data.retry_guidance before deciding.",
+  "apply": "const hit = await notion.dataSources.query({ data_source_id, filter: { property: \"External ID\", rich_text: { equals: extId } } });\nif (hit.results.length === 0) await notion.pages.create(payload);",
+  "affected": "Notion REST API and @notionhq/client 5.x retry behavior, as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/request-limits",
+    "https://developers.notion.com/reference/errors",
+    "https://github.com/makenotion/notion-sdk-js/issues/172"
+  ],
+  "tags": [
+    "retries",
+    "idempotency",
+    "5xx"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

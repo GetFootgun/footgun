@@ -1,0 +1,24 @@
+{
+  "id": "fg-0044",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Google Calendar app, Make an API call",
+  "title": "Google Calendar 'Make an API call' returns 404 when the calendar id is URL-encoded",
+  "symptoms": [
+    "404 Not Found for /v3/calendars/name%40example.com/events/{id}",
+    "The same request works outside Make"
+  ],
+  "cause": "The module encodes the URL itself, so an already-encoded @ (%40) is encoded a second time.",
+  "fix": "Write the calendar id with a raw @ in the path. Debug errors like this in a throwaway scenario with no error handler, because an Ignore handler hides the message.",
+  "apply": "URL: /v3/calendars/team@example.com/events/{{1.id}}",
+  "affected": "Make Google Calendar app, October 2026",
+  "sources": [],
+  "tags": [
+    "url",
+    "encoding"
+  ],
+  "verified_on": "2026-10-08",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

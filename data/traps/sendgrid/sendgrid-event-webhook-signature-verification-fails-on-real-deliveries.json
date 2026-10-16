@@ -1,0 +1,30 @@
+{
+  "id": "fg-0415",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Event Webhook signature",
+  "title": "SendGrid Event Webhook signature verification fails on real deliveries",
+  "symptoms": [
+    "verifySignature returns false for live events",
+    "Verification passes for a single test event and fails for batched events",
+    "Works in unit tests with sample payload, fails behind Express"
+  ],
+  "cause": "The ECDSA signature covers the timestamp header plus the raw request bytes, including the line breaks SendGrid puts between batched events. Parsing and re-stringifying the JSON changes those bytes.",
+  "fix": "Capture the raw body before any JSON middleware and verify against it with the public key from the Event Webhook security settings.",
+  "apply": "app.post('/sg-events', express.raw({ type: 'application/json' }), (req, res) => { const ew = new EventWebhook(); const ok = ew.verifySignature(ew.convertPublicKeyToECDSA(PUBLIC_KEY), req.body, req.get('X-Twilio-Email-Event-Webhook-Signature'), req.get('X-Twilio-Email-Event-Webhook-Timestamp')); res.sendStatus(ok ? 200 : 403); });",
+  "affected": "SendGrid signed Event Webhook, @sendgrid/eventwebhook and sendgrid-python helpers, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/for-developers/tracking-events/getting-started-event-webhook-security-features",
+    "https://github.com/sendgrid/sendgrid-nodejs/issues/1238",
+    "https://github.com/sendgrid/sendgrid-python/issues/950"
+  ],
+  "tags": [
+    "webhooks",
+    "signature",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

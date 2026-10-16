@@ -1,0 +1,28 @@
+{
+  "id": "fg-0344",
+  "provider": "n8n",
+  "surface_type": "infra",
+  "surface_name": "Execution data pruning",
+  "title": "n8n executions older than 14 days vanish and the SQLite file never shrinks",
+  "symptoms": [
+    "Executions list stops at two weeks back",
+    "Only the last 10,000 executions are kept",
+    "database.sqlite keeps its size after executions are deleted"
+  ],
+  "cause": "Pruning is on by default with a 336 hour max age and a 10,000 execution cap. SQLite keeps freed pages for reuse, so the file does not shrink until it is vacuumed.",
+  "fix": "Raise EXECUTIONS_DATA_MAX_AGE or EXECUTIONS_DATA_PRUNE_MAX_COUNT if you need longer history, export what you must keep, and enable vacuum on startup for SQLite.",
+  "apply": "EXECUTIONS_DATA_MAX_AGE=720\nEXECUTIONS_DATA_PRUNE_MAX_COUNT=50000\nDB_SQLITE_VACUUM_ON_STARTUP=true",
+  "affected": "Self-hosted n8n 1.x and 2.x with default settings, as of 2026-10",
+  "sources": [
+    "https://docs.n8n.io/hosting/scaling/execution-data/"
+  ],
+  "tags": [
+    "executions",
+    "sqlite",
+    "retention"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

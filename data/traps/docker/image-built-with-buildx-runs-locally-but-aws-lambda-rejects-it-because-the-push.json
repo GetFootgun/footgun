@@ -1,0 +1,29 @@
+{
+  "id": "fg-0264",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "Buildx default provenance attestations",
+  "title": "Image built with buildx runs locally but AWS Lambda rejects it because the push is an image index",
+  "symptoms": [
+    "Lambda create-function or update-function-code rejects an image that pulls and runs fine with docker run",
+    "docker buildx imagetools inspect shows an extra unknown/unknown platform entry next to linux/amd64"
+  ],
+  "cause": "Since Buildx 0.10 a provenance attestation is attached by default, which turns even a single-platform push into an image index with an attestation manifest. Lambda only accepts single-architecture images, and Cloud Run had the same limit when the issue was filed.",
+  "fix": "Turn off default attestations for images that go to runtimes needing one plain manifest, and build for exactly one platform.",
+  "apply": "docker buildx build --platform linux/amd64 --provenance=false --sbom=false -t \"$IMAGE\" --push .\n# docker/build-push-action:  provenance: false",
+  "affected": "Docker Buildx 0.10 and later (January 2023) and docker/build-push-action 3.3.0 and later; AWS Lambda container images as of October 2026",
+  "sources": [
+    "https://github.com/docker/buildx/issues/1533",
+    "https://docs.docker.com/build/metadata/attestations/",
+    "https://docs.aws.amazon.com/lambda/latest/dg/images-create.html"
+  ],
+  "tags": [
+    "buildx",
+    "attestations",
+    "lambda"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,24 @@
+{
+  "id": "fg-0094",
+  "provider": "wordpress",
+  "surface_type": "infra",
+  "surface_name": "WP Rocket, delayed JS interaction handler",
+  "title": "'t.composedPath(...)[0].getRootNode is not a function' only appears on synthetic events",
+  "symptoms": [
+    "Uncaught TypeError: t.composedPath(...)[0].getRootNode is not a function",
+    "Error shows in session replay tools but real clicks work"
+  ],
+  "cause": "WP Rocket's delayed-JS handler calls getRootNode on the event target without checking it is a Node. An event dispatched on window has no getRootNode, so synthetic events throw; real clicks on page elements do not.",
+  "fix": "Do not treat it as a broken button. Reproduce with a real click, not window.dispatchEvent.",
+  "apply": "Test with a real pointer click in a browser automation tool rather than window.dispatchEvent(new Event('click'))",
+  "affected": "WP Rocket delay JS, August 2026",
+  "sources": [],
+  "tags": [
+    "false-alarm",
+    "javascript"
+  ],
+  "verified_on": "2026-08-19",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

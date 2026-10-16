@@ -1,0 +1,28 @@
+{
+  "id": "fg-0211",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Terraform provider v5 API rate limits",
+  "title": "Cloudflare Terraform provider v5 plans and applies fail with 429 on accounts with many resources",
+  "symptoms": [
+    "Error: failed to make http request ... 429 Too Many Requests",
+    "Large refreshes fail partway while small stacks work",
+    "The same config applied cleanly on provider v4"
+  ],
+  "cause": "Provider v5 does not throttle itself against Cloudflare API rate limits, so Terraform's default parallelism bursts past them. Maintainers acknowledged it and the issue is still open.",
+  "fix": "Lower parallelism, split large stacks, and use refresh=false for targeted changes. Enterprise accounts can ask support for higher limits.",
+  "apply": "terraform apply -parallelism=2\nterraform plan -refresh=false -target=cloudflare_dns_record.www",
+  "affected": "terraform-provider-cloudflare 5.x, open since 2025-04-14",
+  "sources": [
+    "https://github.com/cloudflare/terraform-provider-cloudflare/issues/5505"
+  ],
+  "tags": [
+    "terraform",
+    "rate-limit",
+    "429"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

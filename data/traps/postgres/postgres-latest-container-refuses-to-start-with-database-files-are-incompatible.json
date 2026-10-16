@@ -1,0 +1,28 @@
+{
+  "id": "fg-0278",
+  "provider": "postgres",
+  "surface_type": "infra",
+  "surface_name": "postgres Docker Official Image tags",
+  "title": "postgres:latest container refuses to start with 'database files are incompatible with server'",
+  "symptoms": [
+    "FATAL: database files are incompatible with server",
+    "DETAIL: The data directory was initialized by PostgreSQL version 17, which is not compatible with this version 18.0."
+  ],
+  "cause": "The latest tag and other tags without a major version move to each new major release, and a data directory from one major version cannot be opened by the next without pg_upgrade or a dump and restore.",
+  "fix": "Pin the major version tag for any persistent volume and upgrade on purpose with pg_upgrade or pg_dumpall.",
+  "apply": "services:\n  db:\n    image: postgres:17   # pin the major, never latest with a persistent volume",
+  "affected": "Any major bump of the Docker Official Image, most recently 17 to 18 in September 2025",
+  "sources": [
+    "https://github.com/postgres/postgres/blob/REL_18_STABLE/src/backend/utils/init/miscinit.c",
+    "https://github.com/docker-library/postgres/issues/1364"
+  ],
+  "tags": [
+    "docker",
+    "upgrade",
+    "image-tags"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

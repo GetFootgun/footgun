@@ -1,0 +1,27 @@
+{
+  "id": "fg-0144",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Files API, PDF inputs",
+  "title": "Uploaded PDF rejected: Expected a file with an application/pdf MIME type, but got unsupported MIME type 'None'",
+  "symptoms": [
+    "Invalid file data: 'file_id'. Expected a file with an application/pdf MIME type, but got unsupported MIME type 'None'.",
+    "Upload succeeds but the file id fails when used as input_file"
+  ],
+  "cause": "Uploading raw bytes without a filename or content type stores the file with no MIME type, and the model input path refuses it.",
+  "fix": "Upload with a filename and content type tuple and purpose user_data, then use the new file id.",
+  "apply": "f = client.files.create(file=(\"document.pdf\", pdf_bytes, \"application/pdf\"), purpose=\"user_data\")",
+  "affected": "openai-python and other SDKs uploading bytes for PDF inputs, confirmed by maintainers 2026-09-10",
+  "sources": [
+    "https://github.com/openai/openai-python/issues/2472"
+  ],
+  "tags": [
+    "files",
+    "pdf",
+    "uploads"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

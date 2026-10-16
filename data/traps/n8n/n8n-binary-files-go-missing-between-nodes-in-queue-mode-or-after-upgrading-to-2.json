@@ -1,0 +1,29 @@
+{
+  "id": "fg-0342",
+  "provider": "n8n",
+  "surface_type": "infra",
+  "surface_name": "Binary data mode",
+  "title": "n8n binary files go missing between nodes in queue mode or after upgrading to 2.0",
+  "symptoms": [
+    "A worker cannot read a binary file written by another process in queue mode",
+    "N8N_AVAILABLE_BINARY_DATA_MODES no longer has any effect",
+    "Disk use grows after 2.0 where binary data used to stay in memory"
+  ],
+  "cause": "Filesystem binary storage is local to one machine, so it does not work across queue mode workers. In 2.0 the in-memory default mode was removed, leaving filesystem for regular mode, database for queue mode, and s3.",
+  "fix": "In queue mode use database or S3 binary storage, and in regular mode budget disk for the filesystem default.",
+  "apply": "EXECUTIONS_MODE=queue\nN8N_DEFAULT_BINARY_DATA_MODE=database   # or s3 with external storage configured",
+  "affected": "Self-hosted n8n queue mode, all versions; default-mode removal in n8n 2.0",
+  "sources": [
+    "https://docs.n8n.io/hosting/scaling/queue-mode/",
+    "https://docs.n8n.io/2-0-breaking-changes/"
+  ],
+  "tags": [
+    "binary-data",
+    "queue-mode",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

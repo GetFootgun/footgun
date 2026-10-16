@@ -1,0 +1,29 @@
+{
+  "id": "fg-0407",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "from address domain",
+  "title": "Resend rejects sends with 403 'The domain is not verified' right after adding DNS records",
+  "symptoms": [
+    "403 validation_error: The example.com domain is not verified. Please, add and verify your domain.",
+    "from address uses the root domain while the subdomain was verified",
+    "Domain still shows pending in the dashboard"
+  ],
+  "cause": "The from address must sit on a domain whose status is verified in the same Resend team, and verification is asynchronous after the records are added. Sending from a different domain or subdomain than the one verified fails the same way.",
+  "fix": "Wait until the domain status is verified before deploying, and set from to an address on exactly that domain. Fail fast at startup if the configured from domain is not verified.",
+  "apply": "const { data } = await resend.domains.list(); if (!data.data.some(d => d.name === fromDomain && d.status === 'verified')) throw new Error('from domain not verified');",
+  "affected": "Resend API, all plans, as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/api-reference/errors",
+    "https://resend.com/docs/add-a-domain"
+  ],
+  "tags": [
+    "email",
+    "domains",
+    "configuration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

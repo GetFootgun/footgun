@@ -1,0 +1,24 @@
+{
+  "id": "fg-0120",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "API v2, search",
+  "title": "Bigin search misses a record created or edited a minute ago",
+  "symptoms": [
+    "Search returns 204 or no match for a record visible in the app",
+    "The same search finds it a few minutes later"
+  ],
+  "cause": "The search index lags writes by one to two minutes.",
+  "fix": "Do not treat an immediate search miss as proof the record is absent. Read by id when you have it, or retry after a couple of minutes.",
+  "apply": "GET /bigin/v2/Contacts/{id} when the id is known; otherwise retry the search after 2 minutes",
+  "affected": "Bigin API v2 search, July and October 2026",
+  "sources": [],
+  "tags": [
+    "search",
+    "eventual-consistency"
+  ],
+  "verified_on": "2026-10-14",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

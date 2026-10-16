@@ -1,0 +1,30 @@
+{
+  "id": "fg-0188",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "Firebase Auth email link sign-in on mobile",
+  "title": "Firebase email link sign-in links stop opening the iOS or Android app after the Dynamic Links shutdown",
+  "symptoms": [
+    "Email sign-in, password reset, or verify links open a browser page instead of the app",
+    "Links that used a page.link domain return an error page",
+    "Mobile email link flow broke after August 25, 2025 without code changes"
+  ],
+  "cause": "Mobile email link handling relied on Firebase Dynamic Links, which shut down on August 25, 2025. Auth now uses the project's Firebase Hosting domain, which the app must be configured to open.",
+  "fix": "Update the Auth SDKs, set up App Links or Universal Links for PROJECT_ID.firebaseapp.com or a custom Hosting domain, and pass that domain as linkDomain in ActionCodeSettings.",
+  "apply": "const actionCodeSettings = {\n  url: 'https://example.com/finishSignUp',\n  handleCodeInApp: true,\n  linkDomain: 'auth.example.com', // Firebase Hosting domain\n  iOS: { bundleId: 'com.example.ios' },\n  android: { packageName: 'com.example.android', installApp: true },\n};\nawait sendSignInLinkToEmail(auth, email, actionCodeSettings);",
+  "affected": "Firebase Auth email link, password reset, and verification flows handled in mobile apps after 2025-08-25; Android needs Auth SDK 23.2.0+ (BoM 33.9.0+)",
+  "sources": [
+    "https://firebase.google.com/support/dynamic-links-faq",
+    "https://firebase.google.com/docs/auth/android/email-link-migration"
+  ],
+  "tags": [
+    "auth",
+    "email-link",
+    "dynamic-links",
+    "mobile"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

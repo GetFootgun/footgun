@@ -1,0 +1,30 @@
+{
+  "id": "fg-0533",
+  "provider": "mcp-protocol",
+  "surface_type": "api",
+  "surface_name": "Streamable HTTP, Accept header",
+  "title": "Streamable HTTP MCP server answers 406 Not Acceptable to a hand-written client",
+  "symptoms": [
+    "Not Acceptable: Client must accept both application/json and text/event-stream",
+    "curl or fetch POSTs to the MCP endpoint fail while real MCP clients work",
+    "A JSON-only Accept header is rejected even with enableJsonResponse true"
+  ],
+  "cause": "The Streamable HTTP transport requires every POST to send an Accept header listing both application/json and text/event-stream, because the server may answer either way. The TypeScript SDK server rejects a request that lists only one.",
+  "fix": "Send both media types in Accept on every POST and handle both a JSON body and an SSE stream in the response.",
+  "apply": "curl -X POST https://example.com/mcp -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\",\"params\":{}}'",
+  "affected": "MCP Streamable HTTP, protocol 2025-03-26 and later; @modelcontextprotocol/sdk StreamableHTTPServerTransport, as of 2026-10",
+  "sources": [
+    "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http",
+    "https://github.com/modelcontextprotocol/typescript-sdk/issues/1414",
+    "https://github.com/modelcontextprotocol/typescript-sdk/issues/1944"
+  ],
+  "tags": [
+    "http",
+    "headers",
+    "406"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

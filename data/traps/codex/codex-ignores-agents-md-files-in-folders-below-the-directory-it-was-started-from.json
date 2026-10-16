@@ -1,0 +1,27 @@
+{
+  "id": "fg-0501",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "AGENTS.md discovery",
+  "title": "Codex ignores AGENTS.md files in folders below the directory it was started from",
+  "symptoms": [
+    "Rules in packages/api/AGENTS.md are not followed when Codex starts at the repo root",
+    "Edits to AGENTS.md during a session have no effect until a new session"
+  ],
+  "cause": "Codex builds its instruction chain once per run, walking from the project root down to the current working directory and no further. Files in deeper folders, and edits made after launch, are not read.",
+  "fix": "Start Codex in the folder whose rules apply with --cd, keep shared rules in the root AGENTS.md, and restart after changing instructions.",
+  "apply": "codex --cd services/payments",
+  "affected": "Codex CLI, IDE extension, and ChatGPT desktop app, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+    "https://github.com/openai/codex/issues/9836"
+  ],
+  "tags": [
+    "agents-md",
+    "instructions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

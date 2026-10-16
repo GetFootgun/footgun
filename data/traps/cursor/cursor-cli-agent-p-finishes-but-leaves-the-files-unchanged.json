@@ -1,0 +1,28 @@
+{
+  "id": "fg-0512",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Cursor CLI print mode",
+  "title": "Cursor CLI agent -p finishes but leaves the files unchanged",
+  "symptoms": [
+    "The final answer describes edits, but git diff is empty",
+    "A batch script over many files exits 0 and changes nothing"
+  ],
+  "cause": "In print mode the CLI only proposes changes unless --force (or --yolo) is passed, so non-interactive runs do not write files by default.",
+  "fix": "Add --force for runs that should write, and scope what runs unprompted with permissions allow and deny lists in cli-config.json or .cursor/cli.json.",
+  "apply": "agent -p --force \"Add JSDoc comments to src/utils.ts\"",
+  "affected": "Cursor CLI (agent), as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/cli/headless",
+    "https://cursor.com/docs/cli/reference/permissions"
+  ],
+  "tags": [
+    "cli",
+    "headless",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

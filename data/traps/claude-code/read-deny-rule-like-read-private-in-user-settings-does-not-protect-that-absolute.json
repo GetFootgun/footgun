@@ -1,0 +1,27 @@
+{
+  "id": "fg-0494",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Permission rules, path anchors",
+  "title": "Read deny rule like Read(/private/**) in user settings does not protect that absolute path",
+  "symptoms": [
+    "Claude still reads files under the absolute path named in a deny rule",
+    "The rule in ~/.claude/settings.json matches ~/.claude/private instead of /private"
+  ],
+  "cause": "In permission rules a single leading slash is relative to the directory the settings file belongs to, not the filesystem root. Absolute paths need two leading slashes, and home paths use a tilde.",
+  "fix": "Write absolute rules with // and home rules with ~/ in user settings, and test them with a read attempt.",
+  "apply": "\"permissions\": { \"deny\": [\"Read(//Users/alice/private/**)\", \"Read(~/Documents/keys/**)\"] }",
+  "affected": "Claude Code permission rules, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/permissions"
+  ],
+  "tags": [
+    "permissions",
+    "security",
+    "paths"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

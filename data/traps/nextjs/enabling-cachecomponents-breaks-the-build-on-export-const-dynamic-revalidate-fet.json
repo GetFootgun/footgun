@@ -1,0 +1,28 @@
+{
+  "id": "fg-0299",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "cacheComponents and route segment config",
+  "title": "Enabling cacheComponents breaks the build on export const dynamic, revalidate, fetchCache or dynamicParams",
+  "symptoms": [
+    "Route segment config \"dynamicParams\" is not compatible with `nextConfig.cacheComponents`.",
+    "A similar build error for dynamic = 'force-dynamic', revalidate = 60 or fetchCache",
+    "A third-party template that exports these configs stops building after the flag is turned on"
+  ],
+  "cause": "cacheComponents replaces the per-segment caching switches with use cache, cacheLife and Suspense, so the old exports are rejected rather than ignored.",
+  "fix": "Delete each export and use the replacement: remove force-dynamic and let Suspense handle it, map revalidate to cacheLife inside use cache, and replace dynamicParams = false with notFound() for unknown params.",
+  "apply": "// before\nexport const revalidate = 3600\n// after\nasync function getPosts() {\n  'use cache'\n  cacheLife('hours')\n  return db.post.findMany()\n}",
+  "affected": "Next.js 16.x with cacheComponents: true",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/migrating-to-cache-components"
+  ],
+  "tags": [
+    "cache-components",
+    "migration",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

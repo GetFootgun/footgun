@@ -1,0 +1,24 @@
+{
+  "id": "fg-0033",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "API v2, PATCH /scenarios/{id}",
+  "title": "Blueprint update fails with 'should NOT have additional properties'",
+  "symptoms": [
+    "400 should NOT have additional properties",
+    "A blueprint downloaded from the same scenario is rejected"
+  ],
+  "cause": "The blueprint object accepted on update holds flow, name and metadata only. A blueprint carrying scheduling or interface at its top level fails validation.",
+  "fix": "Strip scheduling and interface from the blueprint before sending it, and pass scheduling as its own field if you need to change it.",
+  "apply": "python: bp = {k: bp[k] for k in ('flow', 'name', 'metadata')}; body = {\"blueprint\": json.dumps(bp)}",
+  "affected": "Make API v2, July and September 2026",
+  "sources": [],
+  "tags": [
+    "validation",
+    "api"
+  ],
+  "verified_on": "2026-09-14",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

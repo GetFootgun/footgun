@@ -1,0 +1,26 @@
+{
+  "id": "fg-0140",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Realtime API, beta interface",
+  "title": "Realtime sessions opened with the OpenAI-Beta: realtime=v1 header stopped connecting in May 2026",
+  "symptoms": [
+    "Voice agent built on the Realtime beta fails to open a session",
+    "Model gpt-4o-realtime-preview no longer accepted"
+  ],
+  "cause": "The Realtime API beta interface, selected with the OpenAI-Beta: realtime=v1 header, shut down on 2026-05-12, and the gpt-4o realtime and audio preview models were retired on 2026-05-07.",
+  "fix": "Remove the beta header, move to a GA realtime model, and retest every client event your code sends and handles against the GA reference.",
+  "apply": "const ws = new WebSocket('wss://api.openai.com/v1/realtime?model=gpt-realtime-2.1', {\n  headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }, // no OpenAI-Beta header\n});",
+  "affected": "OpenAI Realtime API beta, shut down 2026-05-12; preview realtime and audio models retired 2026-05-07",
+  "sources": [
+    "https://developers.openai.com/api/docs/deprecations"
+  ],
+  "tags": [
+    "deprecation",
+    "realtime"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

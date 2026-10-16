@@ -1,0 +1,22 @@
+{
+  "id": "fg-0080",
+  "provider": "railway",
+  "surface_type": "tool",
+  "surface_name": "Railway MCP list-variables",
+  "title": "Railway MCP lists variable names but redacts every value",
+  "symptoms": [
+    "valuesRedacted in the list-variables response"
+  ],
+  "cause": "The OAuth app behind the MCP only receives variable names.",
+  "fix": "Use the CLI from a linked directory when a value must be read or compared.",
+  "apply": "railway variables --kv | grep NAME",
+  "affected": "Railway MCP, August 2026",
+  "sources": [],
+  "tags": [
+    "env-vars"
+  ],
+  "verified_on": "2026-08-01",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

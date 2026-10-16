@@ -1,0 +1,24 @@
+{
+  "id": "fg-0093",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Yoast SEO Premium, automatic redirects",
+  "title": "Swapping two slugs fails because Yoast immediately redirects the freed slug",
+  "symptoms": [
+    "The slug you freed redirects to the old page",
+    "Reclaiming a URL lands on a 301"
+  ],
+  "cause": "Yoast Premium creates a 301 the moment a slug changes, so freeing a slug books a redirect that then hijacks the URL you want to reuse.",
+  "fix": "Rename the current owner, delete the auto-created redirect on the freed slug, rename the real page onto it, then confirm Yoast created the redirect from the real page's old URL.",
+  "apply": "POST /?rest_route=/yoast/v1/redirects/delete {\"origin\":\"product/<slug>\"}; list with GET /?rest_route=/yoast/v1/redirects/list",
+  "affected": "Yoast SEO Premium, September 2026",
+  "sources": [],
+  "tags": [
+    "redirects",
+    "seo"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

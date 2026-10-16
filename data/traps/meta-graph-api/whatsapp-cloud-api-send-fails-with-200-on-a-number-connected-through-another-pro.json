@@ -1,0 +1,24 @@
+{
+  "id": "fg-0068",
+  "provider": "meta-graph-api",
+  "surface_type": "api",
+  "surface_name": "WhatsApp Cloud API, messages",
+  "title": "WhatsApp Cloud API send fails with #200 on a number connected through another provider",
+  "symptoms": [
+    "(#200) You do not have the necessary permissions to send messages on behalf of this WhatsApp Business Account",
+    "Template approved, token valid, request well formed"
+  ],
+  "cause": "When the number's WhatsApp is connected through another business solution provider, a separate Cloud API app cannot send as that number. Subscribing your app to the WABA does not change it.",
+  "fix": "Send through the provider the number is connected to, or move the number to your own app. One number cannot serve both.",
+  "apply": "POST /{WABA_ID}/subscribed_apps succeeds but does not lift the #200; check which app or provider owns the number in WhatsApp Manager.",
+  "affected": "WhatsApp Cloud API, July 2026",
+  "sources": [],
+  "tags": [
+    "permissions",
+    "whatsapp"
+  ],
+  "verified_on": "2026-07-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

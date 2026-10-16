@@ -1,0 +1,29 @@
+{
+  "id": "fg-0535",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Mail Send v3, custom_args",
+  "title": "SendGrid 400 'All values of custom arguments object must be strings' when passing an ID or flag",
+  "symptoms": [
+    "400 Bad Request: All values of custom arguments object must be strings",
+    "Fails as soon as a numeric user_id, a boolean, or an array goes into custom_args",
+    "An empty custom_args object is rejected too"
+  ],
+  "cause": "Mail Send v3 accepts only string values in custom_args, at the message level and in each personalization, and rejects an empty object.",
+  "fix": "Convert every custom_args value to a string before sending, omit custom_args when there is nothing to send, and keep the merged size under 50,000 bytes per personalization.",
+  "apply": "const custom_args = Object.fromEntries(Object.entries(args).map(([k, v]) => [k, typeof v === 'string' ? v : JSON.stringify(v)]));\nif (Object.keys(custom_args).length) msg.custom_args = custom_args;",
+  "affected": "SendGrid v3 Mail Send, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/errors",
+    "https://www.twilio.com/docs/sendgrid/for-developers/sending-email/unique-arguments"
+  ],
+  "tags": [
+    "validation",
+    "email",
+    "webhooks"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

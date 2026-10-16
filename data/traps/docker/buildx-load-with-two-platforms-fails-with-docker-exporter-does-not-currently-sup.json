@@ -1,0 +1,30 @@
+{
+  "id": "fg-0254",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "docker buildx build --load",
+  "title": "buildx --load with two platforms fails with 'docker exporter does not currently support exporting manifest lists'",
+  "symptoms": [
+    "ERROR: docker exporter does not currently support exporting manifest lists",
+    "The same command works when --platform has a single value"
+  ],
+  "cause": "The classic engine image store cannot hold a multi-platform index, so --load can only import one platform. The containerd image store can, and it is the default only on fresh installs of Docker Desktop 4.34 and later and Docker Engine 29 and later; upgraded installs keep the classic store.",
+  "fix": "Turn on the containerd image store, or load one platform at a time for local tests and push the multi-platform build to a registry. Switching stores hides images and containers created under the old store until you switch back.",
+  "apply": "# Docker Engine: /etc/docker/daemon.json, then sudo systemctl restart docker\n{ \"features\": { \"containerd-snapshotter\": true } }\n# Docker Desktop: Settings > General > Use containerd for pulling and storing images > Apply",
+  "affected": "Docker Engine and Docker Desktop installs that use the classic image store; fresh installs of Desktop 4.34+ and Engine 29+ default to containerd",
+  "sources": [
+    "https://github.com/docker/buildx/issues/59",
+    "https://docs.docker.com/engine/storage/containerd/",
+    "https://docs.docker.com/desktop/features/containerd/",
+    "https://docs.docker.com/desktop/release-notes/"
+  ],
+  "tags": [
+    "buildx",
+    "multi-platform",
+    "containerd"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

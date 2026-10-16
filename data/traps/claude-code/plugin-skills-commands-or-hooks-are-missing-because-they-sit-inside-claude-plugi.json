@@ -1,0 +1,26 @@
+{
+  "id": "fg-0493",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Plugins, directory layout",
+  "title": "Plugin skills, commands, or hooks are missing because they sit inside .claude-plugin/",
+  "symptoms": [
+    "The plugin installs and is enabled, but its skills and commands do not appear",
+    "Hooks placed under .claude-plugin/hooks never run"
+  ],
+  "cause": "Only plugin.json belongs in .claude-plugin/. Claude Code looks for skills/, commands/, agents/, and hooks/ at the plugin root, next to that folder.",
+  "fix": "Move every component folder to the plugin root, bump the version in plugin.json so the installed cache refreshes, and validate.",
+  "apply": "mv .claude-plugin/skills .claude-plugin/commands .claude-plugin/agents .claude-plugin/hooks . 2>/dev/null; claude plugin validate .",
+  "affected": "Claude Code plugins, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/plugins-reference"
+  ],
+  "tags": [
+    "plugins",
+    "layout"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0177",
+  "provider": "aws",
+  "surface_type": "infra",
+  "surface_name": "Lambda Node.js runtimes, bundled SDK",
+  "title": "Lambda fails with Cannot find module 'aws-sdk' after moving to a newer Node.js runtime",
+  "symptoms": [
+    "Runtime.ImportModuleError: Error: Cannot find module 'aws-sdk'",
+    "Code that ran on nodejs16.x breaks right after switching the runtime",
+    "require('aws-sdk') works locally but not in the deployed function"
+  ],
+  "cause": "Every supported Lambda Node.js runtime ships only SDK for JavaScript v3, not v2. Code that relied on the runtime providing aws-sdk v2 has nothing to load.",
+  "fix": "Port the calls to the modular v3 clients and bundle the clients you use in the deployment package rather than relying on the runtime copy.",
+  "apply": "npm install @aws-sdk/client-s3\n\n// before: const AWS = require('aws-sdk'); new AWS.S3().getObject(p).promise()\nimport { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';\nconst s3 = new S3Client({});\nconst out = await s3.send(new GetObjectCommand(p));",
+  "affected": "Lambda nodejs18.x and every later Node.js runtime (currently nodejs22.x, nodejs24.x, nodejs26.x)",
+  "sources": [
+    "https://docs.aws.amazon.com/lambda/latest/dg/lambda-nodejs.html",
+    "https://docs.aws.amazon.com/lambda/latest/dg/nodejs-handler.html"
+  ],
+  "tags": [
+    "lambda",
+    "nodejs",
+    "sdk-v3",
+    "runtime-upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

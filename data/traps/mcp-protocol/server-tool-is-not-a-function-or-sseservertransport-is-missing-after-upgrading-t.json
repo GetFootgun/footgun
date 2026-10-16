@@ -1,0 +1,30 @@
+{
+  "id": "fg-0531",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "TypeScript SDK v2 server registration API",
+  "title": "server.tool is not a function, or SSEServerTransport is missing, after upgrading the MCP TypeScript SDK to v2",
+  "symptoms": [
+    "TypeError: server.tool is not a function",
+    "Module '\"@modelcontextprotocol/server\"' has no exported member 'SSEServerTransport'",
+    "mcp-handler 2.x rejects the basePath, redisUrl, or sseEndpoint options"
+  ],
+  "cause": "The v2 packages split @modelcontextprotocol/sdk into client, server, and adapter packages, removed the variadic server.tool, server.prompt, and server.resource, and dropped the server-side HTTP plus SSE transport. mcp-handler 2.x follows the same change and removes its 1.x route options.",
+  "fix": "Use registerTool, registerPrompt, and registerResource with a config object and a z.object schema. Serve Streamable HTTP; only a client limited to the old SSE transport still needs @modelcontextprotocol/server-legacy/sse.",
+  "apply": "server.registerTool('greet', { description: 'Greet a user', inputSchema: z.object({ name: z.string() }) }, async ({ name }) => ({ content: [{ type: 'text', text: `Hello, ${name}` }] }));",
+  "affected": "@modelcontextprotocol/server 2.x and mcp-handler 2.x; @modelcontextprotocol/sdk 1.x and mcp-handler 1.x keep the old API",
+  "sources": [
+    "https://github.com/modelcontextprotocol/typescript-sdk/blob/main/skills/mcp-typescript-sdk-upgrade-to-v2/references/server-registration.md",
+    "https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/troubleshooting.md",
+    "https://github.com/vercel-labs/mcp-handler"
+  ],
+  "tags": [
+    "sdk",
+    "migration",
+    "typescript"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

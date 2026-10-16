@@ -1,0 +1,29 @@
+{
+  "id": "fg-0252",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel Functions lifecycle",
+  "title": "Work started after returning the response never finishes on Vercel (emails, logs, analytics silently dropped)",
+  "symptoms": [
+    "A promise fired without await after sending the response never completes",
+    "Emails or database writes that run after res.json() are missing in production only",
+    "Works with a long running local server"
+  ],
+  "cause": "Vercel only keeps an invocation alive for work it knows about. Promises that are not passed to waitUntil or Next.js after() can be cut off once the response is sent, and even tracked work shares the function max duration.",
+  "fix": "Wrap post response work in after() on Next.js 15.1 or later, or waitUntil from @vercel/functions elsewhere, and keep it within maxDuration. Use a queue or workflow for anything long.",
+  "apply": "import { waitUntil } from '@vercel/functions';\nexport default {\n  fetch(req: Request) {\n    waitUntil(sendWelcomeEmail());\n    return new Response('ok');\n  },\n};",
+  "affected": "Vercel Functions on Node.js and Edge runtimes, all plans, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/functions/functions-api-reference/vercel-functions-package",
+    "https://vercel.com/docs/fluid-compute"
+  ],
+  "tags": [
+    "functions",
+    "background-jobs",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

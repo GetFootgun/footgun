@@ -1,0 +1,30 @@
+{
+  "id": "fg-0376",
+  "provider": "zapier",
+  "surface_type": "billing",
+  "surface_name": "Flood protection and held runs",
+  "title": "Zapier holds a batch of runs and nothing happens until someone replays them",
+  "symptoms": [
+    "Zap runs show status Held in Zap history",
+    "An import of 100 or more records triggers nothing",
+    "Held runs are not picked up by autoreplay"
+  ],
+  "cause": "Polling triggers that find 100 or more new items at once are held by flood protection, counted before any Filter or Path step. Runs are also held when tasks run out, a connection is disconnected, or a premium app is not on the plan.",
+  "fix": "Review and replay held runs from Zap history, raise the flood protection limit on paid plans, and add Delay After Queue for planned bulk loads.",
+  "apply": "Zap history > filter Status: Held > select runs > Replay",
+  "affected": "Zapier polling triggers, all plans; manual replay of held runs needs a paid plan, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/37454233721869-How-to-troubleshoot-held-Zap-or-step-runs",
+    "https://help.zapier.com/hc/en-us/articles/8496181445261-Zap-limits",
+    "https://help.zapier.com/hc/en-us/articles/19220226086797-What-is-replay"
+  ],
+  "tags": [
+    "flood-protection",
+    "replay",
+    "billing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0480",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Print mode, --bare authentication",
+  "title": "claude --bare -p fails to authenticate although the normal session is signed in with Pro or Max",
+  "symptoms": [
+    "A --bare run fails on authentication while the same command without --bare works",
+    "CI job that relies on a subscription login breaks after adding --bare"
+  ],
+  "cause": "Bare mode never reads OAuth credentials or the system keychain, so a Claude subscription login is not used. Amazon Bedrock, Google Cloud, and Microsoft Foundry keep reading their own credentials.",
+  "fix": "Set ANTHROPIC_API_KEY to a key created in the Claude Console, or supply an apiKeyHelper in the --settings JSON.",
+  "apply": "claude --bare -p \"task\" --settings '{\"apiKeyHelper\": \"~/bin/get-anthropic-key.sh\"}'",
+  "affected": "Claude Code --bare mode, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/headless"
+  ],
+  "tags": [
+    "headless",
+    "auth",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

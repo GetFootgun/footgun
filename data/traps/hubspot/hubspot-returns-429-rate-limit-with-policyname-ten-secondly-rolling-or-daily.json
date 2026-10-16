@@ -1,0 +1,27 @@
+{
+  "id": "fg-0391",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "API rate limits for private apps",
+  "title": "HubSpot returns 429 RATE_LIMIT with policyName TEN_SECONDLY_ROLLING or DAILY",
+  "symptoms": [
+    "429 with \"policyName\":\"TEN_SECONDLY_ROLLING\"",
+    "429 with \"policyName\":\"DAILY\" that clears only after midnight",
+    "Second private app in the same portal starts failing when the first one runs a big sync"
+  ],
+  "cause": "Private apps get 100 requests per 10 seconds on Free and Starter and 190 on Professional and Enterprise, per app. The daily cap of 250,000 to 1,000,000 is shared by every private app in the account and resets at midnight in the account time zone.",
+  "fix": "Read X-HubSpot-RateLimit-Remaining and pause when it is low, use batch endpoints for bulk work, and treat a DAILY 429 as a stop until the reset rather than retrying.",
+  "apply": "if (res.status === 429) { const b = await res.json(); if (b.policyName === 'DAILY') throw new Error('daily cap'); await sleep(10000); }",
+  "affected": "HubSpot private apps and 2025.2 or 2026.03 apps with private distribution, limits as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines"
+  ],
+  "tags": [
+    "rate-limit",
+    "api"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

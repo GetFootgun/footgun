@@ -1,0 +1,29 @@
+{
+  "id": "fg-0479",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, tool_choice",
+  "title": "tool_choice type \"tool\" or \"any\" returns 400 on Claude Opus 5.5, Sonnet 5.5, and Fable 5.1",
+  "symptoms": [
+    "tool_choice: type \"tool\" and \"any\" are not supported for this model.",
+    "count_tokens fails with the same error",
+    "An extraction pipeline that forced one tool breaks right after the model id change"
+  ],
+  "cause": "Opus 5.5, Sonnet 5.5, Fable 5.1, and Mythos 5.1 do not allow forcing a tool call, on the Messages endpoint or on token counting. Code that forced a single tool to get structured data breaks when the model is upgraded.",
+  "fix": "Send tool_choice auto, set strict true on the tool, and say in the prompt when it must be called. For pure extraction, switch to structured outputs. On Amazon Bedrock, where strict tools are not offered for Opus 5.5, use auto and validate the input in code.",
+  "apply": "tool_choice: { type: \"auto\" },\ntools: [{ name: \"record_result\", strict: true, description: \"Always call this to return the result.\", input_schema: { type: \"object\", properties: { label: { type: \"string\" } }, required: [\"label\"], additionalProperties: false } }]",
+  "affected": "Claude Opus 5.5, Sonnet 5.5, Fable 5.1, Mythos 5.1, as of 2026-10; earlier models still accept forced tool use unless manual extended thinking is on",
+  "sources": [
+    "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
+    "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide"
+  ],
+  "tags": [
+    "tool-use",
+    "migration",
+    "400"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

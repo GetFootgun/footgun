@@ -1,0 +1,28 @@
+{
+  "id": "fg-0373",
+  "provider": "zapier",
+  "surface_type": "api",
+  "surface_name": "Webhooks by Zapier",
+  "title": "Webhooks by Zapier returns 429 or delays processing during a burst of events",
+  "symptoms": [
+    "HTTP 429 from hooks.zapier.com",
+    "Webhook accepted with 200 but the Zap runs minutes later",
+    "Old style hook URLs throttle at a much lower volume"
+  ],
+  "cause": "Catch hooks allow 20,000 requests every 5 minutes per user, and legacy URLs without a user ID in the path allow only 1,000 every 5 minutes per Zap. Under heavy load Zapier may return 200 and process later.",
+  "fix": "Retry non-200 responses with exponential backoff, regenerate legacy hook URLs, and do not assume a 200 means the Zap already ran.",
+  "apply": "for attempt in range(6):\n    r = requests.post(hook_url, json=payload, timeout=10)\n    if r.status_code != 429 and r.status_code < 500: break\n    time.sleep(2 ** attempt)",
+  "affected": "Webhooks by Zapier catch triggers, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/29972220283789-Webhooks-by-Zapier-rate-limits",
+    "https://help.zapier.com/hc/en-us/articles/8496181445261-Zap-limits"
+  ],
+  "tags": [
+    "webhooks",
+    "rate-limit"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

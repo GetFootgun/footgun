@@ -1,0 +1,26 @@
+{
+  "id": "fg-0488",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Hooks, PermissionRequest event",
+  "title": "Exit code 2 from a PermissionRequest hook does not deny the permission",
+  "symptoms": [
+    "The permission flow continues unchanged after the hook exits 2",
+    "The hook's stderr reason is discarded"
+  ],
+  "cause": "PermissionRequest is one of the events where exit code 2 is not honored; a deny has to come back as a decision object in JSON. PostToolUse, Notification, and SessionStart cannot block either.",
+  "fix": "Print a hookSpecificOutput decision with behavior deny and exit 0, or move the check to PreToolUse, where exit 2 blocks the call.",
+  "apply": "{\"hookSpecificOutput\": {\"hookEventName\": \"PermissionRequest\", \"decision\": {\"behavior\": \"deny\", \"message\": \"Deploys need a human\"}}}",
+  "affected": "Claude Code hooks, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/hooks"
+  ],
+  "tags": [
+    "hooks",
+    "permissions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

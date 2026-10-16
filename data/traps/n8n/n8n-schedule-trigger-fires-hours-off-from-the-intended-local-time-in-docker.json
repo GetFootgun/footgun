@@ -1,0 +1,28 @@
+{
+  "id": "fg-0350",
+  "provider": "n8n",
+  "surface_type": "infra",
+  "surface_name": "Instance timezone",
+  "title": "n8n Schedule Trigger fires hours off from the intended local time in Docker",
+  "symptoms": [
+    "Schedule set for 9:00 runs at 6:00 or 15:00 local time",
+    "Cron expression correct but execution times shifted by a fixed offset",
+    "Times look right only for US Eastern users"
+  ],
+  "cause": "GENERIC_TIMEZONE defaults to America/New_York, and schedule nodes use it rather than the host or container clock.",
+  "fix": "Set GENERIC_TIMEZONE (and TZ for the container) to your zone, or set the workflow timezone in workflow settings.",
+  "apply": "GENERIC_TIMEZONE=Europe/Berlin\nTZ=Europe/Berlin",
+  "affected": "Self-hosted n8n 1.x and 2.x, as of 2026-10",
+  "sources": [
+    "https://docs.n8n.io/hosting/configuration/environment-variables/timezone-localization/"
+  ],
+  "tags": [
+    "schedule",
+    "timezone",
+    "docker"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

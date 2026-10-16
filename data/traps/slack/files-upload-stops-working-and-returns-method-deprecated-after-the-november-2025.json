@@ -1,0 +1,28 @@
+{
+  "id": "fg-0358",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "files.upload",
+  "title": "files.upload stops working and returns method_deprecated after the November 2025 sunset",
+  "symptoms": [
+    "method_deprecated from files.upload",
+    "Old file upload scripts and SDK calls to files_upload fail while chat.postMessage still works",
+    "New apps created after 2024-05-16 never had access to files.upload"
+  ],
+  "cause": "Slack retired files.upload in favor of a two step external upload flow. Apps created after 2024-05-16 lost it first, and the method stopped working for everyone on 2025-11-12.",
+  "fix": "Switch to files.getUploadURLExternal plus files.completeUploadExternal, or the SDK v2 helpers (filesUploadV2 in Node, files_upload_v2 in Python).",
+  "apply": "client.files_upload_v2(channel=\"C0123456789\", file=\"report.pdf\", title=\"Report\")",
+  "affected": "Slack Web API, all apps from 2025-11-12; apps created on or after 2024-05-16 earlier",
+  "sources": [
+    "https://docs.slack.dev/changelog/2024-04-a-better-way-to-upload-files-is-here-to-stay/"
+  ],
+  "tags": [
+    "files",
+    "deprecation",
+    "upload"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0248",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel Functions max duration",
+  "title": "Vercel Function returns 504 FUNCTION_INVOCATION_TIMEOUT after 10 or 15 seconds on an older project",
+  "symptoms": [
+    "504: GATEWAY_TIMEOUT with code FUNCTION_INVOCATION_TIMEOUT",
+    "Timeouts at 10 seconds on Hobby or 15 seconds on Pro while the docs promise 300 seconds",
+    "Long AI or scraping calls die mid-stream"
+  ],
+  "cause": "The 300 second default applies only when Fluid compute is on, and Fluid compute is enabled by default only for projects created on or after April 23, 2025. Older projects keep the legacy short defaults until Fluid is switched on or maxDuration is set.",
+  "fix": "Turn on Fluid compute for the project and redeploy, or set maxDuration on the function within your plan maximum.",
+  "apply": "// vercel.json\n{ \"fluid\": true }\n\n// or in an App Router route file\nexport const maxDuration = 300;",
+  "affected": "Projects created before 2025-04-23 without Fluid compute; Hobby legacy default 10 s (max 60 s), Pro legacy default 15 s",
+  "sources": [
+    "https://vercel.com/docs/fluid-compute",
+    "https://vercel.com/docs/functions/limitations",
+    "https://vercel.com/changelog/vercel-functions-for-hobby-can-now-run-up-to-60-seconds"
+  ],
+  "tags": [
+    "timeout",
+    "fluid-compute",
+    "504"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

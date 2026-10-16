@@ -1,0 +1,29 @@
+{
+  "id": "fg-0295",
+  "provider": "prisma",
+  "surface_type": "infra",
+  "surface_name": "Prisma with PgBouncer and Supavisor",
+  "title": "Prisma through PgBouncer or the Supabase pooler fails with 'prepared statement \"s0\" already exists'",
+  "symptoms": [
+    "prepared statement \"s0\" already exists",
+    "prisma migrate deploy fails or hangs when the CLI URL points at the pooler port 6543"
+  ],
+  "cause": "Transaction-mode poolers do not keep named prepared statements on one session, and Prisma Migrate needs a single direct connection that poolers do not provide.",
+  "fix": "Give the CLI a direct connection and the client the pooled one. On Prisma 6, add pgbouncer=true to the pooled URL only for PgBouncer before 1.21 and configure max_prepared_statements on 1.21 and later; the Prisma 7 docs do not say whether @prisma/adapter-pg reads pgbouncer=true.",
+  "apply": "// prisma.config.ts: migrations use the direct URL\ndatasource: { url: process.env.DIRECT_URL },\n// runtime uses the pooled URL\nconst adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })",
+  "affected": "Prisma ORM 6 and 7 with transaction-mode PgBouncer or Supavisor, as of October 2026; vendor policy, re-check by 2026-12-15",
+  "sources": [
+    "https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/pgbouncer",
+    "https://github.com/prisma/orm/issues/11643",
+    "https://supabase.com/docs/guides/database/connecting-to-postgres"
+  ],
+  "tags": [
+    "pgbouncer",
+    "supabase",
+    "migrate"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

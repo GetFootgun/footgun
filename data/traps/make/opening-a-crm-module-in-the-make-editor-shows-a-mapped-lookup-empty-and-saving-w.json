@@ -1,0 +1,25 @@
+{
+  "id": "fg-0049",
+  "provider": "make",
+  "surface_type": "ui",
+  "surface_name": "Scenario editor, Bigin by Zoho modules",
+  "title": "Opening a CRM module in the Make editor shows a mapped lookup empty, and saving wipes it",
+  "symptoms": [
+    "Contact ID renders empty with its Map toggle off",
+    "Contact ID: Value must not be empty",
+    "Records saved afterwards lose the contact link"
+  ],
+  "cause": "Some app modules, including the Bigin by Zoho update modules, do not render a mapped lookup value in the editor. Saving the module writes the empty field back.",
+  "fix": "Do not edit these modules in the editor. Fetch the blueprint, change the mapper in code, and write it back through the API.",
+  "apply": "GET /api/v2/scenarios/{id}/blueprint, edit flow[n].mapper, PATCH /api/v2/scenarios/{id} with {\"blueprint\": \"<json string>\"}, then POST /api/v2/scenarios/{id}/start",
+  "affected": "Make Bigin by Zoho app (v2 modules), July 2026",
+  "sources": [],
+  "tags": [
+    "data-loss",
+    "editor"
+  ],
+  "verified_on": "2026-07-18",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

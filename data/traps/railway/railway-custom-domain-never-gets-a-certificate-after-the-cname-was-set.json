@@ -1,0 +1,24 @@
+{
+  "id": "fg-0077",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Custom domains",
+  "title": "Railway custom domain never gets a certificate after the CNAME was set",
+  "symptoms": [
+    "Certificate warning on the custom domain",
+    "Domain stays unverified"
+  ],
+  "cause": "Each custom domain gets its own CNAME target, which can change, and Railway also requires a TXT verification record. A CNAME pointing at an old target with no TXT never issues a certificate. Some plans cap custom domains at two.",
+  "fix": "Copy the current CNAME target and the TXT record from the service's domain settings into DNS, and remove unused custom domains if you hit the cap.",
+  "apply": "DNS: CNAME <sub> -> <hash>.up.railway.app and TXT _railway-verify.<sub> = railway-verify=<value>, both copied from the custom domain panel of the service",
+  "affected": "Railway, July 2026",
+  "sources": [],
+  "tags": [
+    "dns",
+    "tls"
+  ],
+  "verified_on": "2026-07-31",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

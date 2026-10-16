@@ -1,0 +1,27 @@
+{
+  "id": "fg-0259",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "docker run --env-file",
+  "title": "docker run --env-file keeps the quote characters that Compose and shells strip from values",
+  "symptoms": [
+    "The variable arrives in the container as \"hello world\" with the quotes included",
+    "The same env file works with docker compose env_file but breaks with docker run --env-file"
+  ],
+  "cause": "docker run --env-file reads each line as a raw NAME=value with no quote handling, while Compose parses env files with shell-like quoting. CLI maintainers treat the raw format as intended, so the two stay different.",
+  "fix": "Keep a separate unquoted file for docker run --env-file, pass the values with -e, or start the container through Compose.",
+  "apply": "# app.env used with: docker run --env-file app.env image\nGREETING=hello world\n# not GREETING=\"hello world\"",
+  "affected": "Docker CLI, all versions through October 2026 (issue open since 2022)",
+  "sources": [
+    "https://github.com/docker/cli/issues/3630"
+  ],
+  "tags": [
+    "cli",
+    "env",
+    "compose"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

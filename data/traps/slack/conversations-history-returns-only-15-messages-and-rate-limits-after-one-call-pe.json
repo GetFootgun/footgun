@@ -1,0 +1,29 @@
+{
+  "id": "fg-0356",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "conversations.history and conversations.replies",
+  "title": "conversations.history returns only 15 messages and rate limits after one call per minute",
+  "symptoms": [
+    "ratelimited error on the second conversations.history call within a minute",
+    "has_more is true but each page holds at most 15 messages even with limit=200",
+    "The same code works for an internal app but not for the distributed one"
+  ],
+  "cause": "Since 2025-05-29 commercially distributed apps that are not in the Slack Marketplace get Tier 1 limits on these two methods, with limit capped at 15. Internal customer-built apps and Marketplace apps keep the older limits.",
+  "fix": "Build the history reader as an internal app in the customer workspace, or get the app listed in the Marketplace. Otherwise design for 15 messages per minute and store messages from the Events API instead of backfilling.",
+  "apply": "# unlisted distributed app since 2025-05-29\nwhile cursor:\n    r = client.conversations_history(channel=cid, limit=15, cursor=cursor)\n    cursor = r['response_metadata'].get('next_cursor')\n    time.sleep(61)",
+  "affected": "Unlisted commercially distributed Slack apps created on or after 2025-05-29, and new installs of older unlisted apps from that date",
+  "sources": [
+    "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps",
+    "https://docs.slack.dev/apis/web-api/rate-limits/"
+  ],
+  "tags": [
+    "rate-limit",
+    "marketplace",
+    "history"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

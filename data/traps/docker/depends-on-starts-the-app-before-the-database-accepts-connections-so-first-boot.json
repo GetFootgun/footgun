@@ -1,0 +1,27 @@
+{
+  "id": "fg-0257",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "Docker Compose depends_on",
+  "title": "depends_on starts the app before the database accepts connections, so first boot fails",
+  "symptoms": [
+    "ECONNREFUSED or 'the database system is starting up' on first docker compose up, gone after a restart",
+    "The app container exits while the db container shows as running"
+  ],
+  "cause": "The short depends_on form waits only until the dependency container is running, not until the process inside it is ready.",
+  "fix": "Give the dependency a healthcheck and use the long depends_on form with condition service_healthy.",
+  "apply": "services:\n  db:\n    image: postgres:17\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U postgres\"]\n      interval: 2s\n      retries: 30\n  app:\n    depends_on:\n      db:\n        condition: service_healthy",
+  "affected": "Docker Compose v2, as of October 2026",
+  "sources": [
+    "https://docs.docker.com/compose/how-tos/startup-order/"
+  ],
+  "tags": [
+    "compose",
+    "startup",
+    "healthcheck"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

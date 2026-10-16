@@ -1,0 +1,29 @@
+{
+  "id": "fg-0317",
+  "provider": "playwright",
+  "surface_type": "tool",
+  "surface_name": "Chromium headless shell install flags",
+  "title": "Installing with --only-shell or --no-shell, then launching in the other mode, fails with Executable doesn't exist",
+  "symptoms": [
+    "Executable doesn't exist at .../chromium-1208/chrome-linux64/chrome after npx playwright install --only-shell",
+    "Executable doesn't exist at .../chromium_headless_shell-1208/... after npx playwright install --no-shell",
+    "Headed debugging or channel: 'chromium' breaks on a CI image that runs headless tests fine"
+  ],
+  "cause": "Playwright ships two Chromium builds: a headless shell for default headless runs and a full build for headed runs and the 'chromium' channel. Each flag skips one of them.",
+  "fix": "Match the install flag to how tests launch. Use --only-shell only when every run is headless with no channel, and --no-shell only when you set channel: 'chromium'.",
+  "apply": "# default headless only\nnpx playwright install --with-deps --only-shell chromium\n# headed, or use: { channel: 'chromium' }\nnpx playwright install --with-deps chromium",
+  "affected": "Playwright 1.49 and later (separate headless shell build)",
+  "sources": [
+    "https://playwright.dev/docs/browsers",
+    "https://github.com/microsoft/playwright/issues/33566"
+  ],
+  "tags": [
+    "install",
+    "headless",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

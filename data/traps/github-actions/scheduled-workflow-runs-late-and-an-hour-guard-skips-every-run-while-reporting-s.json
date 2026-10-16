@@ -1,0 +1,24 @@
+{
+  "id": "fg-0015",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "Scheduled workflows",
+  "title": "Scheduled workflow runs late and an hour guard skips every run while reporting success",
+  "symptoms": [
+    "Runs show success but the job did nothing",
+    "No output for days with a green run history"
+  ],
+  "cause": "Scheduled workflows are queued and can start well after the cron time. A guard that checks the local hour skipped both daily firings, and the workflow still finished green.",
+  "fix": "Deduplicate on the date rather than the hour, and record when real work happened.",
+  "apply": "In the job, skip only if a marker for today's date already exists; otherwise do the work and write the marker.",
+  "affected": "GitHub Actions schedule trigger, August and September 2026",
+  "sources": [],
+  "tags": [
+    "cron",
+    "silent-failure"
+  ],
+  "verified_on": "2026-09-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0452",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Execute webhook",
+  "title": "Discord webhook call returns 204 with no body so the message ID is never available",
+  "symptoms": [
+    "204 No Content from POST /webhooks/{id}/{token}",
+    "Response body is empty and there is no message ID to edit later",
+    "A failed save returns success with nothing posted"
+  ],
+  "cause": "Execute Webhook defaults wait to false, which returns 204 and does not report a message that was not saved. Without wait=true there is no message object to store.",
+  "fix": "Add wait=true to the query string when you need the created message or need to know the send failed.",
+  "apply": "curl -X POST \"https://discord.com/api/webhooks/$WEBHOOK_ID/$WEBHOOK_TOKEN?wait=true\" -H \"Content-Type: application/json\" -d '{\"content\":\"deploy finished\"}'",
+  "affected": "Discord API v10 Execute Webhook, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/resources/webhook"
+  ],
+  "tags": [
+    "webhooks",
+    "responses"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

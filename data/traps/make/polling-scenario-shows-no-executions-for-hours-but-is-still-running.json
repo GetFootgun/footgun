@@ -1,0 +1,24 @@
+{
+  "id": "fg-0050",
+  "provider": "make",
+  "surface_type": "ui",
+  "surface_name": "Scenario history, polling triggers",
+  "title": "Polling scenario shows no executions for hours but is still running",
+  "symptoms": [
+    "History shows no runs for hours on a scenario that polls every 15 minutes",
+    "No error or warning events"
+  ],
+  "cause": "Make does not write an execution to history when a polling trigger runs and finds zero new items. A quiet trigger and a dead trigger look identical in the history view.",
+  "fix": "Judge liveness from nextExec, not from gaps in history. A healthy poller has nextExec in the future and it moves forward one interval after each poll.",
+  "apply": "GET /api/v2/scenarios/{id} and compare nextExec with the current time; check again after one interval and confirm it advanced.",
+  "affected": "Make, polling triggers, August to October 2026",
+  "sources": [],
+  "tags": [
+    "monitoring",
+    "scheduler"
+  ],
+  "verified_on": "2026-08-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

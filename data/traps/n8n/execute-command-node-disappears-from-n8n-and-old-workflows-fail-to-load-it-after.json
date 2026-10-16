@@ -1,0 +1,28 @@
+{
+  "id": "fg-0340",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Execute Command node",
+  "title": "Execute Command node disappears from n8n and old workflows fail to load it after 2.0",
+  "symptoms": [
+    "Execute Command node missing from the nodes panel",
+    "Workflows that use Execute Command stop running after the upgrade",
+    "Local File Trigger also missing"
+  ],
+  "cause": "n8n 2.0 excludes ExecuteCommand and LocalFileTrigger by default through NODES_EXCLUDE.",
+  "fix": "Re-enable only what you need by setting NODES_EXCLUDE to a list without those nodes, or to an empty list to allow all.",
+  "apply": "NODES_EXCLUDE=\"[]\"",
+  "affected": "Self-hosted n8n 2.0 and later",
+  "sources": [
+    "https://docs.n8n.io/2-0-breaking-changes/"
+  ],
+  "tags": [
+    "upgrade",
+    "nodes",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

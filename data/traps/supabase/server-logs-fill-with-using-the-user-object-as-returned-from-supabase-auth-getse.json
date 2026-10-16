@@ -1,0 +1,32 @@
+{
+  "id": "fg-0197",
+  "provider": "supabase",
+  "surface_type": "sdk",
+  "surface_name": "supabase-js auth, getSession on the server",
+  "title": "Server logs fill with Using the user object as returned from supabase.auth.getSession() could be insecure",
+  "symptoms": [
+    "Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure",
+    "Warning appears even though your code never calls getSession",
+    "Shows on every request in Next.js middleware or server components using @supabase/ssr"
+  ],
+  "cause": "On the server, the session comes from cookies the client can forge, so the library wraps session.user in a proxy that warns on first access. Library internals and your own route guards that read session.user trigger it.",
+  "fix": "Use getClaims() to verify the JWT, or getUser() to ask the Auth server, whenever an identity decision is made on the server. Read only the access token from getSession, never the user object.",
+  "apply": "const { data, error } = await supabase.auth.getClaims();\nif (error || !data) return redirect('/login');\nconst userId = data.claims.sub;",
+  "affected": "Server-side clients from @supabase/auth-js (gotrue-js) 2.63.0, released 2024-03-26, onward, as bundled in @supabase/supabase-js and used by @supabase/ssr",
+  "sources": [
+    "https://github.com/supabase/auth-js/issues/873",
+    "https://github.com/supabase/supabase-js/blob/master/packages/core/auth-js/src/lib/helpers.ts",
+    "https://supabase.com/docs/reference/javascript/auth-getsession",
+    "https://github.com/supabase/auth-js/releases/tag/v2.63.0"
+  ],
+  "tags": [
+    "auth",
+    "ssr",
+    "nextjs",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

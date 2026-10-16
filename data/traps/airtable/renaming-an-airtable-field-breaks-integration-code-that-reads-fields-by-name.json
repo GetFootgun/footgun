@@ -1,0 +1,29 @@
+{
+  "id": "fg-0436",
+  "provider": "airtable",
+  "surface_type": "sdk",
+  "surface_name": "Field names vs field IDs",
+  "title": "Renaming an Airtable field breaks integration code that reads fields by name",
+  "symptoms": [
+    "Field silently reads as undefined after someone renames a column",
+    "422 on write for a field name that no longer exists",
+    "returnFieldsByFieldId has no effect on airtable.js find, create or update"
+  ],
+  "cause": "Responses are keyed by field name by default, so any rename in the UI changes the keys your code reads. The REST API can key by field ID, but airtable.js only passes returnFieldsByFieldId through select().",
+  "fix": "Read and write by field ID. In airtable.js, use select() with returnFieldsByFieldId, or call base.makeRequest for single-record reads.",
+  "apply": "const rows = await base(\"tblXXXXXXXXXXXXXX\").select({ returnFieldsByFieldId: true }).all();\nconst email = rows[0].fields[\"fldXXXXXXXXXXXXXX\"];",
+  "affected": "Airtable Web API; airtable.js 0.12.2 and earlier",
+  "sources": [
+    "https://airtable.com/developers/web/api/list-records",
+    "https://github.com/Airtable/airtable.js/issues/360"
+  ],
+  "tags": [
+    "field-ids",
+    "schema",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

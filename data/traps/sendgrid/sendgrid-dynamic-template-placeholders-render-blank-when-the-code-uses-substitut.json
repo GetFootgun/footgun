@@ -1,0 +1,28 @@
+{
+  "id": "fg-0414",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Dynamic templates substitutions",
+  "title": "SendGrid dynamic template placeholders render blank when the code uses substitutions",
+  "symptoms": [
+    "{{first_name}} renders empty in the delivered email",
+    "-name- or %name% tags appear literally",
+    "Legacy template code moved to a d- template stops filling values"
+  ],
+  "cause": "Dynamic templates read only dynamic_template_data, and substitutions are documented as not to be combined with them. Code written for legacy templates still sends substitutions.",
+  "fix": "Move every value into dynamic_template_data on each personalization and use Handlebars syntax in the template.",
+  "apply": "personalizations: [{ to: [{ email }], dynamic_template_data: { first_name: 'Ana' } }], template_id: 'd-xxxxxxxx'",
+  "affected": "SendGrid v3 Mail Send, dynamic templates (d- ids), as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/mail-send",
+    "https://www.twilio.com/docs/sendgrid/ui/sending-email/how-to-send-an-email-with-dynamic-templates"
+  ],
+  "tags": [
+    "templates",
+    "migration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

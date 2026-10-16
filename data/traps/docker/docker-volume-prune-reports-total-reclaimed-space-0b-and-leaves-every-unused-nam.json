@@ -1,0 +1,28 @@
+{
+  "id": "fg-0260",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "docker volume prune",
+  "title": "docker volume prune reports 'Total reclaimed space: 0B' and leaves every unused named volume",
+  "symptoms": [
+    "Total reclaimed space: 0B",
+    "docker system prune --volumes keeps named volumes that no container uses"
+  ],
+  "cause": "Since Engine 23 (API 1.42) prune removes only anonymous volumes unless told to remove all. Volumes created before that upgrade cannot be classified, so the default prune never touches them.",
+  "fix": "List the unused volumes first, then prune with --all when you really mean every unused volume, including named ones.",
+  "apply": "docker volume ls --filter dangling=true\ndocker volume prune --all",
+  "affected": "Docker Engine 23.0 and later (February 2023), API version 1.42 and later",
+  "sources": [
+    "https://github.com/docker/cli/issues/4028",
+    "https://docs.docker.com/reference/cli/docker/volume/prune/"
+  ],
+  "tags": [
+    "volumes",
+    "prune",
+    "disk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

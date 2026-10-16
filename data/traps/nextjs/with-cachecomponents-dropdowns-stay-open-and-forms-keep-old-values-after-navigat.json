@@ -1,0 +1,31 @@
+{
+  "id": "fg-0311",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "cacheComponents Activity route preservation",
+  "title": "With cacheComponents, dropdowns stay open and forms keep old values after navigating away and back",
+  "symptoms": [
+    "A popover opened before navigation is still open on return",
+    "useActionState success messages and input values persist after leaving the page",
+    "Mount-time logic such as opening a dialog from a query param does not run again",
+    "E2E tests that relied on a fresh page state start failing"
+  ],
+  "cause": "With cacheComponents, the router keeps visited routes in a hidden React Activity instead of unmounting them. useState, form inputs and scroll survive the round trip.",
+  "fix": "Add explicit resets: close popovers in a useLayoutEffect cleanup, derive dialog open state from the URL, and reset forms in the submit handler.",
+  "apply": "useLayoutEffect(() => () => setOpen(false), [])",
+  "affected": "Next.js 16.x with cacheComponents: true",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/migrating-to-cache-components",
+    "https://nextjs.org/docs/app/guides/preserving-ui-state",
+    "https://github.com/vercel/next.js/issues/86577"
+  ],
+  "tags": [
+    "cache-components",
+    "state",
+    "navigation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0469",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, thinking parameter",
+  "title": "400 \"thinking.type.enabled\" is not supported after switching to a newer Claude model",
+  "symptoms": [
+    "400 invalid_request_error: \"thinking.type.enabled\" is not supported for this model",
+    "The same request with thinking budget_tokens worked on Claude Sonnet 4.5 or Opus 4.5"
+  ],
+  "cause": "Manual extended thinking (type enabled with budget_tokens) is rejected by Claude 4.7 and every later model, which only take adaptive thinking. It was deprecated but still accepted on the 4.6 models, so code copied from older examples breaks on the model swap.",
+  "fix": "Remove budget_tokens, send thinking type adaptive (or omit thinking on models where it is on by default), and control depth with output_config.effort instead of a token budget.",
+  "apply": "// before: thinking: { type: \"enabled\", budget_tokens: 10000 }\nthinking: { type: \"adaptive\" },\noutput_config: { effort: \"medium\" },",
+  "affected": "Claude Opus 4.7 and later, Sonnet 5 and 5.5, Haiku 5.5, Fable 5.1, as of 2026-10; deprecated but accepted on Opus 4.6 and Sonnet 4.6",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/extended-thinking",
+    "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting"
+  ],
+  "tags": [
+    "thinking",
+    "migration",
+    "400"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

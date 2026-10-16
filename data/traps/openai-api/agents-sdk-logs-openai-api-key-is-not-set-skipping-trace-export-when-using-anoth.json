@@ -1,0 +1,27 @@
+{
+  "id": "fg-0135",
+  "provider": "openai-api",
+  "surface_type": "sdk",
+  "surface_name": "OpenAI Agents SDK tracing",
+  "title": "Agents SDK logs 'OPENAI_API_KEY is not set, skipping trace export' when using another model provider",
+  "symptoms": [
+    "OPENAI_API_KEY is not set, skipping trace export",
+    "Agent runs succeed but no traces appear in the OpenAI dashboard"
+  ],
+  "cause": "Tracing is on by default and exports to OpenAI with an OpenAI key, even when the agent runs on a non-OpenAI model through a custom client. Tracing is also unavailable to organizations under Zero Data Retention.",
+  "fix": "Disable tracing, or give the exporter its own OpenAI key.",
+  "apply": "from agents import set_tracing_disabled, set_tracing_export_api_key\nset_tracing_disabled(True)\n# or keep tracing: set_tracing_export_api_key(os.environ[\"OPENAI_TRACING_KEY\"])",
+  "affected": "openai-agents-python 0.x with non-OpenAI providers or ZDR organizations, checked October 2026",
+  "sources": [
+    "https://openai.github.io/openai-agents-python/tracing/",
+    "https://github.com/openai/openai-agents-python/issues/190"
+  ],
+  "tags": [
+    "agents-sdk",
+    "tracing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

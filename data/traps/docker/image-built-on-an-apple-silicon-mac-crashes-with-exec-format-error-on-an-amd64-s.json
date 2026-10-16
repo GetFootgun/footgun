@@ -1,0 +1,29 @@
+{
+  "id": "fg-0263",
+  "provider": "docker",
+  "surface_type": "tool",
+  "surface_name": "Docker Desktop on Apple Silicon",
+  "title": "Image built on an Apple Silicon Mac crashes with 'exec format error' on an amd64 server",
+  "symptoms": [
+    "exec /usr/local/bin/docker-entrypoint.sh: exec format error",
+    "The requested image's platform (linux/arm64/v8) does not match the detected host platform (linux/amd64) and no specific platform was requested",
+    "no matching manifest for linux/arm64/v8 in the manifest list entries"
+  ],
+  "cause": "docker build targets the build machine's architecture unless told otherwise, so an M-series Mac produces linux/arm64 images. The reverse happens when an image publishes only amd64 and you pull it on the Mac without a platform.",
+  "fix": "Set the target platform explicitly when building images for servers, and set platform in Compose for images that only ship amd64 so Desktop runs them under emulation.",
+  "apply": "docker buildx build --platform linux/amd64 -t \"$IMAGE\" --push .\n# compose\nservices:\n  app:\n    platform: linux/amd64",
+  "affected": "Docker Desktop on Apple Silicon (M1 and later); Rosetta emulation on by default since Desktop 4.25 on macOS 14.1 and later",
+  "sources": [
+    "https://docs.docker.com/build/building/multi-platform/",
+    "https://docs.docker.com/desktop/release-notes/"
+  ],
+  "tags": [
+    "apple-silicon",
+    "multi-platform",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

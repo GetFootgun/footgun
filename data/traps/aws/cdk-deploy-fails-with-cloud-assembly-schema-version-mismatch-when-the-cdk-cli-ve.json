@@ -1,0 +1,29 @@
+{
+  "id": "fg-0172",
+  "provider": "aws",
+  "surface_type": "tool",
+  "surface_name": "AWS CDK CLI and aws-cdk-lib versions",
+  "title": "cdk deploy fails with Cloud assembly schema version mismatch when the CDK CLI version matches aws-cdk-lib",
+  "symptoms": [
+    "Cloud assembly schema version mismatch: Maximum schema version supported is 39.x.x, but found 40.0.0",
+    "Fails on cdk synth, diff, or deploy right after bumping aws-cdk-lib",
+    "Pinning aws-cdk to the same version number as aws-cdk-lib no longer works"
+  ],
+  "cause": "The CDK CLI moved to its own version line starting at 2.1000.0 in early 2025, and aws-cdk-lib 2.182.0 and later need that newer CLI. Pinning both packages to the same number leaves the CLI too old.",
+  "fix": "Upgrade the CLI to the latest 2.1xxx release, which reads every older schema. Use npx with the project-local CLI in CI so a stale global install is not picked up.",
+  "apply": "npm install --save-dev aws-cdk@latest   # CLI is 2.1000.0 or later\nnpx cdk --version\nnpx cdk deploy",
+  "affected": "aws-cdk-lib 2.182.0 and later with aws-cdk CLI below 2.1000.0; CLI and library versioned separately since CLI 2.1000.0 on 2025-02-18",
+  "sources": [
+    "https://docs.aws.amazon.com/cdk/v2/guide/versioning.html",
+    "https://github.com/aws/aws-cdk-cli/blob/main/COMPATIBILITY.md"
+  ],
+  "tags": [
+    "cdk",
+    "cli",
+    "versioning"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

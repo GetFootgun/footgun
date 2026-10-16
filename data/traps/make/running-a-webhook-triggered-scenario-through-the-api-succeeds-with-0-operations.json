@@ -1,0 +1,24 @@
+{
+  "id": "fg-0052",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "API v2, run scenario",
+  "title": "Running a webhook-triggered scenario through the API succeeds with 0 operations",
+  "symptoms": [
+    "Run returns success with 0 operations",
+    "Nothing after the webhook executes"
+  ],
+  "cause": "A run request does not supply a payload to a custom webhook trigger, so the trigger has nothing to emit and the run ends at once.",
+  "fix": "Trigger webhook scenarios by sending an HTTP request to the webhook URL. To run modules on demand from the API, build an action-only scenario with no trigger and on-demand scheduling; a run then executes each module once in module id order.",
+  "apply": "Scenario scheduling {\"type\": \"on-demand\"} with an action as the first module, then POST /api/v2/scenarios/{id}/run with {\"responsive\": true}",
+  "affected": "Make API v2 and the Make MCP scenarios_run tool, September 2026",
+  "sources": [],
+  "tags": [
+    "webhook",
+    "api"
+  ],
+  "verified_on": "2026-09-18",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

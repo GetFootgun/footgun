@@ -1,0 +1,25 @@
+{
+  "id": "fg-0098",
+  "provider": "wordpress",
+  "surface_type": "tool",
+  "surface_name": "mcp-wordpress server, wp_create_post and wp_update_post",
+  "title": "WordPress MCP cannot set a post slug, Yoast fields or a script tag",
+  "symptoms": [
+    "Unsafe content: script tag",
+    "Post gets a long auto-generated slug",
+    "No parameter for meta or slug"
+  ],
+  "cause": "The mcp-wordpress create and update tools accept title, content, status, categories, tags, excerpt and featured media only. They refuse content containing script tags, so JSON-LD blocks fail.",
+  "fix": "Create the draft with the MCP, then finish slug, full content and meta in one REST call authenticated with an application password.",
+  "apply": "curl -u \"$WP_USER:$WP_APP_PASSWORD\" -A \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\" -X POST https://example.com/wp-json/wp/v2/posts/<id> -H 'Content-Type: application/json' -d '{\"slug\":\"my-slug\",\"meta\":{\"_yoast_wpseo_title\":\"...\",\"_yoast_wpseo_metadesc\":\"...\"}}'",
+  "affected": "mcp-wordpress via npx, September 2026",
+  "sources": [],
+  "tags": [
+    "mcp",
+    "rest-api"
+  ],
+  "verified_on": "2026-09-22",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

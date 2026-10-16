@@ -1,0 +1,30 @@
+{
+  "id": "fg-0288",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "PrismaClient constructor",
+  "title": "Prisma 7: 'PrismaClient was instantiated without any options. A driver adapter is required'",
+  "symptoms": [
+    "PrismaClient was instantiated without any options. A driver adapter is required to connect to your database.",
+    "PrismaClientConstructorValidationError: Using engine type \"client\" requires either \"adapter\" or \"accelerateUrl\" to be provided to PrismaClient constructor.",
+    "TypeError: Cannot read properties of undefined (reading '__internal')",
+    "SyntaxError: The requested module '@prisma/client' does not provide an export named 'PrismaClient'"
+  ],
+  "cause": "The Prisma 7 client has no built-in database driver, so every PrismaClient needs a driver adapter or an Accelerate URL. Code and examples written for Prisma 6 call new PrismaClient() with no arguments.",
+  "fix": "Install the adapter for your database, pass it to the constructor, and import PrismaClient from the generated client folder set by the generator output, not from @prisma/client.",
+  "apply": "import { PrismaClient } from './generated/prisma/client'\nimport { PrismaPg } from '@prisma/adapter-pg'\nconst adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })\nexport const prisma = new PrismaClient({ adapter })",
+  "affected": "Prisma ORM 7.0 and later, reproduced on 7.10.0",
+  "sources": [
+    "https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7",
+    "https://github.com/prisma/orm/issues/28670"
+  ],
+  "tags": [
+    "prisma-7",
+    "driver-adapters",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

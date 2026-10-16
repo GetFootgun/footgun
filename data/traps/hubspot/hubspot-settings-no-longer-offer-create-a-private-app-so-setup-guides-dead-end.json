@@ -1,0 +1,28 @@
+{
+  "id": "fg-0396",
+  "provider": "hubspot",
+  "surface_type": "ui",
+  "surface_name": "Legacy private app creation",
+  "title": "HubSpot settings no longer offer Create a private app, so setup guides dead-end",
+  "symptoms": [
+    "No Create a private app button under Settings, Integrations",
+    "Tutorial steps for a private app access token cannot be followed",
+    "New portal created after 2026-09-28 has only Service Keys"
+  ],
+  "cause": "HubSpot is removing creation of legacy, non-project private apps in the account UI, from 2026-09-28 for new accounts and 2026-10-26 for existing ones. Existing private app tokens keep working.",
+  "fix": "For a new in-account integration, create a Service Key under Settings, Integrations, Service Keys, or build a 2026.09 developer platform project. Keep existing private app tokens and rotate them as before.",
+  "apply": "HubSpot account > Settings > Integrations > Service Keys > Create service key",
+  "affected": "HubSpot accounts created on or after 2026-09-28, and all accounts from 2026-10-26",
+  "sources": [
+    "https://developers.hubspot.com/changelog/legacy-private-app-creation-sunset"
+  ],
+  "tags": [
+    "auth",
+    "private-apps",
+    "deprecation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

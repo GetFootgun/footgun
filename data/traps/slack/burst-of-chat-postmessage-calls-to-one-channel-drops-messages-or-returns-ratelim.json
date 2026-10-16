@@ -1,0 +1,28 @@
+{
+  "id": "fg-0354",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "chat.postMessage rate limit",
+  "title": "Burst of chat.postMessage calls to one channel drops messages or returns ratelimited",
+  "symptoms": [
+    "ratelimited with a Retry-After header",
+    "HTTP 429 Too Many Requests",
+    "Some messages in a burst never appear in the channel"
+  ],
+  "cause": "Posting is limited to about one message per second per channel plus a workspace-wide cap. Slack tolerates short bursts but may not store or display messages past the limit.",
+  "fix": "Queue outgoing messages per channel at one per second, honor Retry-After, and batch updates into one message where possible.",
+  "apply": "from slack_sdk.http_retry.builtin_handlers import RateLimitErrorRetryHandler\nclient.retry_handlers.append(RateLimitErrorRetryHandler(max_retry_count=3))  # resends after Retry-After\nfor msg in queue[channel]:\n    client.chat_postMessage(channel=channel, text=msg)\n    time.sleep(1)",
+  "affected": "Slack Web API chat.postMessage and incoming webhooks, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/apis/web-api/rate-limits/",
+    "https://docs.slack.dev/reference/methods/chat.postMessage"
+  ],
+  "tags": [
+    "rate-limit",
+    "messaging"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

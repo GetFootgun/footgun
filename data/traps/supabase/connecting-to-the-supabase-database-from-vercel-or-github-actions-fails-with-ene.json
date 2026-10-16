@@ -1,0 +1,30 @@
+{
+  "id": "fg-0195",
+  "provider": "supabase",
+  "surface_type": "infra",
+  "surface_name": "Supabase direct database connection",
+  "title": "Connecting to the Supabase database from Vercel or GitHub Actions fails with ENETUNREACH",
+  "symptoms": [
+    "connect ENETUNREACH 2a05:... :5432",
+    "could not translate host name db.PROJECT_REF.supabase.co to address",
+    "Works from a laptop but fails in serverless or CI"
+  ],
+  "cause": "The direct host db.PROJECT_REF.supabase.co resolves only to IPv6 since January 29, 2024, and several hosts including Vercel, GitHub Actions, Render, and Retool cannot reach IPv6. The Supavisor pooler still answers on IPv4.",
+  "fix": "Use the pooler connection string (transaction mode on port 6543 for serverless, session mode on 5432 for long-lived servers), or buy the dedicated IPv4 add-on on Pro and above.",
+  "apply": "# serverless (transaction mode)\nDATABASE_URL=postgres://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:6543/postgres\n# check from the deploy host (Linux): no output means no IPv6 route to the direct host\nip -6 route show default",
+  "affected": "Hosted Supabase projects since 2024-01-29, when db.PROJECT_REF.supabase.co began resolving to IPv6 only; IPv4-only networks",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/supabase--your-network-ipv4-and-ipv6-compatibility-cHe3BP",
+    "https://supabase.com/changelog/17817-pgbouncer-and-ipv4-deprecation"
+  ],
+  "tags": [
+    "postgres",
+    "ipv6",
+    "connection",
+    "serverless"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

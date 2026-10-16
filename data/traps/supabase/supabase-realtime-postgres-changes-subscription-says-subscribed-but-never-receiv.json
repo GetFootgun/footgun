@@ -1,0 +1,28 @@
+{
+  "id": "fg-0203",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Realtime postgres_changes",
+  "title": "Supabase Realtime postgres_changes subscription says SUBSCRIBED but never receives any events",
+  "symptoms": [
+    "Channel status SUBSCRIBED, then silence when rows change",
+    "INSERT events arrive for one table but not for a newly created one",
+    "payload.old is empty or only holds the primary key on UPDATE and DELETE"
+  ],
+  "cause": "Realtime only watches tables added to the supabase_realtime publication, and it applies RLS as the subscribing user, so a blocked row is dropped silently. Old values on UPDATE and DELETE need replica identity full, and with RLS on only the primary key comes through.",
+  "fix": "Add the table to the publication, confirm the subscriber can select the changed row, and set replica identity full if you need old values on tables without RLS.",
+  "apply": "alter publication supabase_realtime add table public.messages;\nalter table public.messages replica identity full;\nselect * from pg_publication_tables where pubname = 'supabase_realtime';",
+  "affected": "Supabase Realtime postgres_changes on all plans",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/realtime-postgres-changes-troubleshooting"
+  ],
+  "tags": [
+    "realtime",
+    "rls",
+    "publication"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

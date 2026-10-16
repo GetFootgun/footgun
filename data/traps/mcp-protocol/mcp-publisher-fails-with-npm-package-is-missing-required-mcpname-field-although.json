@@ -1,0 +1,28 @@
+{
+  "id": "fg-0522",
+  "provider": "mcp-protocol",
+  "surface_type": "api",
+  "surface_name": "MCP Registry, npm ownership check",
+  "title": "mcp-publisher fails with 'NPM package is missing required mcpName field' although package.json has it",
+  "symptoms": [
+    "NPM package '@scope/name' is missing required 'mcpName' field",
+    "The latest version on npm shows the correct mcpName, but publishing still fails"
+  ],
+  "cause": "The registry verifies npm ownership by reading mcpName from the package.json of the exact npm version named in server.json under packages[].version, and it must equal the server name. That version is separate from the top-level server version, so pointing at an older npm release that predates mcpName fails.",
+  "fix": "Publish an npm version that contains mcpName, set packages[].version in server.json to that version, then publish to the registry.",
+  "apply": "// server.json\n\"version\": \"1.0.3\",\n\"packages\": [{ \"registryType\": \"npm\", \"identifier\": \"@scope/name\", \"version\": \"1.0.3\" }]\n// package.json of npm 1.0.3: \"mcpName\": \"io.github.username/name\"",
+  "affected": "Official MCP Registry, npm packages, as of 2026-10",
+  "sources": [
+    "https://modelcontextprotocol.io/registry/package-types",
+    "https://github.com/modelcontextprotocol/registry/issues/559"
+  ],
+  "tags": [
+    "registry",
+    "npm",
+    "publishing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

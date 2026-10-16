@@ -1,0 +1,27 @@
+{
+  "id": "fg-0303",
+  "provider": "nextjs",
+  "surface_type": "tool",
+  "surface_name": "Turbopack default for next build",
+  "title": "next build fails on Next.js 16 with 'This build is using Turbopack, with a webpack config and no turbopack config'",
+  "symptoms": [
+    "This build is using Turbopack, with a `webpack` config and no `turbopack` config.",
+    "The build fails even though next.config has no webpack key, because a plugin such as next-pwa or an SVG loader adds one"
+  ],
+  "cause": "Next.js 16 builds with Turbopack by default and refuses to silently ignore a webpack function, since that config would not apply.",
+  "fix": "Port the webpack rules to the turbopack key, or keep webpack for builds with the --webpack flag until the plugin supports Turbopack.",
+  "apply": "// package.json\n\"scripts\": { \"build\": \"next build --webpack\" }",
+  "affected": "Next.js 16.0 and later, any config or plugin that sets webpack",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/upgrading/version-16"
+  ],
+  "tags": [
+    "turbopack",
+    "webpack",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

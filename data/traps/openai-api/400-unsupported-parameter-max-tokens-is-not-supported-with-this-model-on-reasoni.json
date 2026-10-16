@@ -1,0 +1,27 @@
+{
+  "id": "fg-0132",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Chat Completions, max_tokens",
+  "title": "400 'Unsupported parameter: max_tokens is not supported with this model' on reasoning models",
+  "symptoms": [
+    "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.",
+    "Code that worked with gpt-4o fails after switching the model name"
+  ],
+  "cause": "max_tokens is deprecated on Chat Completions and is not accepted by reasoning models. The limit there is max_completion_tokens, which also counts hidden reasoning tokens.",
+  "fix": "Send max_completion_tokens on Chat Completions, or max_output_tokens on the Responses API.",
+  "apply": "const r = await client.chat.completions.create({ model, messages, max_completion_tokens: 4000 });",
+  "affected": "OpenAI Chat Completions with o-series and GPT-5 family reasoning models, since o1 (late 2024), checked October 2026",
+  "sources": [
+    "https://github.com/openai/openai-python/blob/main/src/openai/types/chat/completion_create_params.py",
+    "https://github.com/openai/openai-python/issues/2046"
+  ],
+  "tags": [
+    "reasoning",
+    "parameters"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

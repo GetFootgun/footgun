@@ -1,0 +1,30 @@
+{
+  "id": "fg-0201",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Auth redirectTo and Redirect URLs allow list",
+  "title": "Supabase OAuth or magic link ignores redirectTo and sends users to localhost or the Site URL",
+  "symptoms": [
+    "After Google sign-in the browser lands on http://localhost:3000 in production",
+    "Vercel preview deployments always redirect to the production Site URL",
+    "emailRedirectTo value is silently dropped"
+  ],
+  "cause": "Auth only honors redirectTo when the exact URL matches an entry in the Redirect URLs allow list; otherwise it falls back to the Site URL with no error.",
+  "fix": "Add every production, preview, and local callback URL to the allow list, using wildcards for preview domains, and set Site URL to production.",
+  "apply": "Dashboard: Authentication > URL Configuration > Redirect URLs\nhttps://example.com/**\nhttps://*-myteam.vercel.app/**\nhttp://localhost:3000/**",
+  "affected": "Supabase Auth on all plans; email links, OAuth providers, and password reset",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/why-am-i-being-redirected-to-the-wrong-url-when-using-auth-redirectto-option-_vqIeO",
+    "https://supabase.com/docs/guides/auth/redirect-urls"
+  ],
+  "tags": [
+    "auth",
+    "oauth",
+    "redirect",
+    "vercel"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

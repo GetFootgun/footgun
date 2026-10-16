@@ -1,0 +1,25 @@
+{
+  "id": "fg-0037",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Data store, Search records output",
+  "title": "Data store search results map as empty because fields sit under .data",
+  "symptoms": [
+    "{{3.status}} is always empty",
+    "Filters on data store fields never match"
+  ],
+  "cause": "Search records nests each record's fields under data. Mapping the field name at the top level resolves to nothing, with no error. Boolean fields also cannot be used as search criteria.",
+  "fix": "Map {{N.data.field}}. Store a text status or a date where you need to search, not a boolean.",
+  "apply": "{{3.data.status}} instead of {{3.status}}",
+  "affected": "Make Data store app, 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "data-store",
+    "mapping"
+  ],
+  "verified_on": "2026-10-08",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

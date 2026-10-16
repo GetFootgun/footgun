@@ -1,0 +1,24 @@
+{
+  "id": "fg-0035",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "API v2, POST /hooks",
+  "title": "Creating a custom webhook through the API returns 400 for missing parameters",
+  "symptoms": [
+    "400 on POST /hooks with typeName gateway-webhook",
+    "Missing required parameters"
+  ],
+  "cause": "The gateway-webhook type requires headers, method and stringify in its data object, although they look optional.",
+  "fix": "Send all three explicitly.",
+  "apply": "POST /api/v2/hooks {\"teamId\": 123, \"typeName\": \"gateway-webhook\", \"name\": \"probe\", \"data\": {\"headers\": false, \"method\": false, \"stringify\": false}}",
+  "affected": "Make API v2, July 2026",
+  "sources": [],
+  "tags": [
+    "webhook",
+    "api"
+  ],
+  "verified_on": "2026-07-16",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

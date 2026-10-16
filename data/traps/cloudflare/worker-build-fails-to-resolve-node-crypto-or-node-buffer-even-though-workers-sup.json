@@ -1,0 +1,29 @@
+{
+  "id": "fg-0218",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Workers Node.js compatibility",
+  "title": "Worker build fails to resolve node:crypto or node:buffer even though Workers support Node APIs",
+  "symptoms": [
+    "No such module \"node:crypto\".",
+    "Wrangler build says the package wasn't found on the file system but is built into node",
+    "A dependency that imports node:stream breaks the deploy"
+  ],
+  "cause": "Node.js built ins are only available when the nodejs_compat flag is on. It became a default only for compatibility dates of 2026-08-04 or later, so Workers with older dates must add the flag by hand.",
+  "fix": "Add nodejs_compat to compatibility_flags, or move compatibility_date to 2026-08-04 or later after testing other date gated changes.",
+  "apply": "# wrangler.toml\ncompatibility_date = \"2025-09-01\"\ncompatibility_flags = [\"nodejs_compat\"]",
+  "affected": "Workers with compatibility_date before 2026-08-04 and no nodejs_compat flag",
+  "sources": [
+    "https://developers.cloudflare.com/workers/runtime-apis/nodejs/",
+    "https://developers.cloudflare.com/workers/configuration/compatibility-flags/"
+  ],
+  "tags": [
+    "workers",
+    "nodejs",
+    "compatibility"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

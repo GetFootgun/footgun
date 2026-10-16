@@ -1,0 +1,29 @@
+{
+  "id": "fg-0521",
+  "provider": "mcp-protocol",
+  "surface_type": "api",
+  "surface_name": "Streamable HTTP request headers (2026-07-28)",
+  "title": "400 HeaderMismatch from an MCP server on protocol 2026-07-28",
+  "symptoms": [
+    "400 Bad Request with a HeaderMismatch JSON-RPC error, code -32020",
+    "400 with UnsupportedProtocolVersionError listing the server's supported versions",
+    "A custom client that worked against 2025 servers fails against a 2026-07-28 server"
+  ],
+  "cause": "Under 2026-07-28 every POST must carry Mcp-Method (and Mcp-Name for tools/call, resources/read, prompts/get) plus an MCP-Protocol-Version header that matches the version in the body's _meta. A missing or mismatched header is rejected, and an unknown version gets UnsupportedProtocolVersionError.",
+  "fix": "Set the headers from the same values as the JSON body on every request, base64 encode a name that is not plain ASCII, and pick the version from the server's supported list.",
+  "apply": "Mcp-Method: tools/call\nMcp-Name: get_weather\nMCP-Protocol-Version: 2026-07-28\n// body: { \"method\": \"tools/call\", \"params\": { \"name\": \"get_weather\", \"_meta\": { \"io.modelcontextprotocol/protocolVersion\": \"2026-07-28\" } } }",
+  "affected": "MCP protocol 2026-07-28; error codes renumbered in that revision (HeaderMismatch -32020, UnsupportedProtocolVersion -32022)",
+  "sources": [
+    "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http",
+    "https://modelcontextprotocol.io/specification/2026-07-28/changelog"
+  ],
+  "tags": [
+    "http",
+    "headers",
+    "versioning"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

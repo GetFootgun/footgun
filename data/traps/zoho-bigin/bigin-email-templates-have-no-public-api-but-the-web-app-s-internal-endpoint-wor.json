@@ -1,0 +1,26 @@
+{
+  "id": "fg-0112",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "Email templates, internal /crm/v4.1/settings/email_templates",
+  "title": "Bigin email templates have no public API, but the web app's internal endpoint works",
+  "symptoms": [
+    "The public settings/email_templates path returns an error",
+    "PUT returns NOT_ALLOWED: primary_module cannot be changed",
+    "PUT returns MANDATORY_NOT_FOUND",
+    "GET with a fields parameter returns 400 PATTERN_NOT_MATCHED"
+  ],
+  "cause": "The public Bigin v2 API does not expose email templates. The web app uses an internal v4.1 endpoint that needs a CSRF header built from the crmcsr cookie. On update it rejects the module field and requires name, subject and folder. The template HTML lives in both content and mail_content.",
+  "fix": "From a logged-in browser tab, call the internal endpoint with credentials included and the CSRF header. Send id, name, subject, content, mail_content, editor_mode and folder, and leave module out. Treat it as unofficial: it can change without notice.",
+  "apply": "fetch('/crm/v4.1/settings/email_templates/' + id, {method: 'PUT', credentials: 'include', headers: {'X-ZCSRF-TOKEN': 'crmcsrfparam=' + crmcsrCookieValue, 'Content-Type': 'application/json'}, body: JSON.stringify({email_templates: [{id, name, subject, content: html, mail_content: html, editor_mode: 'rich_text', folder: {id: folderId}}]})})",
+  "affected": "Bigin web app internal API v4.1, July 2026",
+  "sources": [],
+  "tags": [
+    "undocumented",
+    "email-templates"
+  ],
+  "verified_on": "2026-07-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0525",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "TypeScript SDK v2 and Zod versions",
+  "title": "MCP server on SDK v2 starts fine but tools/list fails because package.json still allows Zod 3",
+  "symptoms": [
+    "client.listTools() returns an error pointing at fromJsonSchema() while the server keeps running",
+    "Typecheck and startup pass, and the failure appears only on the first tools/list"
+  ],
+  "cause": "SDK v2 supports only Zod 4, and Zod 4.2 or later converts itself to JSON Schema. A Zod 3 range that satisfied the v1 peer installs and typechecks under v2, then registration skips the schema without throwing.",
+  "fix": "Declare zod ^4.2.0 in package.json, reinstall, and confirm a single copy with npm ls zod.",
+  "apply": "\"dependencies\": { \"@modelcontextprotocol/server\": \"^2.3.0\", \"zod\": \"^4.2.0\" }\n// then: npm install && npm ls zod",
+  "affected": "@modelcontextprotocol/server 2.x; Zod 3 unsupported, Zod 4.0 to 4.1 lack self-conversion; as of 2026-10",
+  "sources": [
+    "https://github.com/modelcontextprotocol/typescript-sdk/blob/main/skills/mcp-typescript-sdk-upgrade-to-v2/references/server-registration.md"
+  ],
+  "tags": [
+    "sdk",
+    "zod",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0417",
+  "provider": "sendgrid",
+  "surface_type": "sdk",
+  "surface_name": "sendgrid-python SendGridAPIClient",
+  "title": "sendgrid-python send() hangs forever when the SendGrid API stalls",
+  "symptoms": [
+    "Worker or request thread stuck inside sg.send(message)",
+    "No exception and no response during a network blip",
+    "Batch jobs stop partway with no error logged"
+  ],
+  "cause": "SendGridAPIClient.send takes no timeout and the underlying urllib call defaults to none, so a stalled connection blocks indefinitely. The lower-level client does accept a per-call timeout.",
+  "fix": "Call the lower-level client with an explicit timeout instead of send().",
+  "apply": "sg.client.mail.send.post(request_body=message.get(), timeout=10)",
+  "affected": "sendgrid (Python) 6.x through 6.12.5, issue open since 2021",
+  "sources": [
+    "https://github.com/sendgrid/sendgrid-python/issues/985",
+    "https://github.com/sendgrid/python-http-client/blob/main/python_http_client/client.py"
+  ],
+  "tags": [
+    "python",
+    "timeouts",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

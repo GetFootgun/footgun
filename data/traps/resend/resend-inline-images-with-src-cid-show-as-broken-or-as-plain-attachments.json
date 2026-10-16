@@ -1,0 +1,27 @@
+{
+  "id": "fg-0406",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "Inline image attachments",
+  "title": "Resend inline images with src=cid: show as broken or as plain attachments",
+  "symptoms": [
+    "img src=cid:logo renders as a broken image",
+    "Image arrives as a separate attachment instead of inline",
+    "inlineContentId missing from the SDK attachment type"
+  ],
+  "cause": "Inline embedding needs the attachment field inlineContentId matching the cid in the HTML, which only exists from resend 4.8.0. Older field names from other providers are ignored.",
+  "fix": "Upgrade to resend 4.8.0 or later and set inlineContentId on the attachment to the same name used after cid:.",
+  "apply": "attachments: [{ filename: 'logo.png', content: buf, inlineContentId: 'logo' }]  // <img src=\"cid:logo\">",
+  "affected": "resend (Node SDK) below 4.8.0, Resend API before August 2025",
+  "sources": [
+    "https://github.com/resend/resend-node/issues/319"
+  ],
+  "tags": [
+    "attachments",
+    "html-email"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

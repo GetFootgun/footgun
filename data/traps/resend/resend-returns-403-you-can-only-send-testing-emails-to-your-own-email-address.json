@@ -1,0 +1,29 @@
+{
+  "id": "fg-0408",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "Send email before domain verification",
+  "title": "Resend returns 403 'You can only send testing emails to your own email address'",
+  "symptoms": [
+    "403 validation_error: You can only send testing emails to your own email address",
+    "Sends to the account owner work, every other recipient fails",
+    "Works in a teammate's account but not in production"
+  ],
+  "cause": "Until a domain is verified, the account can only send to the email address that owns it. The shared resend.dev sender does not lift that restriction.",
+  "fix": "Verify a domain and send from an address on it. For automated tests, send to the resend.dev test inboxes instead of real or made-up addresses.",
+  "apply": "to: ['delivered+signup@resend.dev']  // also bounced@resend.dev, complained@resend.dev",
+  "affected": "Resend API, accounts with no verified domain, as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/api-reference/errors",
+    "https://resend.com/docs/dashboard/emails/send-test-emails"
+  ],
+  "tags": [
+    "email",
+    "sandbox",
+    "testing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

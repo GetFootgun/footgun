@@ -1,0 +1,28 @@
+{
+  "id": "fg-0323",
+  "provider": "playwright",
+  "surface_type": "sdk",
+  "surface_name": "waitForLoadState networkidle",
+  "title": "waitForLoadState('networkidle') times out on pages with analytics, polling or websockets",
+  "symptoms": [
+    "page.waitForLoadState: Timeout 30000ms exceeded",
+    "goto with waitUntil: 'networkidle' passes locally and times out in CI",
+    "Adding a chat widget or analytics script makes unrelated tests fail"
+  ],
+  "cause": "networkidle waits for 500 ms with zero open connections, which never happens on pages that poll or hold sockets. Playwright marks the option as discouraged for testing.",
+  "fix": "Remove networkidle and wait for the thing the test needs with a web-first assertion.",
+  "apply": "await page.goto('/dashboard')\nawait expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()",
+  "affected": "All Playwright versions, page.goto, page.waitForLoadState, page.waitForNavigation",
+  "sources": [
+    "https://playwright.dev/docs/api/class-page"
+  ],
+  "tags": [
+    "waiting",
+    "flaky",
+    "navigation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0491",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Plugins, ${CLAUDE_PLUGIN_ROOT} in shell-form hooks",
+  "title": "Plugin hook fails with 'No such file or directory' when the install path contains a space",
+  "symptoms": [
+    "/bin/sh: /Users/Jane: No such file or directory",
+    "The hook works for most users and fails for anyone whose home folder name has a space",
+    "Windows profile paths such as C:\\Users\\Redux Gamer break the hook"
+  ],
+  "cause": "In a shell-form hook command the substituted ${CLAUDE_PLUGIN_ROOT} path is split by the shell at spaces when the variable is not quoted. Requests to quote it automatically were closed as not planned.",
+  "fix": "Wrap the variable itself in double quotes inside the command string, or use exec form with args so each path is one argument. claude plugin validate warns about an unquoted variable.",
+  "apply": "\"command\": \"\\\"${CLAUDE_PLUGIN_ROOT}\\\"/scripts/process.sh\"",
+  "affected": "Claude Code plugins with shell-form hooks, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/plugins-reference",
+    "https://github.com/anthropics/claude-code/issues/33431",
+    "https://github.com/anthropics/claude-code/issues/38800"
+  ],
+  "tags": [
+    "plugins",
+    "hooks",
+    "windows"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

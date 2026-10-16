@@ -1,0 +1,30 @@
+{
+  "id": "fg-0286",
+  "provider": "prisma",
+  "surface_type": "tool",
+  "surface_name": "Prisma schema datasource block",
+  "title": "Prisma 7 error P1012: The datasource property `url` is no longer supported in schema files",
+  "symptoms": [
+    "Error code: P1012",
+    "error: The datasource property `url` is no longer supported in schema files. Move connection URLs for Migrate to `prisma.config.ts`",
+    "VS Code flags the same error in a project that is still on Prisma 6"
+  ],
+  "cause": "Prisma 7 moved url, directUrl, and shadowDatabaseUrl out of schema.prisma into prisma.config.ts, and the runtime connection now comes from a driver adapter. The VS Code extension defaults to the Prisma 7 language server, so it also flags Prisma 6 schemas.",
+  "fix": "Remove url from the datasource block, set datasource.url in prisma.config.ts, and pass an adapter to PrismaClient. Projects staying on Prisma 6 should run the extension's 'Pin the current workspace to Prisma 6' command (extension 7.x), which sets prisma.pinToPrisma6.",
+  "apply": "// prisma/schema.prisma\ndatasource db {\n  provider = \"postgresql\"\n}\n// prisma.config.ts\nimport 'dotenv/config'\nimport { defineConfig } from 'prisma/config'\nexport default defineConfig({\n  schema: 'prisma/schema.prisma',\n  datasource: { url: process.env.DATABASE_URL },\n})",
+  "affected": "Prisma ORM 7.0 and later (November 2025), reproduced on 7.10.0",
+  "sources": [
+    "https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7",
+    "https://github.com/prisma/orm/issues/28573",
+    "https://github.com/prisma/language-tools/blob/main/packages/vscode/package.json"
+  ],
+  "tags": [
+    "prisma-7",
+    "config",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

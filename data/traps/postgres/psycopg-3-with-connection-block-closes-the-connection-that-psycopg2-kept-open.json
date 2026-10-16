@@ -1,0 +1,27 @@
+{
+  "id": "fg-0281",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "psycopg 3 connection context manager",
+  "title": "psycopg 3 'with connection' block closes the connection that psycopg2 kept open",
+  "symptoms": [
+    "psycopg.OperationalError: the connection is closed",
+    "A module-level connection fails on its second use after a with block"
+  ],
+  "cause": "In psycopg2 the with block on a connection only ended the transaction. In psycopg 3 leaving the block closes the connection.",
+  "fix": "Use conn.transaction() for transaction scope and keep long-lived connections outside a with block, or use psycopg_pool.",
+  "apply": "conn = psycopg.connect(DSN)\nwith conn.transaction():\n    conn.execute(\"INSERT INTO t VALUES (1)\")\n# conn is still open here",
+  "affected": "psycopg 3.x, when porting code from psycopg2",
+  "sources": [
+    "https://github.com/psycopg/psycopg/blob/master/docs/basic/from_pg2.rst"
+  ],
+  "tags": [
+    "psycopg",
+    "migration",
+    "connections"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

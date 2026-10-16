@@ -1,0 +1,24 @@
+{
+  "id": "fg-0070",
+  "provider": "playwright",
+  "surface_type": "infra",
+  "surface_name": "Browser launch in containers",
+  "title": "Playwright fails with 'libglib-2.0.so.0: cannot open shared object file' on a Nixpacks build",
+  "symptoms": [
+    "libglib-2.0.so.0: cannot open shared object file",
+    "Browser binary is installed but launch fails"
+  ],
+  "cause": "playwright install --with-deps needs apt-get, which the Nixpacks build sandbox does not offer, so the fallback installed the browser without its system libraries.",
+  "fix": "Build from the official Playwright Docker image, keeping its tag in step with the playwright package version.",
+  "apply": "FROM mcr.microsoft.com/playwright:v1.60.0-jammy",
+  "affected": "Playwright 1.60.0 on Railway Nixpacks, June 2026",
+  "sources": [],
+  "tags": [
+    "docker",
+    "build"
+  ],
+  "verified_on": "2026-06-22",
+  "status": "stale",
+  "confirmations": 0,
+  "trust": 50
+}

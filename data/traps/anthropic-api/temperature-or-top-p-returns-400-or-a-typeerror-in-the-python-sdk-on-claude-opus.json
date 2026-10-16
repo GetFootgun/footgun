@@ -1,0 +1,29 @@
+{
+  "id": "fg-0478",
+  "provider": "anthropic-api",
+  "surface_type": "sdk",
+  "surface_name": "Messages API sampling parameters, anthropic Python SDK",
+  "title": "temperature or top_p returns 400, or a TypeError in the Python SDK, on Claude Opus 4.7 and later",
+  "symptoms": [
+    "400 invalid_request_error naming temperature, top_p, or top_k",
+    "TypeError from client.messages.create when temperature is passed (anthropic Python SDK 1.0 and later)",
+    "temperature=0 kept for determinism breaks the request after a model upgrade"
+  ],
+  "cause": "Any non-default temperature, top_p, or top_k is rejected on Opus 4.7 and later and on Haiku 5.5, and the Python SDK from 1.0 no longer defines these arguments at all. Haiku 5.5 accepts only the defaults, temperature 1 or top_p 0.99, and never both.",
+  "fix": "Delete temperature, top_p, and top_k from every request and steer behavior through the prompt. Note that temperature 0 never guaranteed identical outputs anyway.",
+  "apply": "params = {k: v for k, v in params.items() if k not in (\"temperature\", \"top_p\", \"top_k\")}\nmsg = client.messages.create(**params)",
+  "affected": "Claude Opus 4.7, 4.8, 5, 5.5, Fable 5 and 5.1, Haiku 5.5; anthropic Python SDK 1.0 and later; as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/models/opus-5-5/migration-guide",
+    "https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide"
+  ],
+  "tags": [
+    "sampling",
+    "migration",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,23 @@
+{
+  "id": "fg-0103",
+  "provider": "wordpress",
+  "surface_type": "infra",
+  "surface_name": "WP Rocket, Delay JavaScript Execution and core inline scripts",
+  "title": "'wp.data is undefined' JavaScript error on pages using WP Rocket delay JS",
+  "symptoms": [
+    "Uncaught TypeError from the inline wp-data-js-after script calling wp.data.use",
+    "Session replay tools flag a code error on every page view"
+  ],
+  "cause": "Delay and defer reorder a core inline script so it runs before the script it depends on.",
+  "fix": "Dequeue the inline after-script on the front end if nothing there needs it, or exclude the dependency from delay.",
+  "apply": "$strip = function () { wp_scripts()->add_data('wp-data', 'after', []); }; add_action('wp_enqueue_scripts', $strip, 9999); add_action('wp_print_footer_scripts', $strip, 1); then confirm document.getElementById('wp-data-js-after') is null",
+  "affected": "WP Rocket delay JS, August 2026",
+  "sources": [],
+  "tags": [
+    "javascript"
+  ],
+  "verified_on": "2026-08-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

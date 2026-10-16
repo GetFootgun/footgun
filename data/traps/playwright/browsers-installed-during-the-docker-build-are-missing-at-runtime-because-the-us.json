@@ -1,0 +1,29 @@
+{
+  "id": "fg-0313",
+  "provider": "playwright",
+  "surface_type": "infra",
+  "surface_name": "PLAYWRIGHT_BROWSERS_PATH",
+  "title": "Browsers installed during the Docker build are missing at runtime because the user or PLAYWRIGHT_BROWSERS_PATH changed",
+  "symptoms": [
+    "Executable doesn't exist at /home/node/.cache/ms-playwright/chromium-1208/chrome-linux/chrome",
+    "npx playwright install ran as root in the build stage but the app runs as a non-root user",
+    "A multi-stage build copies node_modules but not the browser cache"
+  ],
+  "cause": "Browsers go to the current user's cache folder unless PLAYWRIGHT_BROWSERS_PATH is set, and the runtime looks in the same per-user default. A different user, HOME, or a missing env var at runtime points the lookup at an empty folder.",
+  "fix": "Set PLAYWRIGHT_BROWSERS_PATH to one shared folder for both the install step and the runtime, and copy that folder into the final stage. Use 0 to keep browsers inside node_modules instead. The variable does not move branded Chrome or Edge installs.",
+  "apply": "ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright\nRUN npx playwright install --with-deps chromium && chmod -R o+rx /ms-playwright\n# final stage\nCOPY --from=build /ms-playwright /ms-playwright\nENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright",
+  "affected": "All Playwright versions in Docker, CI caches and multi-user hosts",
+  "sources": [
+    "https://playwright.dev/docs/browsers",
+    "https://github.com/microsoft/playwright/issues/31316"
+  ],
+  "tags": [
+    "docker",
+    "install",
+    "env-vars"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,24 @@
+{
+  "id": "fg-0106",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "WooCommerce REST API, product meta",
+  "title": "Yoast fields on WooCommerce products can be set through wc/v3 but not wp/v2",
+  "symptoms": [
+    "wp/v2/product exposes no Yoast meta",
+    "Product SEO title cannot be set through the core endpoint"
+  ],
+  "cause": "The WooCommerce v3 products endpoint accepts arbitrary meta_data, including Yoast keys, with no registration. The core product endpoint does not expose them.",
+  "fix": "Write product SEO fields through wc/v3 meta_data.",
+  "apply": "PUT /?rest_route=/wc/v3/products/<id> {\"meta_data\":[{\"key\":\"_yoast_wpseo_title\",\"value\":\"...\"},{\"key\":\"_yoast_wpseo_metadesc\",\"value\":\"...\"}]}",
+  "affected": "WooCommerce REST API v3 with Yoast SEO Premium, September 2026",
+  "sources": [],
+  "tags": [
+    "seo",
+    "woocommerce"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0371",
+  "provider": "zapier",
+  "surface_type": "tool",
+  "surface_name": "Formatter date and time",
+  "title": "Dates from a Zapier Formatter step are off by several hours",
+  "symptoms": [
+    "Event times shifted by the UTC offset",
+    "9:00 local becomes 9:00 UTC in the destination app",
+    "Correct in some Zaps, wrong in others"
+  ],
+  "cause": "Formatter assumes the input is UTC when From Timezone is empty and outputs UTC by default, and a new account timezone is UTC until changed.",
+  "fix": "Set From Format, From Timezone and To Timezone on every date transform, and set the account or Zap timezone.",
+  "apply": "Formatter > Date / Time > Format: From Format = YYYY-MM-DD HH:mm, From Timezone = America/Chicago, To Timezone = America/Chicago",
+  "affected": "Formatter by Zapier, all plans, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/8496257974029-Modify-date-and-time-formats-in-Zap-workflows",
+    "https://help.zapier.com/hc/en-us/articles/8496215472653-Zap-dates-or-times-are-incorrect"
+  ],
+  "tags": [
+    "formatter",
+    "timezone",
+    "dates"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

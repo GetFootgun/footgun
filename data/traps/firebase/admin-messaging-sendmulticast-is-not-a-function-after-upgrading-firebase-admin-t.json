@@ -1,0 +1,30 @@
+{
+  "id": "fg-0185",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "firebase-admin Cloud Messaging",
+  "title": "admin.messaging().sendMulticast is not a function after upgrading firebase-admin to v13",
+  "symptoms": [
+    "TypeError: admin.messaging(...).sendMulticast is not a function",
+    "sendToDevice, sendToTopic, and sendAll are also undefined",
+    "Push code broke on an npm update with no other change"
+  ],
+  "cause": "firebase-admin 13.0.0 removed the FCM methods built on the legacy HTTP API, which Google shut down, including sendAll, sendMulticast, sendToDevice, sendToDeviceGroup, sendToTopic and sendToCondition.",
+  "fix": "Use send for one message and sendEachForMulticast or sendEach for batches, with the HTTP v1 message shape.",
+  "apply": "import { getMessaging } from 'firebase-admin/messaging';\nconst res = await getMessaging().sendEachForMulticast({\n  tokens,\n  notification: { title: 'Hi', body: 'There' },\n  data: { orderId: '42' },\n});\nres.responses.forEach((r, i) => { if (!r.success) console.warn(tokens[i], r.error?.code); });",
+  "affected": "firebase-admin 13.0.0 and later (released 2024-11-12)",
+  "sources": [
+    "https://firebase.google.com/support/release-notes/admin/node",
+    "https://github.com/firebase/firebase-admin-node/pull/2759"
+  ],
+  "tags": [
+    "fcm",
+    "push",
+    "firebase-admin",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0179",
+  "provider": "aws",
+  "surface_type": "api",
+  "surface_name": "S3 Object Ownership",
+  "title": "PutObject with ACL public-read fails with AccessControlListNotSupported on a new S3 bucket",
+  "symptoms": [
+    "AccessControlListNotSupported: The bucket does not allow ACLs",
+    "400 on uploads that pass ACL: 'public-read' or --acl public-read",
+    "Same upload code works against an older bucket"
+  ],
+  "cause": "New buckets default to the Bucket owner enforced ownership setting, which disables ACLs. Any request that sets an ACL other than bucket-owner-full-control is rejected.",
+  "fix": "Drop the ACL parameter and grant read access with a bucket policy or CloudFront instead. Only switch Object Ownership back to an ACL mode if you truly need per-object ACLs.",
+  "apply": "await s3.send(new PutObjectCommand({ Bucket, Key, Body, ContentType }));  // no ACL\n\n# public read through a bucket policy (Block Public Access must allow it)\naws s3api put-bucket-policy --bucket my-bucket --policy '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::my-bucket/*\"}]}'",
+  "affected": "S3 buckets created with default settings since the rollout that began 2023-04-05, which made Bucket owner enforced the default",
+  "sources": [
+    "https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html",
+    "https://aws.amazon.com/about-aws/whats-new/2023/04/amazon-s3-two-security-best-practices-buckets-default/"
+  ],
+  "tags": [
+    "s3",
+    "acl",
+    "permissions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

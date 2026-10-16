@@ -1,0 +1,28 @@
+{
+  "id": "fg-0225",
+  "provider": "github-actions",
+  "surface_type": "infra",
+  "surface_name": "Cache scope across branches",
+  "title": "Cache saved on one branch or pull request is a miss on sibling branches",
+  "symptoms": [
+    "Cache not found for input keys on a new branch although the same key exists",
+    "Every pull request starts cold",
+    "Caches saved in PR runs are never reused after merge"
+  ],
+  "cause": "A run can only restore caches from its own branch, the default branch, and for pull requests the base branch. Caches written by pull request runs are scoped to the merge ref and only reusable by reruns of that PR.",
+  "fix": "Populate the cache from a workflow on the default branch, for example on push to main or a schedule, so every branch can restore it.",
+  "apply": "on:\n  push:\n    branches: [main]\n# same actions/cache step and key as the PR workflow",
+  "affected": "GitHub Actions dependency caching, as of October 2026",
+  "sources": [
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching"
+  ],
+  "tags": [
+    "cache",
+    "branches",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

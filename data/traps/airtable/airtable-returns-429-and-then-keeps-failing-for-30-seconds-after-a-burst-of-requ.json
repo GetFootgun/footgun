@@ -1,0 +1,30 @@
+{
+  "id": "fg-0432",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Rate limits",
+  "title": "Airtable returns 429 and then keeps failing for 30 seconds after a burst of requests to one base",
+  "symptoms": [
+    "429 RATE_LIMIT_REACHED",
+    "Rate limit exceeded. Please try again later",
+    "Parallel sync workers stall for half a minute at a time"
+  ],
+  "cause": "The API allows 5 requests per second per base and 50 per second across all traffic from one user's tokens. Going over earns a 30 second penalty, so fast retries extend the outage.",
+  "fix": "Queue requests per base at 5 per second or fewer, batch writes 10 records at a time, and wait at least 30 seconds after a 429 before retrying.",
+  "apply": "const sleep = ms => new Promise(r => setTimeout(r, ms));\nfor (const batch of batches) { await base(\"Table\").update(batch); await sleep(220); }\n// on 429: await sleep(30000) before the next call",
+  "affected": "Airtable Web API, limits as published 2026-10 (5 per second per base, 50 per second per user token)",
+  "sources": [
+    "https://airtable.com/developers/web/api/rate-limits",
+    "https://airtable.com/developers/web/api/errors",
+    "https://github.com/Airtable/airtable.js/issues/47"
+  ],
+  "tags": [
+    "rate-limit",
+    "429",
+    "throttling"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0441",
+  "provider": "discord",
+  "surface_type": "infra",
+  "surface_name": "Invalid request limit",
+  "title": "Discord bot gets temporarily blocked by Cloudflare after a loop of 401, 403 or 429 responses",
+  "symptoms": [
+    "Every request fails for a while, including to unrelated routes",
+    "Error pages from Cloudflare instead of JSON from Discord",
+    "Block starts after a bug kept retrying a deleted webhook or a missing permission"
+  ],
+  "cause": "More than 10,000 invalid requests (401, 403 or 429) in 10 minutes triggers a temporary IP restriction. Shared-scope 429s do not count, but retry loops on bad tokens, missing permissions or 404 webhooks do.",
+  "fix": "Stop calling a webhook after a 404, check permissions before calling, and back off on 429 using retry_after and the X-RateLimit-Scope header instead of retrying at once.",
+  "apply": "if (res.status === 429) {\n  const { retry_after } = await res.json();\n  await new Promise(r => setTimeout(r, retry_after * 1000));\n} else if (res.status === 404) {\n  disableWebhook(webhookId);\n}",
+  "affected": "Discord REST API, all bots and webhooks, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/topics/rate-limits"
+  ],
+  "tags": [
+    "rate-limit",
+    "cloudflare",
+    "retries"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

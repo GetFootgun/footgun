@@ -1,0 +1,24 @@
+{
+  "id": "fg-0086",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Complianz, add documents to menu wizard",
+  "title": "Complianz 'add documents to menu' writes a REST URL into the menu item",
+  "symptoms": [
+    "Cookie Policy menu link points at /wp-json/complianz/v1/do_action/save_documents_menu_data?_locale=user",
+    "rest_no_route for visitors on every page"
+  ],
+  "cause": "The wizard saved its own admin request URL as the custom link. The _locale=user parameter gives it away as an admin request.",
+  "fix": "Create a page containing the document shortcode and point the menu item at that page.",
+  "apply": "POST /wp-json/wp/v2/menu-items/<id> {\"type\":\"post_type\",\"object\":\"page\",\"object_id\":<page id>}; page content [cmplz-document type=\"cookie-statement\" region=\"us\"]",
+  "affected": "Complianz GDPR/CCPA premium, August 2026",
+  "sources": [],
+  "tags": [
+    "broken-links",
+    "plugins"
+  ],
+  "verified_on": "2026-08-07",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

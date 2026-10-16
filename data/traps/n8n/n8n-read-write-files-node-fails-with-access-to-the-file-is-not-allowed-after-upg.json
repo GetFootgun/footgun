@@ -1,0 +1,30 @@
+{
+  "id": "fg-0348",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Read/Write Files from Disk node",
+  "title": "n8n Read/Write Files node fails with 'Access to the file is not allowed' after upgrading to 2.0",
+  "symptoms": [
+    "Access to the file is not allowed. Allowed paths: /home/node/.n8n-files",
+    "Mounted volume paths that worked in 1.x are rejected",
+    "Read Binary Files node fails on the same paths"
+  ],
+  "cause": "n8n 2.0 sets N8N_RESTRICT_FILE_ACCESS_TO to ~/.n8n-files by default, so file nodes refuse paths outside it.",
+  "fix": "Mount data under /home/node/.n8n-files, or list the extra directories in N8N_RESTRICT_FILE_ACCESS_TO separated by semicolons.",
+  "apply": "N8N_RESTRICT_FILE_ACCESS_TO=/home/node/.n8n-files;/data/shared",
+  "affected": "n8n 2.0 and later",
+  "sources": [
+    "https://docs.n8n.io/2-0-breaking-changes/",
+    "https://docs.n8n.io/hosting/configuration/environment-variables/security/",
+    "https://github.com/n8n-io/n8n/issues/23781"
+  ],
+  "tags": [
+    "upgrade",
+    "files",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

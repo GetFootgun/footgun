@@ -1,0 +1,28 @@
+{
+  "id": "fg-0165",
+  "provider": "twilio",
+  "surface_type": "sdk",
+  "surface_name": "twilio-node client constructor",
+  "title": "Twilio client throws 'accountSid must start with AC' when created with an API key",
+  "symptoms": [
+    "Error: accountSid must start with AC",
+    "The given SID indicates an API Key which requires the accountSid to be passed as an additional option"
+  ],
+  "cause": "The helper treats its first argument as both the username and the account SID unless an accountSid option is given. An API key SID starts with SK, so validation fails.",
+  "fix": "Pass the key SID and secret as the first two arguments and the real account SID in the options object.",
+  "apply": "const client = twilio(process.env.TWILIO_API_KEY_SID, process.env.TWILIO_API_KEY_SECRET, { accountSid: process.env.TWILIO_ACCOUNT_SID });",
+  "affected": "twilio-node 3.x through 6.2.0, current in October 2026",
+  "sources": [
+    "https://github.com/twilio/twilio-node/issues/600",
+    "https://github.com/twilio/twilio-node/blob/main/src/base/BaseTwilio.ts"
+  ],
+  "tags": [
+    "api-keys",
+    "auth",
+    "node"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

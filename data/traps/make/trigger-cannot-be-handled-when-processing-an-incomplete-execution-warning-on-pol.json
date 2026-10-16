@@ -1,0 +1,25 @@
+{
+  "id": "fg-0055",
+  "provider": "make",
+  "surface_type": "infra",
+  "surface_name": "Scenario scheduler, polling triggers",
+  "title": "'Trigger cannot be handled when processing an incomplete execution' warning on polling scenarios",
+  "symptoms": [
+    "Email subject: Encountered warnings in scenario",
+    "Trigger cannot be handled when processing an incomplete execution",
+    "Several unrelated scenarios warn within the same minute"
+  ],
+  "cause": "A scheduled tick tried to start while the previous run was still finishing, so Make skipped that one cycle. The warning run uses 1 operation and 0 transfer and touches no data. The trigger resumes from the same position on the next cycle.",
+  "fix": "Take no action when the scenario has no incomplete executions, is not waiting, is active and has nextExec set. Do not deactivate and reactivate: on a polling trigger that can reset its position and skip real items. Act only if the warning turns daily or incomplete executions start to pile up.",
+  "apply": "GET /api/v2/scenarios/{id}: expect dlqCount 0, iswaiting false, isActive true, nextExec set.",
+  "affected": "Make, polling scenarios, September 2026",
+  "sources": [],
+  "tags": [
+    "false-alarm",
+    "scheduler"
+  ],
+  "verified_on": "2026-09-04",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

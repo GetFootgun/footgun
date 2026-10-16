@@ -1,0 +1,29 @@
+{
+  "id": "fg-0372",
+  "provider": "zapier",
+  "surface_type": "billing",
+  "surface_name": "Replay",
+  "title": "Replaying a whole Zap run creates duplicate records and charges tasks again",
+  "symptoms": [
+    "Duplicate rows or contacts after replaying an errored run",
+    "Task usage jumps after a bulk replay",
+    "Replay button missing for runs older than 60 days"
+  ],
+  "cause": "Replaying an entire run reruns every step, including the ones that already succeeded, and those count as tasks again. Replay from history reruns only failed steps, needs the Zap on, and only works within 60 days of the trigger.",
+  "fix": "Replay failed steps rather than whole runs, and make create steps idempotent with a Find or Create search first.",
+  "apply": "Zap history > open run > Replay (errored steps only), not Replay entire Zap run",
+  "affected": "Zapier paid plans with replay, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/19220226086797-What-is-replay",
+    "https://help.zapier.com/hc/en-us/articles/8496196837261-How-is-task-usage-measured-in-Zapier"
+  ],
+  "tags": [
+    "replay",
+    "duplicates",
+    "tasks"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

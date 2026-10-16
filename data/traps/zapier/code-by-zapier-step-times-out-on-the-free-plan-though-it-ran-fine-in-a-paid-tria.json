@@ -1,0 +1,29 @@
+{
+  "id": "fg-0369",
+  "provider": "zapier",
+  "surface_type": "tool",
+  "surface_name": "Code by Zapier runtime",
+  "title": "Code by Zapier step times out on the Free plan though it ran fine in a paid trial",
+  "symptoms": [
+    "Code step fails with a timeout error in Zap history",
+    "Same code works during the trial and fails after it ends",
+    "fetch calls inside the step never complete"
+  ],
+  "cause": "Code steps run for 1 second on Free, 30 seconds on Professional and Team, and 2 minutes on Enterprise, and a trial gets the limits of the plan being trialed.",
+  "fix": "Keep Code steps short on Free, move HTTP calls to a Webhooks or app step, or use extended runtimes on paid plans.",
+  "apply": "Zap editor > Code by Zapier step > Open in Code Editor > Runtime icon > Extended runtime",
+  "affected": "Code by Zapier, all plans, as of 2026-10",
+  "sources": [
+    "https://help.zapier.com/hc/en-us/articles/45405528551181-Using-Code-by-Zapier",
+    "https://help.zapier.com/hc/en-us/articles/45405513032461-Configure-extended-runtimes-for-Code-steps"
+  ],
+  "tags": [
+    "code",
+    "timeouts",
+    "plans"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,26 @@
+{
+  "id": "fg-0516",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "User Rules scope",
+  "title": "Cursor User Rules have no effect on Inline Edit (Cmd+K) or Tab completions",
+  "symptoms": [
+    "Cmd+K edits ignore style preferences that Agent follows",
+    "Tab suggestions ignore the conventions in rules"
+  ],
+  "cause": "User Rules are used only by Agent (Chat), and rules in general do not affect Tab or the other AI features.",
+  "fix": "Enforce must-have conventions in tooling that runs on every change, such as a formatter and linter, and restate the preference in the Cmd+K prompt.",
+  "apply": "npx prettier --write . && npx eslint --fix .",
+  "affected": "Cursor editor, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/rules"
+  ],
+  "tags": [
+    "rules",
+    "inline-edit"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0497",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "codex exec Git repository check",
+  "title": "codex exec exits 1 with 'Not inside a trusted directory and --skip-git-repo-check was not specified'",
+  "symptoms": [
+    "Not inside a trusted directory and --skip-git-repo-check was not specified.",
+    "Happens in Docker or CI workspaces without a .git folder, even with --yolo"
+  ],
+  "cause": "Codex requires commands to run inside a Git repository as a guard against destructive changes, and the full-access flags do not lift that check.",
+  "fix": "Run inside a Git repository (git init works for scratch workspaces), or add --skip-git-repo-check in an environment you control.",
+  "apply": "codex exec --skip-git-repo-check --sandbox workspace-write \"task\"",
+  "affected": "Codex CLI codex exec, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/non-interactive-mode",
+    "https://github.com/openai/codex/issues/7522"
+  ],
+  "tags": [
+    "exec",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,25 @@
+{
+  "id": "fg-0043",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Google Email app, Watch emails trigger",
+  "title": "Gmail watch scenario that emails an alert to its own mailbox loops forever",
+  "symptoms": [
+    "The same alert email arrives every polling interval",
+    "The alert subject nests one level deeper on each copy",
+    "Each looping run costs 3 operations"
+  ],
+  "cause": "The Gmail watch trigger has no deduplication; its position only moves forward, so a message the scenario sends to the mailbox it watches is always new. If the alert subject contains the trigger's filter phrase, the alert matches its own trigger. Gmail subject search is case-insensitive and matches phrases, so ordinary words in the alert can match.",
+  "fix": "Add a filter right after the trigger that drops your alert prefix, and never copy the incoming subject into an alert subject (put it in the body). Better still, use a Gmail search with a processed label excluded in the query and add the label as the last step. That makes reprocessing idempotent and lets a missed message be picked up again.",
+  "apply": "Filter after the trigger: {{1.subject}} with Text operators: Does not contain (case insensitive) \"Action needed\". Search-based alternative: query subject:\"phrase\" -label:processed newer_than:2d, then Modify email labels add processed at the end.",
+  "affected": "Make Google Email app, google-email:triggerWatchNewEmails, August 2026",
+  "sources": [],
+  "tags": [
+    "loop",
+    "email"
+  ],
+  "verified_on": "2026-08-10",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

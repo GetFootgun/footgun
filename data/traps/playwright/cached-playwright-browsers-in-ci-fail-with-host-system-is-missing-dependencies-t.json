@@ -1,0 +1,29 @@
+{
+  "id": "fg-0314",
+  "provider": "playwright",
+  "surface_type": "infra",
+  "surface_name": "Caching browsers in CI",
+  "title": "Cached Playwright browsers in CI fail with 'Host system is missing dependencies to run browsers'",
+  "symptoms": [
+    "Host system is missing dependencies to run browsers.",
+    "Failures start only on cache-hit runs that skip npx playwright install --with-deps",
+    "Executable doesn't exist after a version bump because the cache key ignores the Playwright version"
+  ],
+  "cause": "A cache can restore the browser folder but not the system libraries that install --with-deps adds through apt. Playwright's docs advise against caching browsers for that reason.",
+  "fix": "Drop the cache and run install --with-deps every time, or key the cache on the exact Playwright version and still run install-deps on a cache hit.",
+  "apply": "- run: npx playwright install --with-deps\n# if you keep a cache, still run this on a hit:\n- run: npx playwright install-deps",
+  "affected": "All Playwright versions on GitHub Actions and other CI runners",
+  "sources": [
+    "https://playwright.dev/docs/ci",
+    "https://github.com/microsoft/playwright/issues/7249"
+  ],
+  "tags": [
+    "ci",
+    "cache",
+    "install"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

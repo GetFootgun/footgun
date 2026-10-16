@@ -1,0 +1,30 @@
+{
+  "id": "fg-0382",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "z.request throwForStatus",
+  "title": "Zapier z.request throws on every 4xx before your code can read the error body",
+  "symptoms": [
+    "ResponseError thrown from z.request for a 4xx status",
+    "Custom error parsing after z.request never runs",
+    "Upgrading an old integration to core 10 or later changes error messages"
+  ],
+  "cause": "Since core 10.0.0 z.request calls throwForStatus on every response of 400 or more before returning it, unless skipThrowForStatus is set.",
+  "fix": "Set skipThrowForStatus on requests where you need the body, then throw a z.errors.Error with a readable message.",
+  "apply": "const res = await z.request({ url, method: 'POST', body, skipThrowForStatus: true });\nif (res.status >= 400) throw new z.errors.Error(res.json.message, 'ApiError', res.status);",
+  "affected": "zapier-platform-core 10.0.0 and later",
+  "sources": [
+    "https://docs.zapier.com/platform/reference/cli-docs",
+    "https://github.com/zapier/zapier-platform/blob/main/packages/core/src/http-middlewares/after/throw-for-status.js",
+    "https://github.com/zapier/zapier-platform/blob/main/packages/core/src/http-middlewares/after/prepare-response.js"
+  ],
+  "tags": [
+    "errors",
+    "http",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

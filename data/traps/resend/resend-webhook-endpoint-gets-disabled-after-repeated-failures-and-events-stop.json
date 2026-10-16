@@ -1,0 +1,27 @@
+{
+  "id": "fg-0411",
+  "provider": "resend",
+  "surface_type": "api",
+  "surface_name": "Webhook retries",
+  "title": "Resend webhook endpoint gets disabled after repeated failures and events stop",
+  "symptoms": [
+    "Email from Resend saying the webhook endpoint was disabled",
+    "No more email.delivered or email.bounced events",
+    "Same event processed several times before the endpoint was disabled"
+  ],
+  "cause": "Failed deliveries retry on a schedule that runs from immediately to roughly 28 hours later, and an endpoint that keeps failing is disabled automatically. Slow handlers produce repeats that look like duplicates.",
+  "fix": "Return 2xx fast and process in the background, dedupe on svix-id, then re-enable the endpoint in the dashboard and replay the missed messages.",
+  "apply": "Resend dashboard > Webhooks > endpoint > Enable, then open each failed message > Replay",
+  "affected": "Resend webhooks, retry schedule as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/webhooks/retries-and-replays"
+  ],
+  "tags": [
+    "webhooks",
+    "retries"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

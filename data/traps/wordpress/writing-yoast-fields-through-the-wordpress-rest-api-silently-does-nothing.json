@@ -1,0 +1,24 @@
+{
+  "id": "fg-0105",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "REST API, Yoast SEO post meta",
+  "title": "Writing Yoast fields through the WordPress REST API silently does nothing",
+  "symptoms": [
+    "POST /wp/v2/posts/{id} with meta returns 200 but the Yoast title is unchanged",
+    "The meta key reads back absent"
+  ],
+  "cause": "Yoast's meta keys such as _yoast_wpseo_title, _yoast_wpseo_metadesc and _yoast_wpseo_focuskw are not registered for REST, so writes to them are dropped. An unregistered key reads back absent, which looks the same as an empty field.",
+  "fix": "Register each key with show_in_rest for the post type, then write and confirm through yoast_head_json.",
+  "apply": "foreach (['_yoast_wpseo_title','_yoast_wpseo_metadesc','_yoast_wpseo_focuskw'] as $k) { register_post_meta('post', $k, ['show_in_rest' => true, 'single' => true, 'type' => 'string', 'auth_callback' => fn() => current_user_can('edit_posts')]); }",
+  "affected": "WordPress REST API with Yoast SEO Premium, August 2026",
+  "sources": [],
+  "tags": [
+    "silent-failure",
+    "seo"
+  ],
+  "verified_on": "2026-08-07",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,23 @@
+{
+  "id": "fg-0072",
+  "provider": "railway",
+  "surface_type": "infra",
+  "surface_name": "Cron services, deploy",
+  "title": "Deploying a Railway cron service does not run the job",
+  "symptoms": [
+    "Deploy reports SUCCESS with no run in the logs"
+  ],
+  "cause": "A cron service builds and then waits for its schedule; railway up and redeploy do not trigger an immediate run.",
+  "fix": "Test with railway run, which runs the command locally with the service's variables.",
+  "apply": "railway run node job.js",
+  "affected": "Railway cron services, August and September 2026",
+  "sources": [],
+  "tags": [
+    "cron",
+    "testing"
+  ],
+  "verified_on": "2026-08-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

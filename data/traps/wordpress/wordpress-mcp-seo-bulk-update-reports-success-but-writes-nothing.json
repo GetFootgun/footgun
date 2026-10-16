@@ -1,0 +1,25 @@
+{
+  "id": "fg-0100",
+  "provider": "wordpress",
+  "surface_type": "tool",
+  "surface_name": "mcp-wordpress wp_seo_bulk_update_metadata",
+  "title": "WordPress MCP SEO bulk update reports success but writes nothing",
+  "symptoms": [
+    "success: 1, failed: 0",
+    "Yoast title stays default and description stays empty"
+  ],
+  "cause": "The bulk SEO tool reports success without writing Yoast meta. The same server's live-data tool also reports no SEO plugin while Yoast is active.",
+  "fix": "Write the Yoast keys through REST and confirm through yoast_head_json.",
+  "apply": "GET /wp-json/wp/v2/posts/<id>?_fields=yoast_head_json and check title and description",
+  "affected": "mcp-wordpress, September 2026",
+  "sources": [],
+  "tags": [
+    "mcp",
+    "silent-failure",
+    "seo"
+  ],
+  "verified_on": "2026-09-02",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

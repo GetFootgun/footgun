@@ -1,0 +1,29 @@
+{
+  "id": "fg-0213",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Workers environment variables",
+  "title": "process.env is empty in a Cloudflare Worker while env.MY_VAR works inside fetch",
+  "symptoms": [
+    "process.env.API_KEY is undefined in a deployed Worker",
+    "ReferenceError: process is not defined",
+    "Libraries that read process.env at import time get no config"
+  ],
+  "cause": "Workers expose vars and secrets through the env argument, and process.env is only filled when nodejs_compat is on and the compatibility date is 2025-04-01 or later. Module scope code has no env argument at all.",
+  "fix": "Read env from the handler, or import env from cloudflare:workers for module scope access. For libraries that need process.env, enable nodejs_compat with a date of 2025-04-01 or later.",
+  "apply": "import { env } from 'cloudflare:workers';\nconst apiKey = env.API_KEY;\n\n# wrangler.toml\ncompatibility_date = \"2025-04-01\"\ncompatibility_flags = [\"nodejs_compat\"]",
+  "affected": "Cloudflare Workers, process.env population default on for compatibility_date 2025-04-01 or later with nodejs_compat",
+  "sources": [
+    "https://developers.cloudflare.com/workers/configuration/environment-variables/",
+    "https://developers.cloudflare.com/workers/configuration/compatibility-flags/"
+  ],
+  "tags": [
+    "workers",
+    "env",
+    "nodejs"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

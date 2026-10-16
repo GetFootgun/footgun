@@ -1,0 +1,28 @@
+{
+  "id": "fg-0461",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Pagination",
+  "title": "Notion query or list call returns exactly 100 results and the rest are missing",
+  "symptoms": [
+    "results.length is 100 and has_more is true",
+    "Block children list stops at 100 blocks on long pages",
+    "Export script misses rows past the first page"
+  ],
+  "cause": "List and query endpoints return at most 100 items per call and expect next_cursor to be passed back as start_cursor. Code that reads one response only ever sees the first page.",
+  "fix": "Loop on has_more and next_cursor, or use the SDK pagination helpers.",
+  "apply": "import { collectPaginatedAPI } from \"@notionhq/client\";\nconst blocks = await collectPaginatedAPI(notion.blocks.children.list, { block_id: pageId });",
+  "affected": "Notion REST API, all list and query endpoints, as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/intro",
+    "https://github.com/makenotion/notion-sdk-js"
+  ],
+  "tags": [
+    "pagination",
+    "sdk"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

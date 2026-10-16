@@ -1,0 +1,29 @@
+{
+  "id": "fg-0181",
+  "provider": "aws",
+  "surface_type": "api",
+  "surface_name": "S3 presigned URLs",
+  "title": "S3 presigned URL expires after an hour or a few hours even though you set expiresIn to 7 days",
+  "symptoms": [
+    "ExpiredToken: The provided token has expired",
+    "Presigned link works at first, then returns 403 long before its X-Amz-Expires time",
+    "Only URLs generated in Lambda, ECS, EC2, or after AssumeRole are affected"
+  ],
+  "cause": "A presigned URL is only valid while the credentials that signed it are valid. Role and STS credentials expire on their own schedule, and the URL dies with them.",
+  "fix": "Sign long-lived URLs with credentials that live as long as the URL, or keep URLs short and mint a fresh one on demand from your backend. For AssumeRole, raise the session duration if a few hours is enough.",
+  "apply": "// generate on request instead of storing the URL\napp.get('/files/:key', async (req, res) => {\n  const url = await getSignedUrl(s3, new GetObjectCommand({ Bucket, Key: req.params.key }), { expiresIn: 300 });\n  res.redirect(url);\n});",
+  "affected": "All S3 presigned URLs signed with IAM role, instance profile, ECS task role, Lambda execution role, or STS credentials; maximum is 7 days only for IAM user keys with SigV4",
+  "sources": [
+    "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html"
+  ],
+  "tags": [
+    "s3",
+    "presigned-url",
+    "iam",
+    "credentials"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

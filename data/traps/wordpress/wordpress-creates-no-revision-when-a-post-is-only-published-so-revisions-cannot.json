@@ -1,0 +1,23 @@
+{
+  "id": "fg-0097",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Post revisions",
+  "title": "WordPress creates no revision when a post is only published, so revisions cannot show who published it",
+  "symptoms": [
+    "Only the creation revision exists on a post someone later published"
+  ],
+  "cause": "A status-only transition, such as clicking Publish without editing, does not add a revision.",
+  "fix": "Use an audit log plugin or compare post_modified with post_date_gmt; do not infer from revisions who changed a status.",
+  "apply": "GET /wp-json/wp/v2/posts/<id>?context=edit and compare modified_gmt with date_gmt",
+  "affected": "WordPress core, September 2026",
+  "sources": [],
+  "tags": [
+    "audit",
+    "misleading-data"
+  ],
+  "verified_on": "2026-09-22",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

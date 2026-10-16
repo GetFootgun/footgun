@@ -1,0 +1,29 @@
+{
+  "id": "fg-0339",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "Code node $env access",
+  "title": "$env in an n8n Code node or expression returns 'access to env vars denied' after 2.0",
+  "symptoms": [
+    "[ERROR: access to env vars denied]",
+    "$env.MY_VAR worked in 1.x and fails after upgrading",
+    "Setting the variable on the main container has no effect with external task runners"
+  ],
+  "cause": "n8n 2.0 flipped N8N_BLOCK_ENV_ACCESS_IN_NODE to true. With external task runners, Code node code runs in the runner container, so the setting and the variables must exist there too.",
+  "fix": "Prefer credentials or Variables over env access. If you need it, set N8N_BLOCK_ENV_ACCESS_IN_NODE=false on main and on the runner, and pass the variables to the runner container.",
+  "apply": "services:\n  n8n:\n    environment: [N8N_BLOCK_ENV_ACCESS_IN_NODE=false]\n  n8n-runners:\n    environment: [N8N_BLOCK_ENV_ACCESS_IN_NODE=false, MY_VAR=value]",
+  "affected": "n8n 2.0 and later; a UI false positive persisted until 2.29.0",
+  "sources": [
+    "https://docs.n8n.io/2-0-breaking-changes/",
+    "https://github.com/n8n-io/n8n/issues/29603"
+  ],
+  "tags": [
+    "upgrade",
+    "code-node",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

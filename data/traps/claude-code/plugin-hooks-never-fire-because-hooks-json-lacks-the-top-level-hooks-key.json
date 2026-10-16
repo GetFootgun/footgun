@@ -1,0 +1,27 @@
+{
+  "id": "fg-0492",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Plugins, hooks file format",
+  "title": "Plugin hooks never fire because hooks.json lacks the top-level \"hooks\" key",
+  "symptoms": [
+    "Plugin is enabled but none of its hooks run",
+    "A hooks file that starts with {\"PostToolUse\": [...]} fails to load"
+  ],
+  "cause": "A hooks file, including the plugin's hooks/hooks.json, must wrap the event map in a top-level \"hooks\" key, and a bare event map fails to load. Inline hooks inside plugin.json are the opposite: the event map with no wrapper.",
+  "fix": "Wrap the event map in a hooks key, then run claude plugin validate on the plugin folder.",
+  "apply": "{ \"hooks\": { \"PostToolUse\": [ { \"matcher\": \"Edit|Write\", \"hooks\": [ { \"type\": \"command\", \"command\": \"\\\"${CLAUDE_PLUGIN_ROOT}\\\"/scripts/format.sh\" } ] } ] } }",
+  "affected": "Claude Code plugins, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/plugins-reference"
+  ],
+  "tags": [
+    "plugins",
+    "hooks",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

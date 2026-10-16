@@ -1,0 +1,30 @@
+{
+  "id": "fg-0467",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, preserved thinking signatures",
+  "title": "400 Invalid signature in thinking block: 'The block is bound to a different conversation'",
+  "symptoms": [
+    "messages.N.content.M: Invalid `signature` in `thinking` block. The block is bound to a different conversation.",
+    "Retrying the same request body fails the same way, and count_tokens returns the same 400",
+    "Starts after trimming history, removing an injected reminder, or rebuilding the tools array"
+  ],
+  "cause": "On Fable 5.1, Opus 5.5, Sonnet 5.5, and Haiku 5.5 a replayed thinking block is accepted only while the system field, tools, and earlier messages are unchanged. The check is enforced for accounts created on or after 2026-08-31, so harnesses that edit history break on new accounts first.",
+  "fix": "Keep history append-only and use server-side compaction or context editing for trimming. To recover one request, strip every thinking and redacted_thinking block from the named block onward and retry once, or send the thinking-binding-controls-2026-08-01 beta with prefix_mismatch_behavior drop_block.",
+  "apply": "// header: anthropic-beta: thinking-binding-controls-2026-08-01\nthinking: { type: \"adaptive\", block_binding: { prefix_mismatch_behavior: \"drop_block\" } }",
+  "affected": "Claude Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 5.5; accounts created on or after 2026-08-31, or any request that sets prefix_mismatch_behavior",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/thinking-troubleshooting",
+    "https://github.com/microsoft/vscode/issues/341514",
+    "https://github.com/anomalyco/opencode/issues/51481"
+  ],
+  "tags": [
+    "thinking",
+    "history",
+    "400"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

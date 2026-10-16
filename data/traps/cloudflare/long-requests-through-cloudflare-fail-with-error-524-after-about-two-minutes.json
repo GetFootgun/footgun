@@ -1,0 +1,28 @@
+{
+  "id": "fg-0212",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Proxy read timeout",
+  "title": "Long requests through Cloudflare fail with Error 524 after about two minutes",
+  "symptoms": [
+    "Error 524: A timeout occurred",
+    "Exports or report endpoints fail only when proxied",
+    "Older answers cite 100 seconds while the cutoff is now 125 seconds"
+  ],
+  "cause": "Cloudflare waits 125 seconds for the origin to send response headers before returning 524. Only Enterprise zones can raise this proxy read timeout.",
+  "fix": "Return quickly and finish the work in the background with a job id the client polls, or serve the long endpoint from a DNS only hostname.",
+  "apply": "POST /api/export -> 202 {\"job\":\"abc\"}\nGET  /api/export/abc -> {\"status\":\"done\",\"url\":\"...\"}",
+  "affected": "Cloudflare proxied zones on Free, Pro, and Business; Enterprise can raise the timeout up to 6,000 s",
+  "sources": [
+    "https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-524/"
+  ],
+  "tags": [
+    "timeout",
+    "524",
+    "dns-proxy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

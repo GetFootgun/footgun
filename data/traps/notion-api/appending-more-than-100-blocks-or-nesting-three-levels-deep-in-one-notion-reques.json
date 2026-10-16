@@ -1,0 +1,29 @@
+{
+  "id": "fg-0453",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Append block children",
+  "title": "Appending more than 100 blocks or nesting three levels deep in one Notion request fails with validation_error",
+  "symptoms": [
+    "body failed validation: body.children.length should be ≤ `100`",
+    "400 validation_error when a nested list three levels deep is created in one call",
+    "Long Markdown imports fail while short ones succeed"
+  ],
+  "cause": "Append block children and page creation accept at most 100 blocks per array and only two levels of nesting in a single request. The whole payload is also capped at 1000 block elements and 500KB.",
+  "fix": "Send top-level blocks in batches of 100 and append deeper children in follow-up calls using the block IDs the first call returns.",
+  "apply": "for (let i = 0; i < blocks.length; i += 100) {\n  await notion.blocks.children.append({ block_id: pageId, children: blocks.slice(i, i + 100) });\n}",
+  "affected": "Notion REST API, all versions, as of 2026-10",
+  "sources": [
+    "https://developers.notion.com/reference/patch-block-children",
+    "https://developers.notion.com/reference/request-limits"
+  ],
+  "tags": [
+    "limits",
+    "blocks",
+    "batching"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

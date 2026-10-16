@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "footgun": {
+      "type": "http",
+      "url": "https://getfootgun.com/api/mcp",
+      "headers": { "Authorization": "Bearer ${user_config.api_key}" }
+    }
+  }
+}

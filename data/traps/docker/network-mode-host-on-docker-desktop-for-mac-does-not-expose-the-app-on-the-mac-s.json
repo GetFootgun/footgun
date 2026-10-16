@@ -1,0 +1,28 @@
+{
+  "id": "fg-0265",
+  "provider": "docker",
+  "surface_type": "infra",
+  "surface_name": "Docker Desktop host networking",
+  "title": "network_mode: host on Docker Desktop for Mac does not expose the app on the Mac's localhost",
+  "symptoms": [
+    "curl localhost:3000 on the Mac is refused while the container logs show the server listening",
+    "Port mappings are discarded when the service uses host networking"
+  ],
+  "cause": "On Docker Desktop, host networking means the Linux VM's network unless the opt-in host networking feature is on. That feature needs Desktop 4.34 or later, works only at layer 4 for Linux containers, and is off by default.",
+  "fix": "Publish ports with -p or ports instead of host networking, or turn the feature on in settings on 4.34 or later.",
+  "apply": "Docker Desktop > Settings > Resources > Network > Enable host networking > Apply and restart",
+  "affected": "Docker Desktop for Mac and Windows; unsupported before 4.34, opt-in from 4.34 (2024)",
+  "sources": [
+    "https://docs.docker.com/engine/network/drivers/host/",
+    "https://docs.docker.com/desktop/release-notes/"
+  ],
+  "tags": [
+    "networking",
+    "desktop",
+    "mac"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

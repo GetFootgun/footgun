@@ -1,0 +1,28 @@
+{
+  "id": "fg-0430",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "List records response shape",
+  "title": "Airtable record is missing a field entirely when the checkbox is false or the cell is empty",
+  "symptoms": [
+    "record.fields.Done is undefined instead of false",
+    "TypeError reading a property of undefined for an empty linked record field",
+    "Schema inferred from API rows is missing columns"
+  ],
+  "cause": "List and get responses leave out any field whose value counts as empty, including empty strings, empty arrays and false. An unchecked checkbox and a deleted field look identical in the response.",
+  "fix": "Default every field you read, and get the real column list from the base schema endpoint instead of from returned rows.",
+  "apply": "const done = record.fields[\"Done\"] ?? false;\nconst tags = record.fields[\"Tags\"] ?? [];",
+  "affected": "Airtable Web API, all record read endpoints, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/list-records"
+  ],
+  "tags": [
+    "response-shape",
+    "nulls",
+    "schema"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

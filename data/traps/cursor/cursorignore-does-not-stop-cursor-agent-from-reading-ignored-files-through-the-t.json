@@ -1,0 +1,28 @@
+{
+  "id": "fg-0517",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": ".cursorignore and Agent tools",
+  "title": ".cursorignore does not stop Cursor Agent from reading ignored files through the terminal or MCP tools",
+  "symptoms": [
+    "Agent runs cat on a file listed in .cursorignore and sees its contents",
+    "An MCP tool returns data from an ignored folder"
+  ],
+  "cause": "Cursor blocks ignored files from its own file reads, Tab, Inline Edit, and @ mentions, but terminal commands and MCP tools run outside those controls.",
+  "fix": "Keep real credentials out of the workspace. For the CLI add Read and Shell deny rules; in the editor rely on the sandbox read boundary and Run Mode approvals for shell access.",
+  "apply": "// <project>/.cursor/cli.json\n{ \"permissions\": { \"deny\": [\"Read(config/private/**)\", \"Shell(cat)\"] } }",
+  "affected": "Cursor editor Agent and Cursor CLI, as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/reference/ignore-file",
+    "https://cursor.com/help/customization/ignore-files",
+    "https://cursor.com/docs/cli/reference/permissions"
+  ],
+  "tags": [
+    "ignore",
+    "security"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,26 @@
+{
+  "id": "fg-0137",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Model snapshots, legacy GPT shutdown",
+  "title": "Code calling gpt-3.5-turbo, gpt-4, gpt-4-turbo, o1, o3-mini or o4-mini breaks on 2026-10-23",
+  "symptoms": [
+    "Model ids that coding assistants still suggest by default stop being served",
+    "Requests fail for a model name that worked the week before"
+  ],
+  "cause": "OpenAI retires the legacy GPT snapshots, including gpt-3.5-turbo, gpt-4, gpt-4-turbo, gpt-4o-2024-05-13, o1, o1-pro, o3-mini and o4-mini, on 2026-10-23. Older code and model defaults hardcode these names.",
+  "fix": "Replace each model with its listed substitute: gpt-3.5-turbo and o4-mini move to gpt-5.6-terra; gpt-4, gpt-4-turbo, gpt-4o-2024-05-13, o1 and o3-mini move to gpt-5.6-sol; o1-pro moves to gpt-5.6-sol with reasoning.mode pro; gpt-4.1-nano moves to gpt-5.6-luna. Keep the model id in configuration so the next retirement is a one line change.",
+  "apply": "const REPLACEMENT = {\n  'gpt-3.5-turbo': 'gpt-5.6-terra',\n  'gpt-4': 'gpt-5.6-sol',\n  'gpt-4-turbo': 'gpt-5.6-sol',\n  'gpt-4o-2024-05-13': 'gpt-5.6-sol',\n  'gpt-4.1-nano': 'gpt-5.6-luna',\n  'o1': 'gpt-5.6-sol',\n  'o1-pro': 'gpt-5.6-sol', // with reasoning: { mode: 'pro' }\n  'o3-mini': 'gpt-5.6-sol',\n  'o4-mini': 'gpt-5.6-terra',\n};",
+  "affected": "OpenAI API legacy snapshots, shutdown 2026-10-23; gpt-4o and gpt-4.1 snapshots follow on 2027-01-14",
+  "sources": [
+    "https://developers.openai.com/api/docs/deprecations"
+  ],
+  "tags": [
+    "deprecation",
+    "models"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

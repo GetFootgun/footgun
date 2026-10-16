@@ -1,0 +1,29 @@
+{
+  "id": "fg-0209",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Terraform cloudflare_dns_record",
+  "title": "cloudflare_dns_record apply fails with 'Provider produced inconsistent result' on modified_on after upgrading to 5.26",
+  "symptoms": [
+    "Provider produced inconsistent result after apply ... .modified_on: was ... but now ...",
+    "Every existing record plans + include_shadow_metadata = false",
+    "The records do update in Cloudflare even though apply errors"
+  ],
+  "cause": "Provider 5.26.0 added include_shadow_metadata and planned modified_on as unchanged, so the server side timestamp change looked inconsistent. 5.27.0 was incomplete and 5.28.0 fixed both the spurious diff and the error.",
+  "fix": "Upgrade the provider to 5.28.0 or later and run plan again.",
+  "apply": "terraform {\n  required_providers {\n    cloudflare = { source = \"cloudflare/cloudflare\", version = \">= 5.28.0\" }\n  }\n}",
+  "affected": "terraform-provider-cloudflare 5.26.0 and 5.27.0 (September to October 2026)",
+  "sources": [
+    "https://github.com/cloudflare/terraform-provider-cloudflare/issues/7387",
+    "https://github.com/cloudflare/terraform-provider-cloudflare/releases/tag/v5.28.0"
+  ],
+  "tags": [
+    "terraform",
+    "dns",
+    "regression"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

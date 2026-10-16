@@ -1,0 +1,31 @@
+{
+  "id": "fg-0239",
+  "provider": "vercel",
+  "surface_type": "sdk",
+  "surface_name": "AI SDK streamText error handling",
+  "title": "AI SDK streamText error never reaches try/catch and the chat UI only shows 'An error occurred.'",
+  "symptoms": [
+    "An error occurred.",
+    "Provider 429 or 401 errors leave server logs empty",
+    "try/catch around streamText never fires"
+  ],
+  "cause": "streamText returns immediately and provider errors happen later while the stream is consumed, so they become error parts in the stream instead of exceptions. The UI response helpers mask the message by default so details do not leak to clients.",
+  "fix": "Pass onError to streamText for logging, and pass an onError formatter to the UI stream response if the client should see the reason.",
+  "apply": "const result = streamText({\n  model,\n  messages,\n  onError({ error }) { console.error('streamText failed', error); },\n});\nreturn result.toUIMessageStreamResponse({\n  onError: (error) => (error instanceof Error ? error.message : 'Unknown error'),\n});",
+  "affected": "AI SDK (ai package) 4.x through 7.x, still present in ai 7.0.142; streamText onError exists since ai 4.1.22",
+  "sources": [
+    "https://github.com/vercel/ai/issues/4726",
+    "https://github.com/vercel/ai/issues/4099",
+    "https://github.com/vercel/ai/issues/6008",
+    "https://github.com/vercel/ai/blob/main/packages/ai/src/generate-text/stream-text-result.ts"
+  ],
+  "tags": [
+    "ai-sdk",
+    "streaming",
+    "errors"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

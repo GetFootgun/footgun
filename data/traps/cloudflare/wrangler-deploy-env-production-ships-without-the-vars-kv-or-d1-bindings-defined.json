@@ -1,0 +1,28 @@
+{
+  "id": "fg-0222",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Wrangler environments",
+  "title": "Wrangler deploy --env production ships without the vars, KV, or D1 bindings defined at the top level",
+  "symptoms": [
+    "env.DB is undefined in the production environment Worker",
+    "TypeError: Cannot read properties of undefined (reading 'prepare')",
+    "Variables visible in the default deploy are missing under --env"
+  ],
+  "cause": "Bindings and vars are non inheritable keys in Wrangler config, so a named environment gets none of the top level values. Each environment needs its own copy.",
+  "fix": "Repeat vars and every binding block inside each [env.NAME] section, pointing at that environment's resources.",
+  "apply": "[env.production]\nname = \"my-worker-production\"\nvars = { API_HOST = \"api.example.com\" }\n[[env.production.d1_databases]]\nbinding = \"DB\"\ndatabase_name = \"prod-db\"\ndatabase_id = \"YOUR_DB_ID\"",
+  "affected": "Wrangler 3 and 4 with named environments, as of October 2026",
+  "sources": [
+    "https://developers.cloudflare.com/workers/wrangler/environments/"
+  ],
+  "tags": [
+    "wrangler",
+    "environments",
+    "bindings"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

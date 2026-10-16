@@ -1,0 +1,29 @@
+{
+  "id": "fg-0463",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Search endpoint object filter",
+  "title": "Notion search filtered to object database stops matching after moving to API version 2025-09-03",
+  "symptoms": [
+    "Search with filter value database no longer returns the databases it used to",
+    "Search results come back with object data_source instead of database",
+    "One database shows up several times in search results"
+  ],
+  "cause": "On 2025-09-03 search lists data sources, so the object filter value changed from database to data_source. A database with several sources yields one result per source.",
+  "fix": "Filter on data_source and group results by parent.database_id when you need one entry per database.",
+  "apply": "await notion.search({ filter: { property: \"object\", value: \"data_source\" } })",
+  "affected": "Notion-Version 2025-09-03 and later",
+  "sources": [
+    "https://developers.notion.com/docs/upgrade-guide-2025-09-03",
+    "https://developers.notion.com/reference/post-search"
+  ],
+  "tags": [
+    "search",
+    "data-sources",
+    "versioning"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

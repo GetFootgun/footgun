@@ -1,0 +1,29 @@
+{
+  "id": "fg-0307",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "NEXT_PUBLIC_ environment variables",
+  "title": "NEXT_PUBLIC_ variable set at container runtime is ignored and the browser still sees the build-time value",
+  "symptoms": [
+    "process.env.NEXT_PUBLIC_API_URL is undefined in the browser even though the container has it set",
+    "Staging and production images built once both call the staging API",
+    "Changing the variable in the hosting dashboard has no effect until a rebuild"
+  ],
+  "cause": "next build replaces every literal process.env.NEXT_PUBLIC_* reference in client code with the value present at build time. The shipped JavaScript no longer reads the environment, so runtime values never reach it.",
+  "fix": "Pass public values as build args and rebuild per environment, or read a server-only variable in a Server Component and hand it to the client as a prop. Dynamic lookups like process.env[name] are not inlined at all.",
+  "apply": "# Dockerfile\nARG NEXT_PUBLIC_API_URL\nENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL\nRUN npm run build\n\n# docker build --build-arg NEXT_PUBLIC_API_URL=https://api.example.com .",
+  "affected": "All Next.js versions with next build, most visible with one Docker image promoted across environments",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/environment-variables",
+    "https://github.com/vercel/next.js/issues/53367"
+  ],
+  "tags": [
+    "env-vars",
+    "docker",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

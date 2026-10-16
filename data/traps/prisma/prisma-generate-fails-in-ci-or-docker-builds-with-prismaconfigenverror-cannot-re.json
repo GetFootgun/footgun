@@ -1,0 +1,29 @@
+{
+  "id": "fg-0291",
+  "provider": "prisma",
+  "surface_type": "tool",
+  "surface_name": "prisma.config.ts env()",
+  "title": "prisma generate fails in CI or Docker builds with 'PrismaConfigEnvError: Cannot resolve environment variable: DATABASE_URL'",
+  "symptoms": [
+    "Error: PrismaConfigEnvError: Cannot resolve environment variable: DATABASE_URL.",
+    "Error: PrismaConfigEnvError: Missing required environment variable: DATABASE_URL",
+    "A typecheck-only CI job that never touches the database now needs a database URL"
+  ],
+  "cause": "Prisma 7 loads prisma.config.ts for every CLI command, and env() from prisma/config throws when the variable is unset, even for generate. Prisma 7 also stopped reading the env file automatically, so the config has to load dotenv itself.",
+  "fix": "Import dotenv/config at the top of the config and read process.env directly, so generate runs without a URL while migrate commands still fail with a clear message.",
+  "apply": "import 'dotenv/config'\nimport { defineConfig } from 'prisma/config'\nexport default defineConfig({\n  schema: 'prisma/schema.prisma',\n  migrations: { path: 'prisma/migrations' },\n  datasource: { url: process.env.DATABASE_URL },\n})",
+  "affected": "Prisma ORM 7.0 and later; the process.env form is accepted by 7.8.0 and later and was verified on 7.10.0",
+  "sources": [
+    "https://github.com/prisma/orm/issues/28590",
+    "https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7"
+  ],
+  "tags": [
+    "prisma-7",
+    "config",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

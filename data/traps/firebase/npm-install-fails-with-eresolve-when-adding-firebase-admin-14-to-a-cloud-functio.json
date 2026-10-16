@@ -1,0 +1,29 @@
+{
+  "id": "fg-0193",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "firebase-functions peer dependency on firebase-admin",
+  "title": "npm install fails with ERESOLVE when adding firebase-admin 14 to a Cloud Functions project",
+  "symptoms": [
+    "ERESOLVE unable to resolve dependency tree",
+    "Could not resolve dependency: peer firebase-admin@\"^11.10.0 || ^12.0.0 || ^13.0.0\" from firebase-functions@7.2.5",
+    "firebase deploy predeploy npm ci step fails after bumping firebase-admin"
+  ],
+  "cause": "firebase-functions declares the firebase-admin majors it supports as a peer range, and that range lagged the firebase-admin 14 release by about six weeks.",
+  "fix": "Upgrade firebase-functions to 7.3.0 or later together with firebase-admin 14. Avoid legacy-peer-deps as a permanent fix.",
+  "apply": "npm install firebase-functions@^7.3.0 firebase-admin@^14\n# functions/package.json engines must also be node 22 or later for firebase-admin 14",
+  "affected": "firebase-functions 7.2.x and earlier with firebase-admin 14.x; fixed in firebase-functions 7.3.0 (July 2026)",
+  "sources": [
+    "https://github.com/firebase/firebase-functions/issues/1902"
+  ],
+  "tags": [
+    "functions",
+    "npm",
+    "peer-dependencies",
+    "firebase-admin"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

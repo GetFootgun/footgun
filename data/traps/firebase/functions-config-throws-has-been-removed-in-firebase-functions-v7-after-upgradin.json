@@ -1,0 +1,31 @@
+{
+  "id": "fg-0192",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "Cloud Functions for Firebase, functions.config()",
+  "title": "functions.config() throws has been removed in firebase-functions v7 after upgrading",
+  "symptoms": [
+    "Error: functions.config() has been removed in firebase-functions v7. Migrate to environment parameters using the params module.",
+    "Crash wherever functions.config() is called, including module load during firebase deploy",
+    "firebase functions:config:set values no longer reach the code"
+  ],
+  "cause": "firebase-functions 7.0.0 removed the Runtime Config API that was deprecated in 6.0.0, so the export now throws. Deploys that still use functions.config() stop working entirely after March 2027.",
+  "fix": "Move values to params: defineString or defineInt for plain config, defineSecret for secrets, and defineJsonSecret for a whole JSON blob. Pin firebase-functions below 7 only as a short stopgap.",
+  "apply": "import { defineSecret, defineString } from 'firebase-functions/params';\nimport { onRequest } from 'firebase-functions/v2/https';\nconst stripeKey = defineSecret('STRIPE_KEY');\nconst apiBase = defineString('API_BASE');\nexport const api = onRequest({ secrets: [stripeKey] }, (req, res) => {\n  res.send(apiBase.value() + stripeKey.value().length);\n});",
+  "affected": "firebase-functions 7.0.0 and later (released 2025-11-10); deprecated since 6.0.0; deploys using it blocked after March 2027",
+  "sources": [
+    "https://firebase.google.com/docs/functions/config-env",
+    "https://github.com/firebase/firebase-functions/releases/tag/v7.0.0",
+    "https://github.com/firebase/firebase-functions/blob/master/src/v1/config.ts"
+  ],
+  "tags": [
+    "functions",
+    "config",
+    "upgrade",
+    "secrets"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

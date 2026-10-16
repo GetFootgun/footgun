@@ -1,0 +1,28 @@
+{
+  "id": "fg-0249",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "vercel.json builds property",
+  "title": "Vercel ignores the dashboard Build Command, Output Directory, and Node settings because vercel.json has builds",
+  "symptoms": [
+    "Build log warns that Build and Development Settings from Project Settings will not apply because builds exists",
+    "Changing the Build Command in the dashboard has no effect",
+    "Adding a functions block fails with a conflicting functions and builds configuration error"
+  ],
+  "cause": "A legacy builds array switches the project out of zero configuration mode, so the dashboard build settings are skipped and only build outputs are deployed. builds and functions cannot be combined.",
+  "fix": "Delete the builds array, move memory and maxDuration settings into functions, and replace legacy routes with rewrites, redirects, or headers.",
+  "apply": "// vercel.json\n{\n  \"functions\": { \"api/**/*.ts\": { \"maxDuration\": 60 } },\n  \"rewrites\": [{ \"source\": \"/(.*)\", \"destination\": \"/api/index\" }]\n}",
+  "affected": "Any Vercel project whose vercel.json still has builds, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/errors/error-list"
+  ],
+  "tags": [
+    "vercel-json",
+    "config",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

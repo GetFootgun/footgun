@@ -1,0 +1,24 @@
+{
+  "id": "fg-0004",
+  "provider": "anthropic-api",
+  "surface_type": "sdk",
+  "surface_name": "@anthropic-ai/sdk, non-streaming requests",
+  "title": "Long Claude request fails with 'Premature close' on an old SDK",
+  "symptoms": [
+    "Premature close",
+    "Fails only on long generations"
+  ],
+  "cause": "Old SDK versions such as 0.32 with a non-streaming create call buffer the whole response, and long responses can die mid-transfer.",
+  "fix": "Upgrade the SDK and use streaming for long outputs, with a retry wrapper.",
+  "apply": "const msg = await client.messages.stream({ model, max_tokens, messages }).finalMessage();",
+  "affected": "@anthropic-ai/sdk 0.32.1, fixed on 0.111, July 2026",
+  "sources": [],
+  "tags": [
+    "sdk",
+    "streaming"
+  ],
+  "verified_on": "2026-07-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

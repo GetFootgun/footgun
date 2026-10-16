@@ -1,0 +1,28 @@
+{
+  "id": "fg-0355",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "chat.postMessage",
+  "title": "chat.postMessage returns not_in_channel for a bot posting to a public channel",
+  "symptoms": [
+    "not_in_channel from chat.postMessage",
+    "channel_not_found for a private channel the bot was never invited to",
+    "Posting works in one channel but not another"
+  ],
+  "cause": "New Slack apps can only post where the bot is a member. Posting to any public channel without joining needs the chat:write.public scope, and private channels always need an invite.",
+  "fix": "Add chat:write.public and reinstall, or call conversations.join for public channels. For private channels, invite the bot with /invite.",
+  "apply": "client.conversations_join(channel=channel_id)  # needs channels:join\nclient.chat_postMessage(channel=channel_id, text=\"Build finished\")",
+  "affected": "Slack apps using granular bot scopes, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/reference/methods/chat.postMessage"
+  ],
+  "tags": [
+    "scopes",
+    "messaging",
+    "permissions"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0336",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "Webhook delivery retries",
+  "title": "Shopify webhooks silently stop arriving after the endpoint was slow or down for a few hours",
+  "symptoms": [
+    "webhookSubscriptions no longer lists a topic your app created at install",
+    "Warning emails to the emergency developer address about failing deliveries",
+    "Orders processed twice when a slow handler finished after Shopify retried"
+  ],
+  "cause": "Shopify treats no answer within five seconds as a failure, retries 8 times over 4 hours, and then deletes subscriptions created through the Admin API. Retries also mean the same event can arrive twice.",
+  "fix": "Acknowledge with 200 right away and process from a queue, dedupe on X-Shopify-Webhook-Id, and run a reconciliation job. Prefer shopify.app.toml subscriptions, which Shopify does not delete on failure.",
+  "apply": "app.post('/webhooks', verifyHmac, async (req, res) => {\n  res.sendStatus(200)\n  const id = req.get('X-Shopify-Webhook-Id')\n  if (await seen(id)) return\n  await queue.add({ id, topic: req.get('X-Shopify-Topic'), body: req.body })\n})",
+  "affected": "Shop-specific webhook subscriptions created with the Admin API, all versions",
+  "sources": [
+    "https://shopify.dev/docs/apps/build/webhooks/subscribe/https",
+    "https://shopify.dev/docs/apps/build/webhooks/subscribe"
+  ],
+  "tags": [
+    "webhooks",
+    "retries",
+    "idempotency"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

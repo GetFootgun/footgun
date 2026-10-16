@@ -1,0 +1,14 @@
+{
+  "name": "footgun",
+  "owner": {
+    "name": "Footgun"
+  },
+  "description": "Dated, verified traps for third-party APIs, platforms, and AI tools.",
+  "plugins": [
+    {
+      "name": "footgun",
+      "source": "./plugin/footgun",
+      "description": "Dated, verified traps for APIs, platforms, and AI tools."
+    }
+  ]
+}

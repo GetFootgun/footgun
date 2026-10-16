@@ -1,0 +1,29 @@
+{
+  "id": "fg-0321",
+  "provider": "playwright",
+  "surface_type": "tool",
+  "surface_name": "Video recording with a shared page",
+  "title": "Videos are missing for most tests when one page is created in beforeAll and reused",
+  "symptoms": [
+    "Only one video file appears for a whole describe block",
+    "page.video().path() points to a file that is empty or not yet written",
+    "video: 'retain-on-failure' keeps nothing for tests after the first"
+  ],
+  "cause": "A video covers the page from creation to close and is written only after the page or context closes. A page shared across tests produces one recording that no single test owns.",
+  "fix": "Use the per-test page fixture, or record a trace instead of a video for serial suites.",
+  "apply": "test('checkout', async ({ page }) => { /* fresh page, own video */ })\n// serial suites: use: { trace: 'retain-on-failure' }",
+  "affected": "Playwright Test, all versions (open issue since 1.22)",
+  "sources": [
+    "https://github.com/microsoft/playwright/issues/14813",
+    "https://playwright.dev/docs/videos"
+  ],
+  "tags": [
+    "video",
+    "artifacts",
+    "fixtures"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

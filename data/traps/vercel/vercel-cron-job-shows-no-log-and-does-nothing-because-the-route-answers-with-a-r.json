@@ -1,0 +1,29 @@
+{
+  "id": "fg-0247",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel Cron Jobs invocation",
+  "title": "Vercel cron job shows no log and does nothing because the route answers with a redirect",
+  "symptoms": [
+    "No runtime log for the cron path at the scheduled time",
+    "Hitting the path in a browser works because the browser follows the redirect",
+    "Middleware that redirects unauthenticated requests to /login also catches the cron call"
+  ],
+  "cause": "Vercel calls the production deployment with a plain GET and treats any 3xx as the final answer, and redirected or cached cron responses are hidden from the logs. Trailing slash rewrites, auth middleware, or locale redirects on the cron path make the job silently finish without running.",
+  "fix": "Exclude the cron path from middleware redirects, use the exact path the router serves, and authenticate the call with the CRON_SECRET bearer header instead of a session check.",
+  "apply": "// middleware.ts\nexport const config = { matcher: ['/((?!api/cron).*)'] };\n\n// app/api/cron/route.ts\nexport function GET(req: Request) {\n  if (req.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) return new Response('Unauthorized', { status: 401 });\n  return Response.json({ ok: true });\n}",
+  "affected": "Vercel Cron Jobs on all plans, production deployments only, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/cron-jobs/manage-cron-jobs",
+    "https://vercel.com/docs/cron-jobs"
+  ],
+  "tags": [
+    "cron",
+    "redirects",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

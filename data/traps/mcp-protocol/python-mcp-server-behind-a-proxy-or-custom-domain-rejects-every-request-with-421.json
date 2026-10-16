@@ -1,0 +1,29 @@
+{
+  "id": "fg-0530",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "Python SDK DNS rebinding protection",
+  "title": "Python MCP server behind a proxy or custom domain rejects every request with 421 Invalid Host header",
+  "symptoms": [
+    "421 Misdirected Request with body Invalid Host header in the server log",
+    "403 Forbidden Invalid Origin header for browser clients",
+    "The client shows only a generic transport error"
+  ],
+  "cause": "The Python SDK's DNS rebinding protection checks the Host and Origin headers against an allowlist. Deployed behind a real hostname or proxy, the default rejects every request before any MCP handling runs.",
+  "fix": "Pass transport_security with allowed_hosts and allowed_origins for the names you serve, listing both the bare host and host:* for ports, or turn the check off when a reverse proxy already controls Host.",
+  "apply": "from mcp.server.transport_security import TransportSecuritySettings\nsecurity = TransportSecuritySettings(allowed_hosts=[\"mcp.example.com\", \"mcp.example.com:*\"], allowed_origins=[\"https://app.example.com\"])\n# pass transport_security=security when creating the server",
+  "affected": "MCP Python SDK since DNS rebinding protection (PR 861), including v2, as of 2026-10",
+  "sources": [
+    "https://github.com/modelcontextprotocol/python-sdk/blob/main/docs/run/deploy.md",
+    "https://github.com/modelcontextprotocol/python-sdk/issues/1798"
+  ],
+  "tags": [
+    "python",
+    "http",
+    "proxy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0486",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Print mode (-p) in untrusted folders",
+  "title": "claude -p in a freshly cloned repo runs its hooks and .mcp.json servers without asking",
+  "symptoms": [
+    "Hook commands from the repo's .claude/settings.json run in CI",
+    "MCP servers from .mcp.json start with no approval prompt in a folder never trusted"
+  ],
+  "cause": "Print mode shows no workspace trust dialog and no per-server approval prompt, so a project's hooks and MCP servers run even in a folder that was never trusted.",
+  "fix": "On untrusted code or in CI use --bare, which skips hooks, MCP servers, plugins, skills, auto memory, and CLAUDE.md, and pass what the run needs with flags.",
+  "apply": "claude --bare -p \"Summarize README.md\" --allowedTools \"Read\"",
+  "affected": "Claude Code print mode, as of 2026-10",
+  "sources": [
+    "https://code.claude.com/docs/en/headless"
+  ],
+  "tags": [
+    "headless",
+    "security",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0464",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Query a data source",
+  "title": "Querying a large Notion data source stops at 10,000 rows with has_more false",
+  "symptoms": [
+    "request_status.type: incomplete",
+    "incomplete_reason: query_result_limit_reached",
+    "Sync copies exactly 10,000 rows from a larger data source and reports success"
+  ],
+  "cause": "A single data source query pages through at most 10,000 results. At the cap has_more turns false and the response is only flagged incomplete, so a normal pagination loop ends quietly.",
+  "fix": "Check request_status on every response, and split the read into windows (for example by created_time) that each stay under the cap. The JS SDK ships a helper that does this.",
+  "apply": "import { iterateAllDataSourceRows } from \"@notionhq/client\";\nfor await (const row of iterateAllDataSourceRows(notion, { data_source_id })) {\n  // handle row\n}",
+  "affected": "Notion data source query endpoint as documented 2026-10; helper in @notionhq/client 5.27.0",
+  "sources": [
+    "https://developers.notion.com/reference/query-a-data-source",
+    "https://github.com/makenotion/notion-sdk-js"
+  ],
+  "tags": [
+    "pagination",
+    "limits",
+    "sync"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

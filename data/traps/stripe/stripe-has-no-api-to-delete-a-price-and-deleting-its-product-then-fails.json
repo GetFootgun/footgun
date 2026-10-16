@@ -1,0 +1,27 @@
+{
+  "id": "fg-0152",
+  "provider": "stripe",
+  "surface_type": "api",
+  "surface_name": "Prices and Products API, delete",
+  "title": "Stripe has no API to delete a Price, and deleting its Product then fails",
+  "symptoms": [
+    "AttributeError: type object 'Price' has no attribute 'delete'",
+    "This product cannot be deleted because it has one or more user-created prices."
+  ],
+  "cause": "The Prices API supports no deletion, and a Product can only be deleted while it has no prices attached.",
+  "fix": "Archive instead: set active to false on the price, and on the product if you want it hidden too.",
+  "apply": "await stripe.prices.update(priceId, { active: false });\nawait stripe.products.update(productId, { active: false });",
+  "affected": "Stripe Prices and Products API, all versions through 2026-09-30.endive",
+  "sources": [
+    "https://docs.stripe.com/api/products/delete",
+    "https://github.com/stripe/stripe-python/issues/658"
+  ],
+  "tags": [
+    "prices",
+    "products"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

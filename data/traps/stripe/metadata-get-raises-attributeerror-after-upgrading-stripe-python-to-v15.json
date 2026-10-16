@@ -1,0 +1,29 @@
+{
+  "id": "fg-0149",
+  "provider": "stripe",
+  "surface_type": "sdk",
+  "surface_name": "stripe-python StripeObject",
+  "title": "metadata.get() raises AttributeError after upgrading stripe-python to v15",
+  "symptoms": [
+    "AttributeError when calling .get(), .keys() or .values() on a Stripe object",
+    "dict(stripe_object) returns an empty dict",
+    "Unit tests that build events as plain dicts pass while production webhooks return 500"
+  ],
+  "cause": "Since v15 StripeObject no longer inherits from dict. Attribute access, bracket access and in still work, but dict methods are gone.",
+  "fix": "Use getattr with a default, or call to_dict() first. Build test events with StripeObject.construct_from so tests match production.",
+  "apply": "plan = getattr(session.metadata, \"plan\", None)\n# or\nplan = session.metadata.to_dict().get(\"plan\")",
+  "affected": "stripe-python 15.0.0 (2026-03-25) and later",
+  "sources": [
+    "https://github.com/stripe/stripe-python/wiki/Migration-guide-for-v15",
+    "https://github.com/stripe/stripe-python/issues/1946"
+  ],
+  "tags": [
+    "python",
+    "upgrade",
+    "webhooks"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

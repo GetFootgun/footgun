@@ -1,0 +1,27 @@
+{
+  "id": "fg-0519",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Linux sandbox, user namespace",
+  "title": "id -u returns 0 inside Cursor's Linux sandbox, so docker --user and chown use root",
+  "symptoms": [
+    "Files created by a sandboxed Docker run are owned by root on the host",
+    "$(id -u) and $UID print 0 in Agent terminal commands"
+  ],
+  "cause": "On Linux the sandbox runs commands in a user namespace remapped to UID 0, so scripts that read the current user ID get root inside the sandbox.",
+  "fix": "Read the host IDs from CURSOR_ORIG_UID and CURSOR_ORIG_GID, falling back to id when they are unset.",
+  "apply": "docker run --rm --user \"${CURSOR_ORIG_UID:-$(id -u)}:${CURSOR_ORIG_GID:-$(id -g)}\" -v \"$PWD\":/work image",
+  "affected": "Cursor Agent sandbox on Linux (Landlock, kernel 6.2 or later), as of 2026-10",
+  "sources": [
+    "https://cursor.com/docs/agent/security/run-modes"
+  ],
+  "tags": [
+    "sandbox",
+    "linux",
+    "docker"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0162",
+  "provider": "twilio",
+  "surface_type": "billing",
+  "surface_name": "SMS segments and encoding",
+  "title": "One emoji or curly quote doubles the number of SMS segments you pay for",
+  "symptoms": [
+    "num_segments is 2 for a message well under 160 characters",
+    "Messaging bill per message is higher than the character count suggests"
+  ],
+  "cause": "A single character outside GSM-7, such as an emoji or a smart quote pasted from a word processor, switches the whole message to UCS-2, which fits 70 characters per segment, or 67 when split. Twilio bills per segment.",
+  "fix": "Normalize quotes and dashes before sending, avoid emoji in bulk sends, or turn on Smart Encoding in the Messaging Service. Check numSegments on the returned message.",
+  "apply": "const body = text.replace(/[\\u2018\\u2019]/g, \"'\").replace(/[\\u201C\\u201D]/g, '\"');",
+  "affected": "SMS on all Twilio senders; segment sizes checked October 2026",
+  "sources": [
+    "https://www.twilio.com/docs/glossary/what-sms-character-limit"
+  ],
+  "tags": [
+    "sms",
+    "encoding",
+    "cost"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

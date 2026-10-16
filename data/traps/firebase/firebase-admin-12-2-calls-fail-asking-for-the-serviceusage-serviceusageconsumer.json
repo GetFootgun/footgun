@@ -1,0 +1,29 @@
+{
+  "id": "fg-0186",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "firebase-admin credentials and quota project",
+  "title": "firebase-admin 12.2 calls fail asking for the serviceusage.serviceUsageConsumer role",
+  "symptoms": [
+    "Caller does not have required permission to use project ... Grant the caller the roles/serviceusage.serviceUsageConsumer role",
+    "Auth admin calls that worked on 12.1 fail after a minor upgrade",
+    "Fails only when running with Application Default Credentials of a service account"
+  ],
+  "cause": "Releases after 12.1 sent the x-goog-user-project header for all Application Default Credentials, which requires the Service Usage Consumer role. Version 13 limited the header to human accounts.",
+  "fix": "Upgrade to firebase-admin 13 or later. On 12.x, grant roles/serviceusage.serviceUsageConsumer to the runtime service account.",
+  "apply": "gcloud projects add-iam-policy-binding PROJECT_ID \\\n  --member=serviceAccount:SA_EMAIL \\\n  --role=roles/serviceusage.serviceUsageConsumer\n# or: npm install firebase-admin@^13",
+  "affected": "firebase-admin 12.2.0 and later 12.x releases with service account Application Default Credentials; fixed in 13.0.0",
+  "sources": [
+    "https://github.com/firebase/firebase-admin-node/issues/2658",
+    "https://firebase.google.com/support/release-notes/admin/node"
+  ],
+  "tags": [
+    "firebase-admin",
+    "iam",
+    "credentials"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

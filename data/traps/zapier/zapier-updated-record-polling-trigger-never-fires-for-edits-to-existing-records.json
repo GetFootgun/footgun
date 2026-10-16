@@ -1,0 +1,29 @@
+{
+  "id": "fg-0381",
+  "provider": "zapier",
+  "surface_type": "sdk",
+  "surface_name": "Polling trigger deduplication",
+  "title": "Zapier 'Updated record' polling trigger never fires for edits to existing records",
+  "symptoms": [
+    "New records trigger the Zap, edits to them never do",
+    "Test step shows the updated record but live runs skip it",
+    "Zap history has no runs after a record changes"
+  ],
+  "cause": "Polling triggers dedupe on the primary key, which is id by default. An edited record keeps its id, so Zapier treats it as already seen.",
+  "fix": "Make the primary key combine the id with the update timestamp, using primary in outputFields on platform-core 15.6.0 or later.",
+  "apply": "outputFields: [\n  { key: 'id', primary: true },\n  { key: 'updated_at', primary: true },\n]",
+  "affected": "Zapier Platform CLI polling triggers, primary keys from zapier-platform-core 15.6.0, as of 2026-10",
+  "sources": [
+    "https://docs.zapier.com/platform/build/deduplication",
+    "https://docs.zapier.com/platform/reference/cli-docs"
+  ],
+  "tags": [
+    "polling",
+    "dedupe",
+    "triggers"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

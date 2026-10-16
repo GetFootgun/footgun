@@ -1,0 +1,28 @@
+{
+  "id": "fg-0360",
+  "provider": "slack",
+  "surface_type": "ui",
+  "surface_name": "Block Kit button with url",
+  "title": "Link button in a Slack message shows a warning icon after the user clicks it",
+  "symptoms": [
+    "Small warning triangle next to a URL button after click",
+    "Link opens fine but Slack desktop marks the button as failed",
+    "No error in the app logs because no handler exists"
+  ],
+  "cause": "A button with a url still sends a block_actions payload to the app, and Slack expects a 200 within three seconds. With no listener, the request fails and the client shows the warning. Slack staff confirmed this is intended.",
+  "fix": "Register a listener for the button's action_id that only acknowledges.",
+  "apply": "app.action(\"open_report\", async ({ ack }) => { await ack(); });",
+  "affected": "Slack desktop and web clients, Block Kit buttons with url, all versions as of 2026-10",
+  "sources": [
+    "https://github.com/slackapi/node-slack-sdk/issues/869"
+  ],
+  "tags": [
+    "block-kit",
+    "interactivity",
+    "buttons"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

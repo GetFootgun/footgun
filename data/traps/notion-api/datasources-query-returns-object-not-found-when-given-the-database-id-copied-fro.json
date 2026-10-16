@@ -1,0 +1,29 @@
+{
+  "id": "fg-0455",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Data sources (Notion-Version 2025-09-03)",
+  "title": "dataSources.query returns object_not_found when given the database ID copied from the Notion URL",
+  "symptoms": [
+    "object_not_found from notion.dataSources.query with an ID taken from the page URL",
+    "databases.query flagged as deprecated after upgrading @notionhq/client to v5",
+    "Query that worked on 2022-06-28 fails after moving to Notion-Version 2025-09-03"
+  ],
+  "cause": "Since 2025-09-03 a database is a container that holds one or more data sources, and each data source has its own ID. The URL shows the database ID, while query and page creation now take the data source ID.",
+  "fix": "Retrieve the database once with Notion-Version 2025-09-03, read data_sources[].id, and use that ID for queries and page parents. In the app, database settings > Manage data sources > Copy data source ID gives the same value.",
+  "apply": "const db = await notion.databases.retrieve({ database_id: DATABASE_ID });\nconst dataSourceId = db.data_sources[0].id;\nconst res = await notion.dataSources.query({ data_source_id: dataSourceId });",
+  "affected": "Notion-Version 2025-09-03 and later; @notionhq/client 5.0.0 and later",
+  "sources": [
+    "https://developers.notion.com/docs/upgrade-guide-2025-09-03",
+    "https://github.com/makenotion/notion-sdk-js/issues/612"
+  ],
+  "tags": [
+    "data-sources",
+    "versioning",
+    "migration"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

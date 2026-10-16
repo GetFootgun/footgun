@@ -1,0 +1,28 @@
+{
+  "id": "fg-0474",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Prompt caching, cache invalidation",
+  "title": "Prompt cache misses after changing tool_choice, images, effort, or thinking settings between calls",
+  "symptoms": [
+    "cache_read_input_tokens drops to 0 on a turn where only tool_choice changed",
+    "The cache is rewritten after toggling output_config.effort or the thinking mode",
+    "Adding one image anywhere in the prompt re-creates the message cache"
+  ],
+  "cause": "The cache follows the order tools, then system, then messages, and these settings are rendered into the prompt. Changing tool_choice, adding or removing any image, or changing thinking or effort invalidates the message level, and on some models the tool and system levels too; editing tool definitions invalidates everything.",
+  "fix": "Keep tools, tool_choice, thinking, and effort fixed for a conversation. To add an instruction mid-conversation on models that support it, append a role system message to messages instead of editing the top-level system field.",
+  "apply": "messages.push({ role: \"system\", content: \"From now on, answer in French.\" }); // keeps the cached prefix on supported models",
+  "affected": "Claude Messages API prompt caching, as of 2026-10; mid-conversation system messages on Fable 5.1, Opus 5.5, Opus 5, Opus 4.8, Sonnet 5.5, Haiku 5.5, not Sonnet 5",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+    "https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking"
+  ],
+  "tags": [
+    "caching",
+    "cost"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

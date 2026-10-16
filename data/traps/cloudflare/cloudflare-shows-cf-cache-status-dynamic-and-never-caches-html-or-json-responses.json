@@ -1,0 +1,29 @@
+{
+  "id": "fg-0210",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Cloudflare CDN default cache",
+  "title": "Cloudflare shows cf-cache-status DYNAMIC and never caches HTML or JSON responses",
+  "symptoms": [
+    "cf-cache-status: DYNAMIC on every HTML page",
+    "Origin load does not drop after enabling the proxy",
+    "API JSON responses with long Cache-Control still hit the origin"
+  ],
+  "cause": "Cloudflare caches by file extension, and HTML and JSON are not on the default list. Responses that carry Set-Cookie are also never cached.",
+  "fix": "Add a Cache Rule that marks the paths as eligible for cache, and stop sending Set-Cookie on public pages.",
+  "apply": "Cloudflare dashboard > your zone > Caching > Cache Rules > Create rule\nIf: Hostname equals example.com and URI Path starts with /blog\nThen: Cache eligibility = Eligible for cache; Edge TTL = Use cache-control header if present",
+  "affected": "All Cloudflare plans, default cache behavior as of October 2026",
+  "sources": [
+    "https://developers.cloudflare.com/cache/concepts/default-cache-behavior/",
+    "https://developers.cloudflare.com/cache/concepts/cache-responses/"
+  ],
+  "tags": [
+    "caching",
+    "cdn",
+    "html"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

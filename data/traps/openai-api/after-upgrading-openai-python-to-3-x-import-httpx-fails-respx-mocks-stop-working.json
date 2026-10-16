@@ -1,0 +1,30 @@
+{
+  "id": "fg-0134",
+  "provider": "openai-api",
+  "surface_type": "sdk",
+  "surface_name": "openai-python 3.x HTTPX2 transport",
+  "title": "After upgrading openai-python to 3.x, import httpx fails, respx mocks stop working, or TLS verification breaks",
+  "symptoms": [
+    "ModuleNotFoundError: No module named 'httpx'",
+    "RESPX routes no longer intercept SDK requests and tests hit the network",
+    "CERTIFICATE_VERIFY_FAILED in slim containers or behind a TLS inspecting proxy",
+    "Type checker rejects http_client=httpx.Client()"
+  ],
+  "cause": "openai-python 3.0.0 switched to HTTPX2 and stopped installing httpx and certifi. HTTPX2 trusts the operating system certificate store, and only HTTPX2 clients satisfy the type hints.",
+  "fix": "Migrate custom clients and mocks to httpx2 equivalents, install system CA certificates or set SSL_CERT_FILE, and add httpx yourself only as a temporary bridge.",
+  "apply": "import httpx2\nfrom openai import OpenAI, DefaultHttpx2Client\nclient = OpenAI(http_client=DefaultHttpx2Client(timeout=httpx2.Timeout(30.0)))\n# TLS: export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
+  "affected": "openai-python 3.0.0 (2026-08-12) and later",
+  "sources": [
+    "https://github.com/openai/openai-python/blob/main/httpx2.md",
+    "https://github.com/openai/openai-python/releases/tag/v3.0.0"
+  ],
+  "tags": [
+    "python",
+    "httpx",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

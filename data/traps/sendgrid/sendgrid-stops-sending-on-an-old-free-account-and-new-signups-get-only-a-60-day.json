@@ -1,0 +1,28 @@
+{
+  "id": "fg-0422",
+  "provider": "sendgrid",
+  "surface_type": "billing",
+  "surface_name": "Free plan retirement",
+  "title": "SendGrid stops sending on an old free account and new signups get only a 60-day trial",
+  "symptoms": [
+    "Mail Send fails on an account that ran on the free plan for years",
+    "Dashboard asks for a paid plan before sending resumes",
+    "Contacts list emptied on a former free Marketing Campaigns account"
+  ],
+  "cause": "Twilio retired the free Email API and Marketing Campaigns plans starting 2025-05-27, kept them working for 60 days, then paused sending on free accounts. Free accounts with more than 100 stored contacts had all contacts deleted.",
+  "fix": "Move production senders to a paid Email API plan, and do not build new projects on a SendGrid free tier that no longer exists.",
+  "apply": "SendGrid console > Settings > Account Details > Your Products > Email API > Change Plan",
+  "affected": "SendGrid free Email API and free Marketing Campaigns plans, retired from 2025-05-27 with sending paused about 60 days later",
+  "sources": [
+    "https://www.twilio.com/en-us/changelog/sendgrid-free-plan"
+  ],
+  "tags": [
+    "billing",
+    "plans",
+    "deprecation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,31 @@
+{
+  "id": "fg-0202",
+  "provider": "supabase",
+  "surface_type": "sdk",
+  "surface_name": "supabase-js auth client, onAuthStateChange and session lock",
+  "title": "Supabase queries hang forever after awaiting a Supabase call inside onAuthStateChange",
+  "symptoms": [
+    "The next supabase.from(...) or getSession() anywhere in the app never resolves, with no error",
+    "Acquiring an exclusive Navigator LockManager lock immediately failed",
+    "Hang shows up only after login, a tab refocus, or a token refresh"
+  ],
+  "cause": "Older auth clients held a session lock while running onAuthStateChange callbacks, so awaiting another Supabase call inside the callback waited on the same lock. Version 2.107.0 removed the navigator.locks mutex.",
+  "fix": "Upgrade to supabase-js 2.107.0 or later. On older versions keep the callback synchronous and defer any Supabase call with setTimeout. Even on new versions, never call refreshSession from a TOKEN_REFRESHED handler.",
+  "apply": "supabase.auth.onAuthStateChange((event, session) => {\n  setSession(session); // sync only\n  setTimeout(async () => {\n    await supabase.from('profiles').select('*').eq('id', session?.user.id);\n  }, 0);\n});\n\nnpm install @supabase/supabase-js@^2.107.0",
+  "affected": "@supabase/supabase-js 2.x before 2.107.0 (released 2026-06-02); gotrue-js 2.62.0 and later in that range",
+  "sources": [
+    "https://github.com/supabase/auth-js/issues/762",
+    "https://github.com/supabase/supabase-js/issues/936",
+    "https://github.com/supabase/supabase-js/releases/tag/v2.107.0"
+  ],
+  "tags": [
+    "auth",
+    "deadlock",
+    "supabase-js",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

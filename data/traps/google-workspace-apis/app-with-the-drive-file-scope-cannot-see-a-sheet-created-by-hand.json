@@ -1,0 +1,23 @@
+{
+  "id": "fg-0017",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "OAuth scope drive.file",
+  "title": "App with the drive.file scope cannot see a Sheet created by hand",
+  "symptoms": [
+    "404 File not found for a file that exists",
+    "Files created in the browser are invisible to the app"
+  ],
+  "cause": "The drive.file scope only reaches files the app itself created or was explicitly given through a picker. In exchange it avoids restricted scope verification.",
+  "fix": "Have the app's setup script create the Sheets and folders it needs.",
+  "apply": "Create the file through the API with the same OAuth client, then store its id for later runs.",
+  "affected": "Google Drive API v3, August 2026",
+  "sources": [],
+  "tags": [
+    "oauth-scope"
+  ],
+  "verified_on": "2026-08-11",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

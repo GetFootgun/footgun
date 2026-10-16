@@ -1,0 +1,28 @@
+{
+  "id": "fg-0470",
+  "provider": "anthropic-api",
+  "surface_type": "billing",
+  "surface_name": "Messages API, monthly usage threshold",
+  "title": "429 rate_limit_error that retries never clear because the monthly API spend limit was reached",
+  "symptoms": [
+    "429 rate_limit_error: You have reached your API usage limits",
+    "error.details.error_code: enforced_spend_limit_reached",
+    "No retry-after header, and the SDK's automatic retries fail every time"
+  ],
+  "cause": "When an organization crosses the monthly usage threshold for its tier, the API answers with the same error type as a rate limit, but access stays blocked until the reset time in the message or a tier change.",
+  "fix": "Read error.details.error_code before backing off. On enforced_spend_limit_reached stop retrying, alert someone, and raise the tier or the spend limit in the Console.",
+  "apply": "except anthropic.RateLimitError as e:\n    code = ((e.body or {}).get(\"error\") or {}).get(\"details\", {}).get(\"error_code\")\n    if code == \"enforced_spend_limit_reached\":\n        raise SystemExit(\"Claude API spend limit reached, retries will not help\")\n    raise",
+  "affected": "Claude Messages API, as of 2026-10",
+  "sources": [
+    "https://platform.claude.com/docs/en/api/rate-limits"
+  ],
+  "tags": [
+    "rate-limit",
+    "billing",
+    "retries"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

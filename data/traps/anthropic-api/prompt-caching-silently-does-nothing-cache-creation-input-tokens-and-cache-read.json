@@ -1,0 +1,28 @@
+{
+  "id": "fg-0475",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Prompt caching, minimum cacheable length",
+  "title": "Prompt caching silently does nothing: cache_creation_input_tokens and cache_read_input_tokens stay 0",
+  "symptoms": [
+    "usage.cache_creation_input_tokens: 0 and usage.cache_read_input_tokens: 0 on every call",
+    "No error although cache_control is set on the block",
+    "Parallel first requests all miss the cache"
+  ],
+  "cause": "A prefix shorter than the model's minimum cacheable length is processed uncached and no error is returned. The minimum differs by model: 512 tokens on the 5.x models, 1,024 on Sonnet 4.6 and Opus 4.8, 2,048 on Opus 4.7, and 4,096 on Opus 4.6, Opus 4.5, and Haiku 4.5.",
+  "fix": "Check both usage fields on the second identical call. If both are 0, grow the cached prefix past the model's minimum or move the breakpoint later. A cache entry exists only after the first response begins, so send one request and wait before fanning out.",
+  "apply": "const u = res.usage;\nif (!u.cache_creation_input_tokens && !u.cache_read_input_tokens) console.warn('prompt not cached: prefix below the model minimum or breakpoint misplaced');",
+  "affected": "Claude API, Claude Platform on AWS, Google Cloud, Microsoft Foundry, minimums as of 2026-10; Bedrock documents its own minimums",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+  ],
+  "tags": [
+    "caching",
+    "silent-failure",
+    "cost"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

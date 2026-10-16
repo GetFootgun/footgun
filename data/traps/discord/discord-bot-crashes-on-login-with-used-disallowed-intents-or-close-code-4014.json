@@ -1,0 +1,31 @@
+{
+  "id": "fg-0440",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Gateway close code 4014",
+  "title": "Discord bot crashes on login with Used disallowed intents or close code 4014",
+  "symptoms": [
+    "Gateway closed with code 4014",
+    "Error: Used disallowed intents",
+    "discord.errors.PrivilegedIntentsRequired",
+    "Unhandled promise rejection on client.login() even with .catch() in discord.js 14.10+"
+  ],
+  "cause": "The bot asked for a privileged intent (GUILD_MEMBERS, GUILD_PRESENCES or MESSAGE_CONTENT) that is not switched on or not approved for the application. Discord closes the connection and reconnecting does not help.",
+  "fix": "Switch the matching toggles on under Bot > Privileged Gateway Intents in the Developer Portal, or remove those intents from the client. Verified apps in 100 or more servers need Discord approval first.",
+  "apply": "https://discord.com/developers/applications > your app > Bot > Privileged Gateway Intents > enable Server Members Intent / Message Content Intent > Save Changes",
+  "affected": "Discord gateway, all library versions; discord.js 14.10.0 and later surfaces it as an uncaught rejection",
+  "sources": [
+    "https://docs.discord.com/developers/events/gateway",
+    "https://docs.discord.com/developers/topics/opcodes-and-status-codes",
+    "https://github.com/discordjs/discord.js/issues/9621"
+  ],
+  "tags": [
+    "intents",
+    "gateway",
+    "login"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

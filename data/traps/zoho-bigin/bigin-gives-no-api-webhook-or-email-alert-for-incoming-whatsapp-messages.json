@@ -1,0 +1,25 @@
+{
+  "id": "fg-0114",
+  "provider": "zoho-bigin",
+  "surface_type": "api",
+  "surface_name": "Messages channel, WhatsApp",
+  "title": "Bigin gives no API, webhook or email alert for incoming WhatsApp messages",
+  "symptoms": [
+    "Replies show only under Messages",
+    "Messages is absent from the v2 API",
+    "No email or Zoho Flow trigger fires on a reply"
+  ],
+  "cause": "Bigin's Messages channel is not exposed through the API, webhooks or Zoho Flow. The only alert is a push notification in the mobile app. Replies from existing contacts go to the contact owner, and new numbers follow the Assign Messages To rule, so a deactivated owner means nobody is told.",
+  "fix": "Keep each contact's owner an active user with the mobile app installed, and set the assignment rule for new numbers.",
+  "apply": "Setup > Channels > Messages > General > Assign Messages To",
+  "affected": "Bigin WhatsApp channel, October 2026",
+  "sources": [],
+  "tags": [
+    "notifications",
+    "whatsapp"
+  ],
+  "verified_on": "2026-10-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

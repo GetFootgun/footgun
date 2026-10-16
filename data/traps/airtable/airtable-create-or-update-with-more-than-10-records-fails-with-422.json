@@ -1,0 +1,29 @@
+{
+  "id": "fg-0427",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Batch create, update, delete",
+  "title": "Airtable create or update with more than 10 records fails with 422",
+  "symptoms": [
+    "422 when the records array holds 11 or more items",
+    "table.create(orders) in airtable.js works for small orders and fails for large ones",
+    "No partial write: none of the records are created"
+  ],
+  "cause": "Create, update and delete calls accept at most 10 records per request. airtable.js passes the whole array through without splitting it.",
+  "fix": "Chunk record arrays into groups of 10 and send them in sequence to stay inside the per-base rate limit.",
+  "apply": "for (let i = 0; i < records.length; i += 10) {\n  await base(\"Orders\").create(records.slice(i, i + 10));\n}",
+  "affected": "Airtable Web API and airtable.js 0.12.x, as of 2026-10",
+  "sources": [
+    "https://support.airtable.com/docs/managing-api-call-limits-in-airtable",
+    "https://github.com/Airtable/airtable.js/issues/172"
+  ],
+  "tags": [
+    "batching",
+    "limits",
+    "422"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,23 @@
+{
+  "id": "fg-0087",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Complianz, cached page links",
+  "title": "Complianz banner keeps the old cookie policy link after the page setting changes",
+  "symptoms": [
+    "Banner still links the old URL after saving the new page"
+  ],
+  "cause": "Complianz caches its link set in its own option-backed store cmplz_transients under keys such as page_links_1_en_US, and caches missing documents as \"none\".",
+  "fix": "Delete those keys and let Complianz rebuild them, for example from a temporary admin-only snippet.",
+  "apply": "$t = get_option('cmplz_transients'); unset($t['page_links_1_en_US']); update_option('cmplz_transients', $t); COMPLIANZ::$document->get_page_links();",
+  "affected": "Complianz GDPR/CCPA premium, August 2026",
+  "sources": [],
+  "tags": [
+    "cache",
+    "plugins"
+  ],
+  "verified_on": "2026-08-07",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

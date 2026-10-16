@@ -1,0 +1,28 @@
+{
+  "id": "fg-0318",
+  "provider": "playwright",
+  "surface_type": "tool",
+  "surface_name": "Trace recording mode",
+  "title": "No trace.zip for a failed test because the config records traces only on first retry",
+  "symptoms": [
+    "test-results has no trace.zip for a local failure",
+    "The HTML report shows no Traces section for the failed test"
+  ],
+  "cause": "The generated config uses trace: 'on-first-retry' together with retries: 0 outside CI. With no retry, nothing is recorded.",
+  "fix": "Use retain-on-failure, which records every test and keeps only the failing ones.",
+  "apply": "// playwright.config.ts\nuse: { trace: 'retain-on-failure' }\n# or one run: npx playwright test --trace on",
+  "affected": "Playwright Test configs created by npm init playwright, all current versions",
+  "sources": [
+    "https://playwright.dev/docs/trace-viewer",
+    "https://playwright.dev/docs/test-configuration"
+  ],
+  "tags": [
+    "trace",
+    "config",
+    "debugging"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

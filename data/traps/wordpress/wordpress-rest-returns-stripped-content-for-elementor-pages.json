@@ -1,0 +1,24 @@
+{
+  "id": "fg-0101",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Elementor page data",
+  "title": "WordPress REST returns stripped content for Elementor pages",
+  "symptoms": [
+    "post_content lacks the HTML visible on the page",
+    "Edits to post_content do not change the live page"
+  ],
+  "cause": "Elementor stores the real layout in post meta _elementor_data as a JSON string with escaped slashes. post_content is a stripped copy.",
+  "fix": "Read and write _elementor_data as an opaque string: back it up, make a targeted substring replacement on the exact stored form, validate that it still parses, and write it back. Then clear the Elementor and page caches.",
+  "apply": "GET /wp-json/wp/v2/pages/<id>?context=edit&_fields=id,meta (requires _elementor_data registered for REST); replace \"url\":\"\\/old\\/\" with \"url\":\"\\/new\\/\"",
+  "affected": "Elementor Pro, July to September 2026",
+  "sources": [],
+  "tags": [
+    "elementor",
+    "rest-api"
+  ],
+  "verified_on": "2026-09-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

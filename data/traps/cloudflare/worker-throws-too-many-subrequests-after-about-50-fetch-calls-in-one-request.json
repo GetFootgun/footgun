@@ -1,0 +1,30 @@
+{
+  "id": "fg-0220",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Workers subrequest limit",
+  "title": "Worker throws 'Too many subrequests' after about 50 fetch calls in one request",
+  "symptoms": [
+    "Error: Too many subrequests. Workers can make up to 50 subrequests per request.",
+    "Fan out loops over an API stop partway through",
+    "Works for small inputs and fails for large ones"
+  ],
+  "cause": "Workers Free caps each invocation at 50 external subrequests (plus 1,000 to Cloudflare services). Workers Paid has defaulted to 10,000 since February 2026, up from 1,000, and can be raised further in config.",
+  "fix": "Batch upstream calls or move the fan out into a Queue or Workflow. On Paid, raise limits.subrequests if 10,000 is not enough.",
+  "apply": "# wrangler.toml (Workers Paid)\n[limits]\nsubrequests = 50_000",
+  "affected": "Workers Free: 50 external per invocation; Workers Paid: 10,000 default since 2026-02-11 (1,000 before)",
+  "sources": [
+    "https://developers.cloudflare.com/workers/platform/limits/",
+    "https://developers.cloudflare.com/changelog/post/2026-02-11-subrequests-limit/",
+    "https://github.com/cloudflare/workers-sdk/issues/2084"
+  ],
+  "tags": [
+    "workers",
+    "limits",
+    "subrequests"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

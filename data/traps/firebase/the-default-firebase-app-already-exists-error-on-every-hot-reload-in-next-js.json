@@ -1,0 +1,28 @@
+{
+  "id": "fg-0194",
+  "provider": "firebase",
+  "surface_type": "sdk",
+  "surface_name": "firebase-admin initializeApp in Next.js",
+  "title": "The default Firebase app already exists error on every hot reload in Next.js",
+  "symptoms": [
+    "FirebaseAppError: The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument.",
+    "Appears after editing a file in next dev or across API route invocations",
+    "Production build works, dev server breaks"
+  ],
+  "cause": "Next.js re-evaluates modules on hot reload and across route bundles while the Node process keeps the earlier app instance, so initializeApp runs twice for the same default app.",
+  "fix": "Reuse the existing app with getApps() before calling initializeApp.",
+  "apply": "import { getApps, initializeApp, cert } from 'firebase-admin/app';\nexport const adminApp = getApps().length\n  ? getApps()[0]\n  : initializeApp({ credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)) });",
+  "affected": "firebase-admin initialized at module scope without a getApps() guard, under next dev hot reload or when several route bundles share one Node.js process",
+  "sources": [
+    "https://github.com/firebase/firebase-admin-node/issues/2111"
+  ],
+  "tags": [
+    "firebase-admin",
+    "nextjs",
+    "initialization"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0534",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "TypeScript SDK and duplicate Zod copies",
+  "title": "TS2589 'Type instantiation is excessively deep and possibly infinite' when registering MCP tools",
+  "symptoms": [
+    "TS2589: Type instantiation is excessively deep and possibly infinite",
+    "The error points at an unrelated-looking registerTool or ToolCallback call site"
+  ],
+  "cause": "Two copies of zod in the dependency tree make TypeScript instantiate cross-version schema types until it hits its recursion limit.",
+  "fix": "Align the project on one Zod 4 version and force it with an override when a transitive dependency pins another copy.",
+  "apply": "// package.json\n\"overrides\": { \"zod\": \"^4.2.0\" }\n// verify: npm ls zod",
+  "affected": "@modelcontextprotocol/sdk 1.x and @modelcontextprotocol/server 2.x with mixed zod versions, as of 2026-10",
+  "sources": [
+    "https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/troubleshooting.md",
+    "https://github.com/modelcontextprotocol/typescript-sdk/issues/494"
+  ],
+  "tags": [
+    "typescript",
+    "zod",
+    "build"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

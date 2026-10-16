@@ -1,0 +1,23 @@
+{
+  "id": "fg-0104",
+  "provider": "wordpress",
+  "surface_type": "ui",
+  "surface_name": "WP Mail SMTP, Email Test tool",
+  "title": "WP Mail SMTP Email Test ignores Smart Routing rules",
+  "symptoms": [
+    "Test email goes through the primary mailer although a routing rule should apply"
+  ],
+  "cause": "The Email Test tool always uses the primary mailer.",
+  "fix": "Test routing with a real site email such as a password reset.",
+  "apply": "Trigger a real email, then check WP Mail SMTP > Email Log for the mailer that sent it",
+  "affected": "WP Mail SMTP Pro 4.10, October 2026",
+  "sources": [],
+  "tags": [
+    "email",
+    "testing"
+  ],
+  "verified_on": "2026-10-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0419",
+  "provider": "sendgrid",
+  "surface_type": "api",
+  "surface_name": "Scheduled sends",
+  "title": "SendGrid rejects scheduled emails with 'Scheduling more than 72 hours in advance is forbidden'",
+  "symptoms": [
+    "400 Scheduling more than 72 hours in advance is forbidden",
+    "Reminder emails for next week fail while tomorrow's succeed",
+    "send_at in milliseconds rejected or scheduled far in the future"
+  ],
+  "cause": "send_at must be a Unix timestamp in seconds no more than 72 hours ahead. Date.now() values are milliseconds.",
+  "fix": "Keep your own queue for anything beyond 72 hours and hand it to SendGrid inside the window, with send_at in seconds.",
+  "apply": "send_at: Math.floor(sendDate.getTime() / 1000)  // only when sendDate - now <= 72h",
+  "affected": "SendGrid v3 Mail Send send_at, as of 2026-10",
+  "sources": [
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/mail-send",
+    "https://www.twilio.com/docs/sendgrid/api-reference/mail-send/errors"
+  ],
+  "tags": [
+    "scheduling",
+    "validation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

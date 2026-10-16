@@ -1,0 +1,24 @@
+{
+  "id": "fg-0038",
+  "provider": "make",
+  "surface_type": "api",
+  "surface_name": "Data store, Update a record",
+  "title": "Data store 'Update a record' blanks every field you did not map",
+  "symptoms": [
+    "Fields that held values before an update are empty afterwards",
+    "Only the mapped fields survive"
+  ],
+  "cause": "Update a record writes the whole record, and unmapped fields are written as empty.",
+  "fix": "Map every field on every update, carrying unchanged values from an earlier Get or Search.",
+  "apply": "In each UpdateRecord, map all structure fields and use {{N.data.field}} from the preceding search for the ones you are not changing.",
+  "affected": "Make Data store app, 2026",
+  "sources": [],
+  "tags": [
+    "data-loss",
+    "data-store"
+  ],
+  "verified_on": "2026-10-08",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

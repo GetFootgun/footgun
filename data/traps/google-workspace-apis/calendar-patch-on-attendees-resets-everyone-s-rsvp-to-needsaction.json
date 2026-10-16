@@ -1,0 +1,23 @@
+{
+  "id": "fg-0020",
+  "provider": "google-workspace-apis",
+  "surface_type": "api",
+  "surface_name": "Calendar API, events.patch attendees",
+  "title": "Calendar PATCH on attendees resets everyone's RSVP to needsAction",
+  "symptoms": [
+    "Attendees who had accepted show as awaiting response after the update",
+    "responseStatus is needsAction for every attendee"
+  ],
+  "cause": "A PATCH that includes attendees replaces the whole array. Any attendee sent without responseStatus gets the default.",
+  "fix": "Read the event first and send every existing attendee back with its responseStatus, plus the new one.",
+  "apply": "PATCH /calendar/v3/calendars/{calendarId}/events/{eventId}?sendUpdates=none {\"attendees\": [{\"email\": \"a@example.com\", \"responseStatus\": \"accepted\"}, {\"email\": \"new@example.com\"}]}",
+  "affected": "Google Calendar API v3, July 2026",
+  "sources": [],
+  "tags": [
+    "data-loss"
+  ],
+  "verified_on": "2026-07-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

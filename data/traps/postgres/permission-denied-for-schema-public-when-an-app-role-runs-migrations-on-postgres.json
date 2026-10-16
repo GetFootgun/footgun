@@ -1,0 +1,28 @@
+{
+  "id": "fg-0274",
+  "provider": "postgres",
+  "surface_type": "infra",
+  "surface_name": "PostgreSQL public schema privileges",
+  "title": "'permission denied for schema public' when an app role runs migrations on PostgreSQL 15 or later",
+  "symptoms": [
+    "ERROR: permission denied for schema public",
+    "CREATE TABLE works as the database owner or a superuser but not as the app role",
+    "The same migration succeeds against a PostgreSQL 14 server"
+  ],
+  "cause": "PostgreSQL 15 removed the default CREATE privilege for PUBLIC on the public schema in new clusters and new databases, and made pg_database_owner its owner. Upgraded clusters and restored dumps keep the old grants, so environments disagree.",
+  "fix": "Make the app role own the database, or grant CREATE on the schema to it explicitly.",
+  "apply": "ALTER DATABASE app OWNER TO app_user;\n-- or\nGRANT USAGE, CREATE ON SCHEMA public TO app_user;",
+  "affected": "PostgreSQL 15 and later (October 2022), new clusters and newly created databases",
+  "sources": [
+    "https://www.postgresql.org/docs/release/15.0/"
+  ],
+  "tags": [
+    "postgres",
+    "permissions",
+    "migrations"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0362",
+  "provider": "slack",
+  "surface_type": "api",
+  "surface_name": "Token rotation",
+  "title": "Slack bot token stops working after 12 hours once token rotation is turned on",
+  "symptoms": [
+    "token_expired from every Web API call about 12 hours after install",
+    "Refresh fails with invalid_refresh_token after reusing an old refresh token",
+    "Token rotation toggle cannot be switched back off"
+  ],
+  "cause": "With rotation on, access tokens expire after 43,200 seconds and each refresh returns a new single-use refresh token that replaces the old one. Rotation cannot be disabled once enabled.",
+  "fix": "Store the new refresh token from every oauth.v2.access refresh, refresh before expires_in, and keep tokens in a shared database store with refreshes serialized so two workers never redeem the same token. Try rotation in a development app first.",
+  "apply": "r = client.oauth_v2_access(client_id=cid, client_secret=cs, grant_type=\"refresh_token\", refresh_token=stored)\nsave(access=r[\"access_token\"], refresh=r[\"refresh_token\"], expires_at=now + r[\"expires_in\"] - 300)",
+  "affected": "Slack apps with token rotation enabled, as of 2026-10",
+  "sources": [
+    "https://docs.slack.dev/authentication/using-token-rotation/",
+    "https://github.com/slackapi/bolt-python/issues/663"
+  ],
+  "tags": [
+    "oauth",
+    "tokens",
+    "rotation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

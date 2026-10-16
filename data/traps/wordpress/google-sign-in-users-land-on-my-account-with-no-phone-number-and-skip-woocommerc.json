@@ -1,0 +1,25 @@
+{
+  "id": "fg-0090",
+  "provider": "wordpress",
+  "surface_type": "api",
+  "surface_name": "Nextend Social Login (free) with WooCommerce",
+  "title": "Google sign-in users land on My Account with no phone number and skip WooCommerce form hooks",
+  "symptoms": [
+    "No Continue with Google button on WooCommerce login or register forms",
+    "New social users have an empty billing phone",
+    "Registration hooks that read $_POST do not run their form logic"
+  ],
+  "cause": "The free Nextend plugin does not inject its button into WooCommerce forms. Social logins return email and name only, never a phone, and send a new user to the account page. Code that reads posted form fields on user_register sees no form post.",
+  "fix": "Render the button with its shortcode on the WooCommerce form hooks, add a phone capture step for logged-in users with no phone, and do not gate list signups on posted form fields.",
+  "apply": "add_action('woocommerce_register_form_start', fn() => print(do_shortcode('[nextend_social_login provider=\"google\"]')));",
+  "affected": "Nextend Social Login free with WooCommerce, September 2026",
+  "sources": [],
+  "tags": [
+    "auth",
+    "woocommerce"
+  ],
+  "verified_on": "2026-09-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

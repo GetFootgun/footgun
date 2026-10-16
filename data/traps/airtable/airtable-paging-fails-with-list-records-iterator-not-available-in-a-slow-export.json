@@ -1,0 +1,28 @@
+{
+  "id": "fg-0429",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "List records offset iterator",
+  "title": "Airtable paging fails with LIST_RECORDS_ITERATOR_NOT_AVAILABLE in a slow export loop",
+  "symptoms": [
+    "422 LIST_RECORDS_ITERATOR_NOT_AVAILABLE",
+    "Export works on small tables and fails partway through large ones",
+    "Failure appears when per-page processing is slow"
+  ],
+  "cause": "The offset token points at a server-side iterator that can time out from client inactivity or a server restart. Doing heavy work between page requests lets it expire, and iteration then has to restart from the beginning.",
+  "fix": "Fetch all pages first and process afterward, keep the gap between page requests short, and restart the listing from scratch on this error.",
+  "apply": "const all = await base(\"Big Table\").select({ pageSize: 100 }).all(); // fetch first\nfor (const rec of all) { await process(rec); } // then do slow work",
+  "affected": "Airtable Web API list records pagination, as of 2026-10",
+  "sources": [
+    "https://airtable.com/developers/web/api/list-records"
+  ],
+  "tags": [
+    "pagination",
+    "timeouts",
+    "422"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

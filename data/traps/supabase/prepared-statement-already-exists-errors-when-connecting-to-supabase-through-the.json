@@ -1,0 +1,30 @@
+{
+  "id": "fg-0196",
+  "provider": "supabase",
+  "surface_type": "infra",
+  "surface_name": "Supabase Supavisor transaction pooler",
+  "title": "prepared statement already exists errors when connecting to Supabase through the pooler on port 6543",
+  "symptoms": [
+    "prepared statement \"s0\" already exists",
+    "Errors appear only under concurrent load, not in local tests",
+    "postgres.js queries hang or return rows meant for another query"
+  ],
+  "cause": "Transaction mode hands the connection back to the pool after each transaction, so per-session state such as prepared statements and pipelined queries leaks between clients. Most drivers prepare statements by default.",
+  "fix": "Turn off prepared statements in the driver when using port 6543, or use session mode or a direct connection for code that needs them, including migrations.",
+  "apply": "# Prisma\nDATABASE_URL=\"postgres://...pooler.supabase.com:6543/postgres?pgbouncer=true\"\nDIRECT_URL=\"postgres://...pooler.supabase.com:5432/postgres\"\n// postgres.js / Drizzle\nconst sql = postgres(process.env.DATABASE_URL, { prepare: false });",
+  "affected": "Supabase Supavisor transaction mode (port 6543) with Prisma, postgres.js, Drizzle, asyncpg, JDBC",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/error-prepared-statement-xxx-already-exists-3laqeM",
+    "https://supabase.com/docs/guides/database/connecting-to-postgres"
+  ],
+  "tags": [
+    "postgres",
+    "pooler",
+    "prisma",
+    "serverless"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

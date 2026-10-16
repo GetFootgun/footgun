@@ -1,0 +1,30 @@
+{
+  "id": "fg-0449",
+  "provider": "discord",
+  "surface_type": "api",
+  "surface_name": "Message content length",
+  "title": "Discord send fails with Invalid Form Body when the message is longer than 2000 characters",
+  "symptoms": [
+    "DiscordAPIError[50035]: Invalid Form Body",
+    "content[BASE_TYPE_MAX_LENGTH]: Must be 2000 or fewer in length.",
+    "Bot relaying LLM or log output fails only on long answers"
+  ],
+  "cause": "Message content is capped at 2000 characters for bots, webhooks and interaction replies alike. Discord counts Unicode code points, so JavaScript string length can overcount emoji but never undercounts.",
+  "fix": "Split long text into chunks of at most 2000 characters, or send it as a file attachment.",
+  "apply": "for (const part of text.match(/[\\s\\S]{1,2000}/g) ?? []) {\n  await channel.send({ content: part, allowedMentions: { parse: [] } });\n}",
+  "affected": "Discord API v10 messages, webhooks and interaction responses, as of 2026-10",
+  "sources": [
+    "https://docs.discord.com/developers/resources/message",
+    "https://docs.discord.com/developers/resources/webhook",
+    "https://github.com/discord/discord-api-docs/issues/1173"
+  ],
+  "tags": [
+    "limits",
+    "messages",
+    "validation"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

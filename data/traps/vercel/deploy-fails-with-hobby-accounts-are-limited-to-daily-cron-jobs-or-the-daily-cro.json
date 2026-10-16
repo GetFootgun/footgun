@@ -1,0 +1,30 @@
+{
+  "id": "fg-0240",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel Cron Jobs, Hobby plan",
+  "title": "Deploy fails with 'Hobby accounts are limited to daily cron jobs' or the daily cron fires up to an hour late",
+  "symptoms": [
+    "Hobby accounts are limited to daily cron jobs. This cron expression would run more than once per day.",
+    "A job scheduled for 0 1 * * * runs anywhere between 01:00 and 01:59 UTC",
+    "Cron times look shifted because the schedule is read as UTC"
+  ],
+  "cause": "On Hobby, Vercel rejects any cron expression that fires more than once a day and only guarantees the hour, not the minute. All schedules run in UTC.",
+  "fix": "Keep Hobby crons to one run per day and do not depend on the minute, or move to Pro for per minute precision. For frequent jobs on Hobby, trigger the route from an external scheduler.",
+  "apply": "// vercel.json (Hobby safe)\n{ \"crons\": [{ \"path\": \"/api/cron/daily\", \"schedule\": \"0 6 * * *\" }] }",
+  "affected": "Vercel Hobby plan cron jobs, as of October 2026",
+  "sources": [
+    "https://vercel.com/docs/cron-jobs/usage-and-pricing",
+    "https://vercel.com/docs/cron-jobs/manage-cron-jobs",
+    "https://vercel.com/docs/cron-jobs"
+  ],
+  "tags": [
+    "cron",
+    "hobby",
+    "scheduling"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,27 @@
+{
+  "id": "fg-0255",
+  "provider": "docker",
+  "surface_type": "infra",
+  "surface_name": "Docker Hub pull limits",
+  "title": "CI pulls fail with 'toomanyrequests: You have reached your unauthenticated pull rate limit'",
+  "symptoms": [
+    "toomanyrequests: You have reached your unauthenticated pull rate limit",
+    "Failures cluster on shared runners or on hosts behind one NAT gateway"
+  ],
+  "cause": "Docker Hub counts anonymous pulls per IPv4 address or IPv6 /64 subnet, 100 per 6 hours, so every job behind one egress address shares that budget. Authenticated Personal accounts get 200 per 6 hours.",
+  "fix": "Log in to Docker Hub before pulling in CI, cache or mirror base images in your own registry, and avoid pulling the same image in every job.",
+  "apply": "echo \"$DOCKERHUB_TOKEN\" | docker login -u \"$DOCKERHUB_USER\" --password-stdin",
+  "affected": "Docker Hub, limits as published in October 2026; vendor policy, re-check by 2026-12-15",
+  "sources": [
+    "https://docs.docker.com/docker-hub/usage/"
+  ],
+  "tags": [
+    "docker-hub",
+    "rate-limit",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

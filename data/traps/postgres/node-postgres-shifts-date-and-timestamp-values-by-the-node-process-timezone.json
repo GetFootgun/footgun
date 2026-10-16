@@ -1,0 +1,29 @@
+{
+  "id": "fg-0273",
+  "provider": "postgres",
+  "surface_type": "sdk",
+  "surface_name": "node-postgres (pg) date parsing",
+  "title": "node-postgres shifts DATE and TIMESTAMP values by the Node process timezone",
+  "symptoms": [
+    "A DATE of 2017-05-29 comes back as 2017-05-29T05:00:00.000Z in a process running at UTC-5",
+    "In zones ahead of UTC, DATE values read back as the previous day once converted with toISOString",
+    "In zones behind UTC, writing a Date created at UTC midnight stores the previous calendar day"
+  ],
+  "cause": "pg turns DATE and TIMESTAMP WITHOUT TIME ZONE values into JavaScript Date objects at local time in the Node process zone (the TZ variable), and formats Date parameters in that zone on the way in. Parsing DATE into a Date is kept only for backward compatibility.",
+  "fix": "Store instants as timestamptz, run Node with TZ=UTC, and keep DATE values as plain strings.",
+  "apply": "import pg from 'pg'\npg.types.setTypeParser(1082, (v) => v) // DATE stays 'YYYY-MM-DD'\n// start the process with TZ=UTC",
+  "affected": "pg (node-postgres) 8.x, as of October 2026",
+  "sources": [
+    "https://github.com/brianc/node-postgres/blob/master/docs/pages/features/types.mdx",
+    "https://github.com/brianc/node-postgres/issues/783"
+  ],
+  "tags": [
+    "node-postgres",
+    "timezone",
+    "dates"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

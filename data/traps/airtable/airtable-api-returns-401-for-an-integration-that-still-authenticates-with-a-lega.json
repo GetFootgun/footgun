@@ -1,0 +1,30 @@
+{
+  "id": "fg-0425",
+  "provider": "airtable",
+  "surface_type": "api",
+  "surface_name": "Authentication",
+  "title": "Airtable API returns 401 for an integration that still authenticates with a legacy API key",
+  "symptoms": [
+    "401 Unauthorized on every request made with a key that starts with key",
+    "Integration that ran for years stopped working in February 2024",
+    "airtable.js still asks for an apiKey option, so old keys look valid in config"
+  ],
+  "cause": "Airtable finished retiring user API keys on 2024-02-01, and those keys can no longer call the API. The airtable.js option kept the name apiKey, but it now expects a personal access token or an OAuth token.",
+  "fix": "Create a personal access token with the scopes and bases the integration needs and put it where the old key was. Use OAuth for integrations that act for other users.",
+  "apply": "Airtable.configure({ apiKey: process.env.AIRTABLE_PAT }); // token created at https://airtable.com/create/tokens",
+  "affected": "Airtable Web API, user API keys, since 2024-02-01; airtable.js 0.12.x",
+  "sources": [
+    "https://support.airtable.com/docs/airtable-api-key-deprecation-notice",
+    "https://airtable.com/developers/web/api/authentication",
+    "https://github.com/Airtable/airtable.js"
+  ],
+  "tags": [
+    "auth",
+    "deprecation",
+    "tokens"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

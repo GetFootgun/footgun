@@ -1,0 +1,28 @@
+{
+  "id": "fg-0337",
+  "provider": "shopify",
+  "surface_type": "api",
+  "surface_name": "App-specific vs shop-specific webhook subscriptions",
+  "title": "webhookSubscriptions query returns nothing although webhooks from shopify.app.toml are being delivered",
+  "symptoms": [
+    "webhookSubscriptions returns an empty list for topics that clearly fire",
+    "Each order webhook arrives twice after adding the topic to shopify.app.toml",
+    "Changes to the toml webhooks have no effect in production"
+  ],
+  "cause": "Subscriptions declared in shopify.app.toml are app-wide and config managed, so the Admin API does not list them, and they only change when a new app version is released. Old API-created subscriptions to the same topic keep firing alongside them.",
+  "fix": "Check toml subscriptions in the Dev Dashboard under the app version, delete the old API-created subscriptions to the same topics before migrating, and run shopify app deploy after each toml change.",
+  "apply": "# list and delete the old shop-specific ones first\nquery { webhookSubscriptions(first: 50) { nodes { id topic } } }\nmutation { webhookSubscriptionDelete(id: \"gid://shopify/WebhookSubscription/123\") { userErrors { message } } }\n# then\nshopify app deploy",
+  "affected": "Shopify apps using shopify.app.toml webhooks with Shopify CLI 3.x and 4.x",
+  "sources": [
+    "https://shopify.dev/docs/apps/build/webhooks/subscribe"
+  ],
+  "tags": [
+    "webhooks",
+    "cli",
+    "config"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

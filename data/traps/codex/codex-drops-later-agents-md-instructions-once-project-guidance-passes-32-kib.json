@@ -1,0 +1,27 @@
+{
+  "id": "fg-0496",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "AGENTS.md size cap",
+  "title": "Codex drops later AGENTS.md instructions once project guidance passes 32 KiB",
+  "symptoms": [
+    "Rules from the AGENTS.md closest to the working directory are missing",
+    "A long root AGENTS.md crowds out folder-specific instructions"
+  ],
+  "cause": "project_doc_max_bytes, 32 KiB by default, caps how much project guidance Codex reads, and Codex stops adding files once the combined size reaches it. Files nearer the working directory come last in the chain, so they are the ones cut.",
+  "fix": "Raise project_doc_max_bytes in config.toml, or trim the root file and move detail into nested files.",
+  "apply": "# ~/.codex/config.toml\nproject_doc_max_bytes = 65536",
+  "affected": "Codex CLI, IDE extension, and ChatGPT desktop app, as of 2026-10",
+  "sources": [
+    "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+    "https://learn.chatgpt.com/docs/config-file/config-advanced"
+  ],
+  "tags": [
+    "agents-md",
+    "silent-failure"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

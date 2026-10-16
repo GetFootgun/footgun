@@ -1,0 +1,30 @@
+{
+  "id": "fg-0199",
+  "provider": "supabase",
+  "surface_type": "sdk",
+  "surface_name": "Supabase service role or secret key clients",
+  "title": "Supabase client created with the service role key still gets RLS errors or empty results",
+  "symptoms": [
+    "new row violates row-level security policy from a client built with the service_role or sb_secret key",
+    "Admin queries return [] in a Next.js server action using createServerClient",
+    "Service role client stops bypassing RLS after calling signUp or signInWithPassword on it"
+  ],
+  "cause": "RLS is decided by the Authorization header, not the apikey header. SSR clients copy the user session from cookies into that header, and auth calls on a shared client replace it with the user's JWT.",
+  "fix": "Build a separate admin client with plain createClient, no cookies, and session persistence off. Create users with auth.admin.createUser rather than signUp on that client.",
+  "apply": "import { createClient } from '@supabase/supabase-js';\nexport const admin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET_KEY, {\n  auth: { persistSession: false, autoRefreshToken: false },\n});",
+  "affected": "supabase-js 2.x and @supabase/ssr; legacy service_role keys and new secret keys alike",
+  "sources": [
+    "https://supabase.com/docs/guides/troubleshooting/why-is-my-service-role-key-client-getting-rls-errors-or-not-returning-data-7_1K9z",
+    "https://github.com/supabase/ssr/issues/141"
+  ],
+  "tags": [
+    "rls",
+    "service-role",
+    "ssr",
+    "auth"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

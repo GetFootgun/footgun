@@ -1,0 +1,30 @@
+{
+  "id": "fg-0383",
+  "provider": "playwright",
+  "surface_type": "tool",
+  "surface_name": "npx playwright install",
+  "title": "npx playwright install hangs after the first browser download on Playwright 1.55 to 1.59 with recent Node releases",
+  "symptoms": [
+    "The download reaches 100% and then the install prints nothing and never exits",
+    "CI jobs time out on the install step after a Node image bump to 26.x or 24.16",
+    "The same Playwright version installs fine on node:24.15.0"
+  ],
+  "cause": "Playwright before 1.60 unpacked browsers with a yauzl stream whose close event never fires under newer Node stream lifecycle behavior, so the extract step waits forever. Playwright 1.60 vendors a patched yauzl.",
+  "fix": "Upgrade Playwright to 1.60.0 or later. That is the only real fix, since the hang also appears on the Node 24 LTS line from 24.16.",
+  "apply": "npm i -D @playwright/test@^1.60.0 && npx playwright install --with-deps",
+  "affected": "Playwright 1.55.1 to 1.59.x on recent Node releases (26.x, 24.16 and later); fixed in 1.60.0 (released 2026-05-11)",
+  "sources": [
+    "https://github.com/microsoft/playwright/issues/40724",
+    "https://github.com/microsoft/playwright/issues/40998",
+    "https://github.com/microsoft/playwright/pull/40747"
+  ],
+  "tags": [
+    "install",
+    "nodejs",
+    "ci"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

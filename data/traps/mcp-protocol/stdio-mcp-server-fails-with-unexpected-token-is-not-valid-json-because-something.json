@@ -1,0 +1,32 @@
+{
+  "id": "fg-0532",
+  "provider": "mcp-protocol",
+  "surface_type": "sdk",
+  "surface_name": "stdio transport, stdout",
+  "title": "stdio MCP server fails with 'Unexpected token ... is not valid JSON' because something printed to stdout",
+  "symptoms": [
+    "SyntaxError: Unexpected token ... is not valid JSON in the host's MCP log",
+    "The server connects in a terminal test but fails or disconnects inside the client",
+    "[dotenv@17.x.x] injecting env (N) ... appears in the MCP log"
+  ],
+  "cause": "On stdio, stdout is the JSON-RPC wire, so any line that is not a protocol message corrupts it. A console.log or print in your code or a dependency is enough; dotenv 16.6.0 and 17.x log a line to stdout on load by default.",
+  "fix": "Log only to stderr (console.error, the logging module), silence chatty dependencies, or upgrade dotenv to 18, which logs to stderr. The first character quoted in the error usually points at the stray line.",
+  "apply": "require('dotenv').config({ quiet: true }); // dotenv 16.6 to 17.x print to stdout by default\nconsole.error('server ready'); // never console.log in a stdio server",
+  "affected": "Any stdio MCP server; dotenv 16.6.0 and 17.0.0 to 17.4.2 (16.6.1 defaulted to quiet); dotenv 18.0.0 moved the message to stderr",
+  "sources": [
+    "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio",
+    "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server",
+    "https://github.com/modelcontextprotocol/typescript-sdk/blob/main/docs/troubleshooting.md",
+    "https://github.com/motdotla/dotenv/blob/master/CHANGELOG.md",
+    "https://github.com/motdotla/dotenv/issues/903"
+  ],
+  "tags": [
+    "stdio",
+    "logging",
+    "json-rpc"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

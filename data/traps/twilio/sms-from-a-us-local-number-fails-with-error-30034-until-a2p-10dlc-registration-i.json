@@ -1,0 +1,29 @@
+{
+  "id": "fg-0163",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Programmable Messaging, US A2P 10DLC",
+  "title": "SMS from a US local number fails with error 30034 until A2P 10DLC registration is approved",
+  "symptoms": [
+    "30034 US A2P 10DLC - Message from an Unregistered Number",
+    "Message status undelivered while messaging fees are still charged",
+    "Sends fail while the Brand or Campaign is still under review"
+  ],
+  "cause": "Since 2023-09-01 Twilio blocks all US bound SMS and MMS from +1 10DLC numbers that are not in the sender pool of a Messaging Service tied to an approved A2P Campaign.",
+  "fix": "Finish Brand and Campaign registration, add the number to the Messaging Service linked to the Campaign, and send through that service. Use a toll-free number, short code or Verify while registration is pending.",
+  "apply": "await client.messages.create({ messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID, to: '+15551234567', body: 'Your order shipped' });",
+  "affected": "US bound messages from +1 10DLC numbers, fully blocked since 2023-09-01",
+  "sources": [
+    "https://www.twilio.com/docs/api/errors/30034",
+    "https://www.twilio.com/en-us/changelog/-u-s--a2p-10dlc--full-blocking-of-traffic-sent-from-unregistered"
+  ],
+  "tags": [
+    "sms",
+    "10dlc",
+    "compliance"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

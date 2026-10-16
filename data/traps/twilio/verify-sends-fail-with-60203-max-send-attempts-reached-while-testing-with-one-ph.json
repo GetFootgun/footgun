@@ -1,0 +1,27 @@
+{
+  "id": "fg-0169",
+  "provider": "twilio",
+  "surface_type": "api",
+  "surface_name": "Verify API, send rate limit",
+  "title": "Verify sends fail with 60203 'Max send attempts reached' while testing with one phone number",
+  "symptoms": [
+    "60203 Max send attempts reached",
+    "HTTP 429 from verifications.create after a few resends"
+  ],
+  "cause": "Verify allows five send attempts per verification lifecycle. Starting new sends without checking or cancelling keeps the same verification open until it expires.",
+  "fix": "Complete the lifecycle with a check, or cancel the verification in tests, or wait 10 minutes for it to expire.",
+  "apply": "await client.verify.v2.services(serviceSid).verifications(to).update({ status: 'canceled' });",
+  "affected": "Twilio Verify v2, checked October 2026",
+  "sources": [
+    "https://www.twilio.com/docs/api/errors/60203"
+  ],
+  "tags": [
+    "verify",
+    "rate-limit",
+    "testing"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0215",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "SSL/TLS encryption mode",
+  "title": "Site behind Cloudflare loops with ERR_TOO_MANY_REDIRECTS after the origin forces HTTPS",
+  "symptoms": [
+    "ERR_TOO_MANY_REDIRECTS in the browser",
+    "curl -I shows 301 to the same https URL repeatedly",
+    "Starts right after enabling Force HTTPS in WordPress, Laravel, or nginx"
+  ],
+  "cause": "In Flexible mode Cloudflare talks to the origin over plain HTTP, so an origin that redirects HTTP to HTTPS answers every proxied request with a redirect. The browser keeps following it forever.",
+  "fix": "Install a certificate on the origin and switch the zone to Full (strict), or drop the origin redirect and use Always Use HTTPS at Cloudflare.",
+  "apply": "Cloudflare dashboard > your zone > SSL/TLS > Overview > Encryption mode: Full (strict)",
+  "affected": "Cloudflare zones using Flexible SSL/TLS with an origin that redirects to HTTPS",
+  "sources": [
+    "https://developers.cloudflare.com/ssl/troubleshooting/too-many-redirects/"
+  ],
+  "tags": [
+    "ssl",
+    "redirects",
+    "dns-proxy"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

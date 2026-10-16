@@ -1,0 +1,29 @@
+{
+  "id": "fg-0405",
+  "provider": "resend",
+  "surface_type": "billing",
+  "surface_name": "Free plan daily quota",
+  "title": "Resend free plan starts failing with daily_quota_exceeded well before 100 sends",
+  "symptoms": [
+    "429 daily_quota_exceeded: You have exceeded your daily email sending quota.",
+    "Fewer than 100 API calls made today",
+    "Quota resets at midnight UTC, not 24 hours after the first send"
+  ],
+  "cause": "On the Free plan every to, cc, and bcc recipient counts as one email, received emails count too, and the 100 per day quota runs on the UTC calendar day.",
+  "fix": "Count recipients, not API calls, read the x-resend-daily-quota header, and move to a paid plan before production traffic.",
+  "apply": "const used = Number(res.headers.get('x-resend-daily-quota'));",
+  "affected": "Resend Free plan (100 per day, 3,000 per month), as of 2026-10",
+  "sources": [
+    "https://resend.com/docs/knowledge-base/account-quotas-and-limits",
+    "https://resend.com/docs/api-reference/rate-limit"
+  ],
+  "tags": [
+    "quota",
+    "billing",
+    "email"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0397",
+  "provider": "hubspot",
+  "surface_type": "api",
+  "surface_name": "Webhooks API delivery",
+  "title": "HubSpot webhook handler processes the same event twice or in the wrong order",
+  "symptoms": [
+    "Same objectId and subscriptionType delivered more than once",
+    "propertyChange events arrive older value last",
+    "Retries pile up when the handler takes more than five seconds"
+  ],
+  "cause": "HubSpot batches up to 100 events per request, treats any response slower than five seconds or any 4xx or 5xx as a failure, and retries up to ten times over 24 hours. It does not guarantee ordering, and duplicates can occur.",
+  "fix": "Acknowledge with 200 immediately and process from a queue, dedupe on eventId, and order by occurredAt instead of arrival time.",
+  "apply": "app.post('/hubspot', (req, res) => { res.sendStatus(200); for (const e of req.body) queue.add(String(e.eventId), e); });",
+  "affected": "HubSpot Webhooks API v3 for legacy public apps, as of 2026-10",
+  "sources": [
+    "https://developers.hubspot.com/docs/api-reference/legacy/webhooks/guide"
+  ],
+  "tags": [
+    "webhooks",
+    "idempotency",
+    "retries"
+  ],
+  "verified_on": "2026-10-15",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
