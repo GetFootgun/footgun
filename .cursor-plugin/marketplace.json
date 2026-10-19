@@ -1,0 +1,18 @@
+{
+  "name": "footgun",
+  "owner": {
+    "name": "Footgun",
+    "email": "hello@getfootgun.com"
+  },
+  "metadata": {
+    "description": "Dated, verified traps for APIs, platforms, and AI coding tools.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "footgun",
+      "source": "./plugin/footgun",
+      "description": "Dated, verified fixes for how APIs and AI coding tools break, served to your agent before it codes."
+    }
+  ]
+}

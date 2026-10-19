@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "footgun": {
+      "url": "https://getfootgun.com/api/mcp"
+    }
+  }
+}
