@@ -1,0 +1,29 @@
+{
+  "id": "fg-0536",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Cloudflare CLI (cf)",
+  "title": "cf CLI commands stop working after update with unknown command errors for camelCase names like getCredits",
+  "symptoms": [
+    "cf accounts billing getCredits fails with an unknown command error",
+    "Scripts or agent prompts using camelCase cf subcommands break after npm install --global cf@latest",
+    "Flags that worked in an earlier beta are rejected"
+  ],
+  "cause": "Cloudflare CLI 1.0.0-beta.16 renamed generated command names to kebab-case, for example getCredits became get-credits, and also made other breaking command and flag changes.",
+  "fix": "Update scripts to the kebab-case command names and check the CLI release notes for renamed flags, or pin the older beta version in CI until you migrate.",
+  "apply": "cf accounts billing get-credits",
+  "affected": "Cloudflare CLI 1.0.0-beta.16 and later, from 2026-10-16",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "cloudflare-cli",
+    "cf",
+    "breaking-change",
+    "rename"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

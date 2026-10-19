@@ -1,0 +1,29 @@
+{
+  "id": "fg-0538",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code CLI (requests to api.anthropic.com)",
+  "title": "Large requests to api.anthropic.com are now gzip compressed even with telemetry disabled, breaking some proxies",
+  "symptoms": [
+    "A proxy or inspection layer in front of api.anthropic.com rejects or cannot read request bodies after upgrading",
+    "Request bodies show Content-Encoding gzip when telemetry is off"
+  ],
+  "cause": "From 2.1.300, large requests to api.anthropic.com use gzip compression regardless of telemetry setting.",
+  "fix": "Disable gzip request bodies, or make the proxy accept gzip.",
+  "apply": "export CLAUDE_CODE_GZIP_REQUEST_BODIES=0",
+  "affected": "Claude Code 2.1.300 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "proxy",
+    "gzip",
+    "env-var",
+    "network",
+    "2.1.300"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

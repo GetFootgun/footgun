@@ -1,0 +1,31 @@
+{
+  "id": "fg-0540",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion API markdown update and notion-update-page",
+  "title": "Notion page markdown edit returns 400 validation_error on a very large page and retrying never works",
+  "symptoms": [
+    "HTTP 400 validation_error when updating page content as markdown",
+    "additional_data.limit_kind is page_record_count",
+    "tags appear when the page is retrieved as markdown",
+    "Same request used to return 500 internal_server_error and keeps failing on retry"
+  ],
+  "cause": "Since October 2, 2026, a page with about 20,000 records (mostly blocks) is not loaded in full. An edit that targets a block that was not loaded, or would remove content that was not loaded, is rejected. Earlier the same case returned a 500, so retry logic written for 500 now loops on a permanent failure.",
+  "fix": "Do not retry this 400. Retrieve the page as markdown and edit only content outside the  tags, or split the page into smaller pages. Read additional_data.limit for the cap.",
+  "apply": "On 400 validation_error where additional_data.limit_kind == \"page_record_count\": stop retrying and limit edits to content outside <unknown> tags",
+  "affected": "Update a page's content as markdown and the notion-update-page MCP tool, from 2026-10-02",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "markdown",
+    "validation_error",
+    "retry",
+    "large-pages"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

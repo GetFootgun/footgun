@@ -1,0 +1,34 @@
+{
+  "id": "fg-0539",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API (Claude Haiku 5.5)",
+  "title": "400 errors after switching from Claude Haiku 4.5 to claude-haiku-5-5 with budget_tokens, temperature, top_k, or prefill",
+  "symptoms": [
+    "400 invalid_request_error after changing model to claude-haiku-5-5",
+    "Request with thinking budget_tokens is rejected",
+    "Request with temperature, top_p, or top_k is rejected",
+    "Request ending with an assistant prefill message is rejected",
+    "computer_20250124 tool returns 400"
+  ],
+  "cause": "Claude Haiku 5.5 (launched 2026-10-07) rejects manual extended thinking via budget_tokens, the sampling parameters temperature, top_p and top_k, assistant message prefill, and the computer_20250124 tool. Thinking blocks sent back after a change to system, tools, or earlier turns can also return 400. Adaptive thinking is on by default.",
+  "fix": "Remove budget_tokens and use adaptive thinking with the effort parameter. Drop temperature, top_p, and top_k. Remove the trailing assistant prefill message and steer format through the prompt or structured outputs. Use computer_toolset_20260801 on the Claude API and Google Cloud, or computer_20251124 on Amazon Bedrock. Do not replay thinking blocks after editing earlier context.",
+  "apply": "model: \"claude-haiku-5-5\"; remove: temperature, top_p, top_k, thinking.budget_tokens, trailing assistant message; computer tool: {\"type\":\"computer_toolset_20260801\"}",
+  "affected": "claude-haiku-5-5, launched 2026-10-07, when migrating from Claude Haiku 4.5",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview",
+    "https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide"
+  ],
+  "tags": [
+    "haiku-5-5",
+    "migration",
+    "thinking",
+    "sampling",
+    "prefill",
+    "computer-use"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

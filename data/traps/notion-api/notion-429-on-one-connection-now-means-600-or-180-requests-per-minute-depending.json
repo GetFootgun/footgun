@@ -1,0 +1,30 @@
+{
+  "id": "fg-0542",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion API rate limits",
+  "title": "Notion 429 on one connection now means 600 or 180 requests per minute depending on plan",
+  "symptoms": [
+    "429 rate_limited on a single integration at moderate sustained volume",
+    "Retry-After no longer exceeds 60 seconds",
+    "Free and Plus workspaces throttle at a lower rate than Business or Enterprise"
+  ],
+  "cause": "Since September 9, 2026, the per-connection limit is enforced over a fixed 60-second window: 600 requests per minute on Business and Enterprise, 180 per minute on all other plans. The wait is also repeated in the body as additional_data.retry_after.",
+  "fix": "Pace requests to the plan's per-minute budget, and honor Retry-After or additional_data.retry_after on 429 and 529. Check additional_data rate_limit_reason to tell a workspace limit from an endpoint limit.",
+  "apply": "Throttle to <=180 req/min (non-Business plans) or <=600 req/min (Business/Enterprise); on 429 sleep for Retry-After or additional_data.retry_after seconds",
+  "affected": "All API versions, from 2026-09-09",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "429",
+    "rate-limit",
+    "retry-after",
+    "plans"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0541",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion API page writes and notion-update-page",
+  "title": "Notion page markdown write returns 504 gateway_timeout and the change may already be saved",
+  "symptoms": [
+    "HTTP 504 gateway_timeout from Update a page's content as markdown",
+    "Previously the same timeout returned 500 internal_server_error",
+    "Blind retry duplicates inserted content"
+  ],
+  "cause": "Since September 24, 2026, requests that run past their deadline return 504 instead of 500. A 504 does not mean the write was rolled back, so a retry handler that treats it like a failed write can apply the edit twice. A write that runs out of its time budget still returns 503 with additional_data.retry_guidance.",
+  "fix": "On 504, re-read the page and confirm whether the edit landed before retrying. Use additional_data.retry_guidance on 503. Update any error handling that matched only 500.",
+  "apply": "On 504: GET the page markdown, check whether the new content is present, and only then resend the edit",
+  "affected": "Update a page's content as markdown and notion-update-page MCP tool, from 2026-09-24",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "504",
+    "gateway_timeout",
+    "retry",
+    "markdown"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

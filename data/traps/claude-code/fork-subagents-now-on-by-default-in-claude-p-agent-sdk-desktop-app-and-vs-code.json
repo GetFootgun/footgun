@@ -1,0 +1,29 @@
+{
+  "id": "fg-0537",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code CLI (headless, desktop app, VS Code)",
+  "title": "Fork subagents now on by default in claude -p, Agent SDK, desktop app and VS Code",
+  "symptoms": [
+    "Headless or SDK runs spawn fork subagents that did not appear before",
+    "Subagent calls from a subagent now run in the foreground by default in those surfaces, and the main conversation's subagents always run in the background in desktop and VS Code"
+  ],
+  "cause": "Version 2.1.302 turned on fork subagents (subagent_type fork) by default outside the terminal, and changed foreground and background behavior for subagents in desktop and VS Code.",
+  "fix": "Turn fork subagents off if your workflow depends on the old behavior.",
+  "apply": "export CLAUDE_CODE_FORK_SUBAGENT=0",
+  "affected": "Claude Code 2.1.302 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "subagents",
+    "fork",
+    "env-var",
+    "vscode",
+    "2.1.302"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

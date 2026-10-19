@@ -1,0 +1,31 @@
+{
+  "id": "fg-0545",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API (Claude Sonnet 5.5)",
+  "title": "Turning thinking off on Claude Sonnet 5.5 fails with thinking type disabled, and computer_20251124 returns 400",
+  "symptoms": [
+    "400 error when sending thinking: {\"type\":\"disabled\"} to claude-sonnet-5-5",
+    "computer_20251124 tool rejected on Claude API or Google Cloud",
+    "advisor tool rejects Opus 4.8, Opus 4.7, or Sonnet 5 as the advisor model"
+  ],
+  "cause": "Since the Claude Sonnet 5.5 launch on 2026-09-28, up-front thinking is turned off with thinking type between_tools instead of disabled, and only at high effort or below. The earlier computer_20251124 tool is not accepted on the Claude API and Google Cloud, and the advisor tool rejects some older models as advisors.",
+  "fix": "Send thinking type between_tools with effort high or lower. Switch to the computer_toolset_20260801 toolset. Pick a supported advisor model.",
+  "apply": "thinking: {\"type\": \"between_tools\"}, output_config: {\"effort\": \"high\"}",
+  "affected": "claude-sonnet-5-5, from 2026-09-28, migrating from Claude Sonnet 5",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview",
+    "https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide"
+  ],
+  "tags": [
+    "sonnet-5-5",
+    "thinking",
+    "computer-use",
+    "advisor-tool",
+    "migration"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

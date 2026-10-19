@@ -1,0 +1,28 @@
+{
+  "id": "fg-0546",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion API file uploads and Free workspace limits",
+  "title": "Notion REST API returns 403 on a Free workspace once the block limit is reached",
+  "symptoms": [
+    "HTTP 403 from page or block writes in an internal or selected-workspace OAuth connection",
+    "Writes that worked before September 1, 2026 now fail on a Free workspace"
+  ],
+  "cause": "Starting September 1, 2026, the REST API enforces the existing Free workspace block limit for internal connections and OAuth connections restricted to selected workspaces. The limit was not previously enforced for these API calls.",
+  "fix": "Reduce block count, upgrade the workspace plan, or review the grace period and background template behavior in the Workspace block limits docs. Treat this 403 as non-retryable.",
+  "apply": "Check the workspace block count against the Free plan limit before bulk writes; do not retry the 403",
+  "affected": "Free workspaces, internal connections and selected-workspace OAuth connections, from 2026-09-01",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "403",
+    "free-plan",
+    "block-limit"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

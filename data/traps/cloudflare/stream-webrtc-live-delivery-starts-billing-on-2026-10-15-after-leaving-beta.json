@@ -1,0 +1,29 @@
+{
+  "id": "fg-0544",
+  "provider": "cloudflare",
+  "surface_type": "billing",
+  "surface_name": "Stream",
+  "title": "Stream WebRTC live delivery starts billing on 2026-10-15 after leaving beta",
+  "symptoms": [
+    "Unexpected Stream charges for minutes delivered via WebRTC playback",
+    "WebRTC usage newly shown in Stream billable usage charts"
+  ],
+  "cause": "WebRTC (WHIP/WHEP) in Stream became generally available on 2026-10-15 and usage-based billing began that day at the standard rates for minutes of video delivered. During beta it was not billed.",
+  "fix": "Review Stream pricing and the new WebRTC analytics and usage charts, and cap or monitor live viewership before enabling WebRTC playback in production.",
+  "apply": "Dashboard > Stream > Analytics (check WebRTC delivery minutes)",
+  "affected": "Stream accounts using WebRTC live inputs, from 2026-10-15",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "stream",
+    "webrtc",
+    "billing",
+    "whip",
+    "whep"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

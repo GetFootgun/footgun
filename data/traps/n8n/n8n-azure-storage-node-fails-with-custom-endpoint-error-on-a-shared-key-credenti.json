@@ -1,0 +1,29 @@
+{
+  "id": "fg-0543",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "n8n Azure Storage node",
+  "title": "n8n Azure Storage node fails with custom endpoint error on a Shared Key credential set to Custom cloud",
+  "symptoms": [
+    "Azure Storage Shared Key credential with Azure Cloud set to Custom fails with a clear error when used",
+    "Private endpoint or custom domain storage account will not connect"
+  ],
+  "cause": "From 2.40, the Shared Key credential has an Azure Cloud dropdown. Custom endpoints only work when an admin enables N8N_AZURE_STORAGE_CUSTOM_ENDPOINTS_ENABLED, which defaults to off. Only host-style endpoints are supported.",
+  "fix": "Set the environment variable to true on the n8n instance and restart, and use a host-style endpoint URL.",
+  "apply": "N8N_AZURE_STORAGE_CUSTOM_ENDPOINTS_ENABLED=true",
+  "affected": "n8n 2.40 and later, self-hosted instances using custom or private Azure Storage endpoints",
+  "sources": [
+    "https://docs.n8n.io/release-notes/"
+  ],
+  "tags": [
+    "n8n",
+    "azure-storage",
+    "credentials",
+    "env-var",
+    "endpoint"
+  ],
+  "verified_on": "2026-10-17",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
