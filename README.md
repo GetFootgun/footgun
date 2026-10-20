@@ -6,7 +6,7 @@ Footgun is a dated, verified registry of the traps that docs leave out: silent d
 
 ## Does it help?
 
-On 8 coding tasks that touch recent API changes, Claude Code got the code right on the first try 88% of the time with Footgun and 38% without, at 41% lower cost per working result. The method and full results, including older APIs where it made no difference, are at [getfootgun.com/benchmark](https://getfootgun.com/benchmark).
+On 17 coding tasks that touch recent API changes, run 5 times each, Claude Code got the code right on the first try 82% of the time with Footgun and 52% without, at 18% lower cost per working result. On older APIs the model already knows, it made no difference. The method and full results are at [getfootgun.com/benchmark](https://getfootgun.com/benchmark).
 
 ## Install in Claude Code
 
