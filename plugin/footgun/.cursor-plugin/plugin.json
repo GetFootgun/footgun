@@ -2,7 +2,7 @@
   "name": "footgun",
   "displayName": "Footgun",
   "version": "1.0.0",
-  "description": "Dated, verified fixes for how APIs and AI coding tools break, served to your agent before it codes. Lookups need no account.",
+  "description": "Dated, verified fixes for how APIs and AI coding tools break, served to your agent before it codes. Lookups need no account. Check existing code with npx @getfootgun/footgun scan.",
   "author": {
     "name": "Footgun",
     "email": "hello@getfootgun.com"
@@ -10,6 +10,14 @@
   "homepage": "https://getfootgun.com",
   "repository": "https://github.com/GetFootgun/footgun",
   "license": "MIT",
-  "keywords": ["mcp", "api", "breaking-changes", "deprecations", "stripe", "nextjs", "claude-code"],
+  "keywords": [
+    "mcp",
+    "api",
+    "breaking-changes",
+    "deprecations",
+    "stripe",
+    "nextjs",
+    "claude-code"
+  ],
   "logo": "assets/logo.svg"
 }
