@@ -8,6 +8,10 @@ Footgun is a dated, verified registry of the traps that docs leave out: silent d
 
 On 17 coding tasks that touch recent API changes, run 5 times each, Claude Code got the code right on the first try 82% of the time with Footgun and 52% without, at 18% lower cost per working result. On older APIs the model already knows, it made no difference. The method and full results are at [getfootgun.com/benchmark](https://getfootgun.com/benchmark).
 
+## What we found in 200 AI-built apps
+
+89 of 200 still use GitHub Actions built for Node 20, which GitHub now runs on Node 24. 93 have at least one problem that breaks now or will break, counting only rules a person checked against real code. The method and results are at [getfootgun.com/scan](https://getfootgun.com/scan).
+
 ## Install in Claude Code
 
 ```
