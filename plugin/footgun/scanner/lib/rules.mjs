@@ -128,6 +128,13 @@ function isSafe(rule) {
   return v;
 }
 
+// A line whose trimmed start is a comment marker is not matched (`#!` shebangs fall under `#`).
+// Block comments are not parsed: only lines starting with `/*` or `*` are skipped.
+const COMMENT_START = /^(?:\/\/|#|\/\*|\*|<!--|--)/;
+// A rule whose pattern itself targets comment syntax (contains `<!--`, or starts with a comment marker) is not subject to the skip.
+// For ordinary rules, `#[attr]`, `#include` and Markdown `*` bullets are skipped like any other comment-looking line.
+const COMMENT_RULE = /<!--|^\^?(?:\\s\*|\(\?:|\()*(?:--|#|\/\/|\/\\\*|\\\*)/;
+
 export function matchRule(rule, relPath, text) {
   if (!isSafe(rule)) return [];
   if (!rule.files.some((g) => globMatch(g, relPath))) return [];
@@ -139,10 +146,12 @@ export function matchRule(rule, relPath, text) {
     return [];
   }
   if (unless && unless.test(text)) return [];
+  const skipComments = !COMMENT_RULE.test(rule.pattern);
   const hits = [];
   const lines = text.split(/\r?\n/);
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].length > MAX_LINE) continue;
+    if (skipComments && COMMENT_START.test(lines[i].trimStart())) continue;
     if (re.test(lines[i])) hits.push(i + 1);
   }
   return hits;

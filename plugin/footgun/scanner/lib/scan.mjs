@@ -303,16 +303,16 @@ export async function scanProject(root, rules) {
     : [];
 
   const findings = [];
-  const seen = new Set();
+  // one finding per trap per file, at its lowest matching line
+  const first = new Map();
   const hitRules = new Set();
   for (const { rel, d, line } of hits) {
     const ri = detects[d].ri;
-    const key = `${ri}\0${rel}\0${line}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
+    const key = `${ri}\0${rel}`;
     hitRules.add(ri);
-    findings.push(finding(good[ri], rel, line, false));
+    if (!first.has(key) || line < first.get(key).line) first.set(key, { ri, rel, line });
   }
+  for (const { ri, rel, line } of first.values()) findings.push(finding(good[ri], rel, line, false));
   findings.sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : a.line - b.line));
   // a manual finding and the applicable list both need a ref narrower than "any version": a broad ref
   // only shows the package is present, which is enough to run detect rules but not to say the trap applies
