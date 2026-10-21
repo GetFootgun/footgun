@@ -1,7 +1,7 @@
 {
   "name": "footgun",
   "displayName": "Footgun",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Dated, verified traps for third-party APIs, platforms, and AI tools, loaded before your agent hits them.",
   "author": { "name": "Footgun" },
   "homepage": "https://getfootgun.com",
@@ -10,7 +10,7 @@
   "keywords": ["mcp", "api", "errors", "gotchas"],
   "userConfig": {
     "api_key": { "type": "string", "title": "Footgun API key", "description": "Optional. Needed to confirm traps and to file privately. Create one at https://getfootgun.com/account", "sensitive": true },
-    "auto_context": { "type": "boolean", "title": "Automatic trap notes", "description": "At the start of each session, scan this project on your machine and add a short note listing the known traps for its exact package versions. Your code never leaves your machine. Needs Node 20 or later.", "default": false },
+    "auto_context": { "type": "boolean", "title": "Automatic trap notes", "description": "Adds a short note of known traps for this project's package versions at the start of each session. Your code never leaves your machine. Needs Node 20 or later. On by default; set to false to turn it off.", "default": true },
     "share_learnings": { "type": "boolean", "title": "Share anonymous learnings", "description": "Send anonymous trap filings and an anonymous usage count to Footgun. No source code is ever sent. Turn off to send neither.", "default": true }
   }
 }

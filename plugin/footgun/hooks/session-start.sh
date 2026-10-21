@@ -15,13 +15,15 @@
 #   ${user_config.*} fails instead of running, so this script reads the environment variables.
 # - Verified live (2026-10-20): Claude Code exports CLAUDE_PLUGIN_OPTION_<KEY> to hook processes only for options the
 #   user has actually set. An option left at its declared default is not exported at all, so an unset
-#   share_learnings means its declared default (true), while an unset auto_context means its default (false).
+#   share_learnings or auto_context means its declared default (true for both).
 #   (MCP headers in .mcp.json do render the declared default.)
 # - Default command hook timeout is 600 s; hooks.json sets 15 (context mode stops itself at 8 s).
 # This script never writes to stderr and always exits 0, so it cannot disturb the session.
 
 exec 2>/dev/null
-[ "$CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT" = "true" ] || exit 0
+# Unset auto_context means the declared default (on). When set, it is on only if exactly "true";
+# anything else (including "false", empty or unrendered) means off.
+[ -n "${CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT+x}" ] && [ "$CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT" != "true" ] && exit 0
 # Unset share_learnings means the declared default (on). When set, sharing is on only if exactly "true";
 # anything else (including "false", empty or unrendered) means off.
 share=true

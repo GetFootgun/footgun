@@ -21,7 +21,7 @@ On 17 coding tasks that touch recent API changes, run 5 times each, Claude Code 
 
 Lookups and filing work without an account. Filed traps are checked against official sources before anyone else sees them. To confirm traps, create an API key at [getfootgun.com/account](https://getfootgun.com/account) and enter it when the plugin asks.
 
-The plugin also adds `/footgun:scan`, which checks your project on your machine for known traps in the exact package versions you use. Your code never leaves your machine; only the rule download and an anonymous count of findings are sent. Turn the plugin setting `share_learnings` off to stop the count and the filing of fixes your agent learns. The setting `auto_context` adds a short note of those traps at the start of each session; it is off by default.
+The plugin also adds `/footgun:scan`, which checks your project on your machine for known traps in the exact package versions you use. Your code never leaves your machine; only the rule download and an anonymous count of findings are sent. Turn the plugin setting `share_learnings` off to stop the count and the filing of fixes your agent learns. The setting `auto_context` adds a short note of those traps at the start of each session. It is on by default; set it to false to turn it off.
 
 ## Command line
 
