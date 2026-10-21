@@ -87,8 +87,24 @@ async function scan(args) {
   await sendPing({ url: BASE, kind: "scan", counts: pingCounts(uniqueTraps(result.findings)) });
 }
 
+const USAGE = `usage:
+  npx @getfootgun/footgun "<error text>"
+  npx @getfootgun/footgun lookup <provider> [context]
+  npx @getfootgun/footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>]
+  npx @getfootgun/footgun context [path]
+
+scan flags:
+  --json                        print machine-readable output
+  --fail-on breaks|will-break   exit 1 when a finding of that kind is found
+  --key <key>                   search and scan with your private namespaces too
+
+environment:
+  FOOTGUN_API_KEY               same as --key
+  FOOTGUN_URL                   point at another server
+  FOOTGUN_SHARE=false           turn off the anonymous usage count`;
+
 async function main() {
-  if (!a || a === "--help") { console.log('usage:\n  footgun "<error text>"\n  footgun lookup <provider> [context]\n  footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>]\n  footgun context [path]'); return; }
+  if (!a || process.argv.slice(2).some((x) => x === "--help" || x === "-h")) { console.log(USAGE); return; }
   // FOOTGUN_CONTEXT_DEADLINE_MS exists for tests. Exiting ends a scan still running past the deadline.
   if (a === "context") {
     const deadlineMs = Number(process.env.FOOTGUN_CONTEXT_DEADLINE_MS) || undefined;
