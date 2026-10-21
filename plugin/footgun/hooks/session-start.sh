@@ -13,21 +13,26 @@
 # - userConfig values reach a hook as environment variables CLAUDE_PLUGIN_OPTION_<KEY>, KEY uppercased
 #   (auto_context -> CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT). A shell-form hook command that references
 #   ${user_config.*} fails instead of running, so this script reads the environment variables.
+# - Verified live (2026-10-20): Claude Code exports CLAUDE_PLUGIN_OPTION_<KEY> to hook processes only for options the
+#   user has actually set. An option left at its declared default is not exported at all, so an unset
+#   share_learnings means its declared default (true), while an unset auto_context means its default (false).
+#   (MCP headers in .mcp.json do render the declared default.)
 # - Default command hook timeout is 600 s; hooks.json sets 15 (context mode stops itself at 8 s).
 # This script never writes to stderr and always exits 0, so it cannot disturb the session.
 
 exec 2>/dev/null
 [ "$CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT" = "true" ] || exit 0
-# Sharing is on only when share_learnings is exactly "true"; anything else (unset, empty, unrendered) means off.
-share=false
-[ "$CLAUDE_PLUGIN_OPTION_SHARE_LEARNINGS" = "true" ] && share=true
+# Unset share_learnings means the declared default (on). When set, sharing is on only if exactly "true";
+# anything else (including "false", empty or unrendered) means off.
+share=true
+[ -n "${CLAUDE_PLUGIN_OPTION_SHARE_LEARNINGS+x}" ] && [ "$CLAUDE_PLUGIN_OPTION_SHARE_LEARNINGS" != "true" ] && share=false
 
 root="${CLAUDE_PROJECT_DIR:-$PWD}"
 major="$(node -p 'process.versions.node.split(".")[0]')"
 case "$major" in ''|*[!0-9]*) major=0 ;; esac
 
 if [ "$major" -lt 20 ]; then
-  # Anonymous count of sessions without a usable Node: no paths, names or code. Skipped when share_learnings is false
+  # Anonymous count of sessions without a usable Node: no paths, names or code. Skipped when share_learnings is off
   # or curl is absent. Runs in the background with short timeouts and discarded output, so it cannot slow or disturb the session.
   if [ "$share" = "true" ] && command -v curl >/dev/null; then
     ( curl -s -o /dev/null --connect-timeout 1 --max-time 2 -X POST -H 'content-type: application/json' \

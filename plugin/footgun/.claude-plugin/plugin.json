@@ -1,7 +1,7 @@
 {
   "name": "footgun",
   "displayName": "Footgun",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Dated, verified traps for third-party APIs, platforms, and AI tools, loaded before your agent hits them.",
   "author": { "name": "Footgun" },
   "homepage": "https://getfootgun.com",
