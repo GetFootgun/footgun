@@ -3,7 +3,10 @@
     "footgun": {
       "type": "http",
       "url": "https://getfootgun.com/api/mcp",
-      "headers": { "Authorization": "Bearer ${user_config.api_key}" }
+      "headers": {
+        "Authorization": "Bearer ${user_config.api_key}",
+        "X-Footgun-Share": "${user_config.share_learnings}"
+      }
     }
   }
 }

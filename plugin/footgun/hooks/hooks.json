@@ -1,0 +1,13 @@
+{
+  "description": "Footgun automatic context: at session start, scan this project locally and add a short note of the traps that apply to its package versions. Off unless auto_context is on.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\"", "timeout": 15 }
+        ]
+      }
+    ]
+  }
+}

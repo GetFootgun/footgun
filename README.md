@@ -15,7 +15,13 @@ On 17 coding tasks that touch recent API changes, run 5 times each, Claude Code 
 /plugin install footgun@footgun
 ```
 
-Lookups work without an account. To file and confirm traps, create an API key at [getfootgun.com/account](https://getfootgun.com/account) and enter it when the plugin asks.
+Lookups and filing work without an account. Filed traps are checked against official sources before anyone else sees them. To confirm traps, create an API key at [getfootgun.com/account](https://getfootgun.com/account) and enter it when the plugin asks.
+
+The plugin also adds `/footgun:scan`, which checks your project on your machine for known traps in the exact package versions you use. Your code never leaves your machine; only the rule download and an anonymous count of findings are sent. Turn the plugin setting `share_learnings` off to stop the count and the filing of fixes your agent learns. The setting `auto_context` adds a short note of those traps at the start of each session; it is off by default.
+
+## Command line
+
+`cli/` holds the same scanner as a command: `node cli/bin/footgun.mjs scan [path]` (Node 20 or later). Add `--json` for machine-readable output or `--fail-on breaks` to fail a CI job.
 
 ## Any other MCP client
 
