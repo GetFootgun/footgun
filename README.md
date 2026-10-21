@@ -21,7 +21,7 @@ The plugin also adds `/footgun:scan`, which checks your project on your machine 
 
 ## Command line
 
-`cli/` holds the same scanner as a command: `node cli/bin/footgun.mjs scan [path]` (Node 20 or later). Add `--json` for machine-readable output or `--fail-on breaks` to fail a CI job.
+`cli/` holds the same scanner as a command, published on npm as `@getfootgun/footgun`: `npx @getfootgun/footgun scan [path]` (Node 20 or later). Add `--json` for machine-readable output or `--fail-on breaks` to fail a CI job.
 
 ## Any other MCP client
 

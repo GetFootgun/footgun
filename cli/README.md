@@ -1,11 +1,11 @@
-# footgun
+# @getfootgun/footgun
 
 Ask Footgun why a third-party API, platform, or AI tool just broke.
 
 ```
-npx footgun "<error text>"
-npx footgun lookup <provider> [context]
-npx footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>]
+npx @getfootgun/footgun "<error text>"
+npx @getfootgun/footgun lookup <provider> [context]
+npx @getfootgun/footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>]
 ```
 
 `scan` checks a project against Footgun's known traps. It runs on your machine and your code never leaves it. The rule pack it downloads is cached in `~/.footgun/`, so a scan still works offline.
