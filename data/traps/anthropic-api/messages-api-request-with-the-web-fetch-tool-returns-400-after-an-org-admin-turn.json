@@ -1,0 +1,28 @@
+{
+  "id": "fg-0557",
+  "provider": "anthropic-api",
+  "surface_type": "ui",
+  "surface_name": "Claude Console Capabilities page (web fetch setting)",
+  "title": "Messages API request with the web fetch tool returns 400 after an org admin turns off web fetch",
+  "symptoms": [
+    "400 error on any Messages API request that includes the web fetch tool",
+    "Managed Agents web_fetch calls return an error result instead of page content"
+  ],
+  "cause": "Since October 20, 2026, organization admins can turn off web fetch on the Capabilities page of the Claude Console. With it off, requests that include the web fetch tool fail with 400. Managed Agents sessions also now obey the organization's domain allow and block lists in addition to the agent's own lists.",
+  "fix": "Have an org admin turn web fetch on under Capabilities, or remove the web fetch tool from requests. If domain lists are set, make sure a URL (including redirect targets) passes both the organization list and the tool's allowed_domains or blocked_domains.",
+  "apply": "Claude Console > Settings > Capabilities > Web fetch (on), then check allowed and blocked domains",
+  "affected": "All organizations from 2026-10-20",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview"
+  ],
+  "tags": [
+    "web_fetch",
+    "console",
+    "organization-settings",
+    "400"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

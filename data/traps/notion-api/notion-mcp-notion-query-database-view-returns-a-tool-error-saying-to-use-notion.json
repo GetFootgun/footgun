@@ -1,0 +1,30 @@
+{
+  "id": "fg-0555",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion MCP notion-query-database-view",
+  "title": "Notion MCP notion-query-database-view returns a tool error saying to use notion-query-data-sources",
+  "symptoms": [
+    "tool error naming notion-query-data-sources as the replacement",
+    "notion-query-database-view missing from tools/list",
+    "saved view queries that worked with a cached tool list now fail"
+  ],
+  "cause": "notion-query-database-view was removed from tool lists on 2026-08-13 and calls to it stopped working on 2026-09-29.",
+  "fix": "Call notion-query-data-sources with data.mode set to view and the same view_url.",
+  "apply": "notion-query-data-sources {\"data\":{\"mode\":\"view\",\"view_url\":\"<view_url>\"}}",
+  "affected": "Notion MCP clients, removal complete 2026-09-29",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "mcp",
+    "query",
+    "views",
+    "removal"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

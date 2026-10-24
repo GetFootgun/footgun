@@ -1,0 +1,30 @@
+{
+  "id": "fg-0552",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Managed Agents environments networking (limited)",
+  "title": "Creating a Managed Agents session returns 400, or web_fetch/web_search return nothing, under limited networking with allowed_hosts",
+  "symptoms": [
+    "400 error on session create or update when a web tool's allowed_domains has an entry not within allowed_hosts",
+    "web_fetch returns url_not_allowed error result",
+    "web_search omits results, or both tools return nothing when allowed_hosts is empty"
+  ],
+  "cause": "Since October 7, 2026, a cloud environment with limited networking applies allowed_hosts to web_search and web_fetch too. An allowed_hosts entry matches one exact host unless it starts with *., so docs.example.com is not within [\"example.com\"]. allow_package_managers and allow_mcp_servers add no hosts for these tools.",
+  "fix": "Add each needed host to allowed_hosts, using a *. wildcard entry for subdomains, or remove the entry from the web tool's allowed_domains. Note that adding a host also opens it to the sandbox.",
+  "apply": "allowed_hosts: [\"example.com\", \"*.example.com\"]",
+  "affected": "Claude Managed Agents cloud environments with limited networking, from 2026-10-07",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview"
+  ],
+  "tags": [
+    "managed-agents",
+    "networking",
+    "allowed_hosts",
+    "web_fetch",
+    "web_search"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

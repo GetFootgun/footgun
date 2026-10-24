@@ -1,0 +1,28 @@
+{
+  "id": "fg-0549",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Wrangler",
+  "title": "Wrangler 4.150.0 uploads source maps by default on deploy",
+  "symptoms": [
+    "Source maps appear in Workers after upgrading Wrangler without config changes",
+    "Stack traces now show original file names and lines"
+  ],
+  "cause": "From Wrangler 4.150.0, wrangler deploy, versions upload and preview generate and upload source maps without upload_source_maps being set. cf deploy and Vite plugin 1.64.0 or later do the same. Unresolvable maps such as inline data: maps are skipped silently unless upload_source_maps is true.",
+  "fix": "Set upload_source_maps to false to opt out, or true to make unresolvable maps fail the upload. For cf or the Vite plugin, set build.sourcemap to false.",
+  "apply": "upload_source_maps = false",
+  "affected": "Wrangler 4.150.0 and later, cf deploy, Cloudflare Vite plugin 1.64.0 and later, from 2026-10-20",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "wrangler",
+    "source-maps",
+    "defaults",
+    "vite"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0556",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion API custom_emoji icons",
+  "title": "Notion API returns validation_error for a custom_emoji icon that used to save and read back as null",
+  "symptoms": [
+    "validation_error when setting a custom_emoji icon on a page, database, data source or callout",
+    "icon saved earlier reads back as null"
+  ],
+  "cause": "Since 2026-09-25, a custom_emoji icon must name a custom emoji that exists in the integration's workspace. Previously an invalid ID was saved and returned null.",
+  "fix": "Use a custom emoji ID from the same workspace as the integration, or use a standard emoji or native icon.",
+  "apply": "{\"icon\":{\"type\":\"custom_emoji\",\"custom_emoji\":{\"id\":\"<id_from_this_workspace>\"}}}",
+  "affected": "Notion API page, database, data source and callout writes, from 2026-09-25",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "icons",
+    "custom_emoji",
+    "validation_error"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

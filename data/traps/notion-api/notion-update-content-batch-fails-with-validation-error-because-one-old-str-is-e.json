@@ -1,0 +1,30 @@
+{
+  "id": "fg-0554",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion MCP notion-update-page update_content",
+  "title": "Notion update_content batch fails with validation_error because one old_str is empty or matches nothing",
+  "symptoms": [
+    "validation_error naming an old_str that wasn't found",
+    "update_content call that used to partly succeed now leaves the page unchanged",
+    "validation_error on an empty old_str"
+  ],
+  "cause": "Since 2026-08-25, notion-update-page applies every content-changing replacement in a batch or none. One missing old_str now fails the whole call, and an empty old_str, once silently skipped, fails validation on both the MCP tool and the REST markdown update. On 2026-10-16 this changed again: partial matches are applied and misses are listed in warnings, and the request fails only if no content-changing edit matches.",
+  "fix": "Send only non-empty old_str values that exist on the page. Read the warnings array (codes no_match or indentation_mismatch) after each update, and re-fetch the page if a miss is reported.",
+  "apply": "Check response.warnings after every update_content call; treat any no_match entry as a failed edit and re-fetch the page before retrying.",
+  "affected": "Notion MCP and Update page markdown, behavior changed 2026-08-25 and again 2026-10-16",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "mcp",
+    "markdown",
+    "update_content",
+    "validation_error"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

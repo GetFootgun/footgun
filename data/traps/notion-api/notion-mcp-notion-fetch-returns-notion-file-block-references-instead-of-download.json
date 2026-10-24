@@ -1,0 +1,30 @@
+{
+  "id": "fg-0553",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion MCP notion-fetch file URLs",
+  "title": "Notion MCP notion-fetch returns notion-file-block:// references instead of downloadable file URLs",
+  "symptoms": [
+    "page markdown from notion-fetch contains notion-file-block:// links",
+    "file download from a fetched page fails because the link is not an http URL",
+    "copied page markdown has expired signed URLs"
+  ],
+  "cause": "From 2026-10-05, notion-fetch no longer signs URLs for files in page blocks. It emits stable notion-file-block:// references. Files in database properties are still signed inline.",
+  "fix": "Pass include_file_urls: true to notion-fetch, or call notion-get-file-download-urls with up to 25 references. Keep the references, not the URLs, when editing or copying markdown.",
+  "apply": "notion-fetch {\"id\":\"<page_id>\",\"include_file_urls\":true}",
+  "affected": "Notion MCP, from 2026-10-05",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "mcp",
+    "notion-fetch",
+    "files",
+    "signed-urls"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

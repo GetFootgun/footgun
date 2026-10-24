@@ -1,0 +1,29 @@
+{
+  "id": "fg-0548",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "cloudflared",
+  "title": "Tunnel path-based ingress rules may match differently once URL normalization becomes default on 2027-01-25",
+  "symptoms": [
+    "Requests that matched one ingress rule start matching another after upgrading cloudflared",
+    "Path-based routing for rules that require Cloudflare Access validation changes behavior"
+  ],
+  "cause": "From cloudflared 2026.10.0 URLs can be normalized before ingress matching, off by default. New cloudflared releases from 2027-01-25 will turn it on by default, which can change which ingress rule matches. Configs without Access-validated rules are unaffected.",
+  "fix": "Turn normalization on now in a test environment and verify path routing before the default flips. You can also set TUNNEL_DISABLE_PATH_NORMALIZATION=false on each replica and restart it.",
+  "apply": "cloudflared tunnel --disable-path-normalization=false run <TUNNEL_NAME_OR_UUID>",
+  "affected": "cloudflared 2026.10.0 and later; default changes in releases from 2027-01-25",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "cloudflared",
+    "tunnel",
+    "ingress",
+    "access",
+    "normalization"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

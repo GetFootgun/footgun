@@ -1,0 +1,29 @@
+{
+  "id": "fg-0547",
+  "provider": "cloudflare",
+  "surface_type": "sdk",
+  "surface_name": "Agents SDK Think",
+  "title": "Think agent starts with an empty workspace after moving from @cloudflare/shell to @cloudflare/computer",
+  "symptoms": [
+    "Agent files are missing after upgrading Think",
+    "Workspace is empty although the old data still exists in the Durable Object SQLite tables"
+  ],
+  "cause": "@cloudflare/computer stores files in different tables than @cloudflare/shell and there is no automatic migration. @cloudflare/shell and Think's createExecuteTool are deprecated as of 2026-10-20.",
+  "fix": "Copy existing files into the new workspace with the migration script in the official guide before switching. Add WorkerJavaScriptBackend if you need JS execution.",
+  "apply": "import { Workspace } from \"@cloudflare/computer\";",
+  "affected": "Think and Agent Skills using @cloudflare/shell, from 2026-10-20",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "agents",
+    "think",
+    "workspace",
+    "migration",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

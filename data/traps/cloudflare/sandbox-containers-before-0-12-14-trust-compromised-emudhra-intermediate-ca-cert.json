@@ -1,0 +1,29 @@
+{
+  "id": "fg-0558",
+  "provider": "cloudflare",
+  "surface_type": "sdk",
+  "surface_name": "Sandbox SDK",
+  "title": "Sandbox containers before 0.12.14 trust compromised eMudhra intermediate CA certificates",
+  "symptoms": [
+    "HTTPS from the sandbox to test hosts at emudhra.we-have-a-problem.com succeeds instead of failing",
+    "Running sandboxes keep the old image after a Worker redeploy"
+  ],
+  "cause": "Sandbox images before 0.12.14 trust eight eMudhra intermediate CAs whose private keys can be recovered, so forged certificates are accepted for direct HTTPS from the container (mountBucket, backups, gitCheckout, tunnels, user code). Running sandboxes and old snapshots keep the old image.",
+  "fix": "Upgrade @cloudflare/sandbox to 0.12.14 and update the Dockerfile FROM line, keeping any -python, -opencode or -musl suffix. For 1.x, docker pull base images, run docker builder prune --all, redeploy, destroy running sandboxes, and recreate snapshots from the new image.",
+  "apply": "FROM docker.io/cloudflare/sandbox:0.12.14",
+  "affected": "Sandbox SDK images before 0.12.14 (0.13 prerelease before 0.13.0-next.825.1; 1.x images built on stale base images), as of 2026-10-22",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "sandbox",
+    "tls",
+    "ca-certificates",
+    "security",
+    "docker"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0551",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code self-hosted runner",
+  "title": "Self-hosted runner checkout hook killed after 30 minutes and the session setup fails",
+  "symptoms": [
+    "Session setup fails after a long checkout hook",
+    "Checkout hook is stopped at 30 minutes",
+    "Large clones or slow bootstrap hooks fail on 2.1.307 but worked before"
+  ],
+  "cause": "From 2.1.307, checkout hooks on the self-hosted runner are stopped after 30 minutes by default, which fails the session setup. Earlier versions had no such limit.",
+  "fix": "Raise --checkout-hook-timeout-min to a larger number of minutes, or set it to 0 to disable the limit.",
+  "apply": "--checkout-hook-timeout-min 0",
+  "affected": "Claude Code self-hosted runner 2.1.307 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "self-hosted-runner",
+    "checkout-hook",
+    "timeout",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

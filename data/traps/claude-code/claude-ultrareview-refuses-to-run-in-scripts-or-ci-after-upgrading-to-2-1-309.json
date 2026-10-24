@@ -1,0 +1,30 @@
+{
+  "id": "fg-0550",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude ultrareview",
+  "title": "claude ultrareview refuses to run in scripts or CI after upgrading to 2.1.309",
+  "symptoms": [
+    "claude ultrareview exits without running when no terminal is attached",
+    "workspace trust prompt appears for ultrareview on a terminal",
+    "Script that worked on 2.1.308 now refuses to start the review"
+  ],
+  "cause": "From 2.1.309, claude ultrareview requires workspace trust. On a terminal it asks. Without a terminal it refuses. Earlier versions did not check trust.",
+  "fix": "Pass --trust-workspace in scripts. The flag takes no value, so put any PR number or base branch before it. Alternatively set CLAUDE_CODE_DISABLE_ULTRAREVIEW_TRUST_CHECK=1 in the environment.",
+  "apply": "claude ultrareview 123 --trust-workspace",
+  "affected": "Claude Code 2.1.309 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "ultrareview",
+    "ci",
+    "workspace-trust",
+    "headless",
+    "upgrade"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

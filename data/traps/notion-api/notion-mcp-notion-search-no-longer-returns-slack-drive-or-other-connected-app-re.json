@@ -1,0 +1,30 @@
+{
+  "id": "fg-0559",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion MCP notion-search and notion-ai-search",
+  "title": "Notion MCP notion-search no longer returns Slack, Drive or other connected-app results",
+  "symptoms": [
+    "notion-search returns only Notion pages and databases",
+    "connected sources such as Slack or Google Drive never appear in results",
+    "notion-ai-search missing from tools/list"
+  ],
+  "cause": "notion-search became keyword-only on 2026-09-02, then on 2026-10-20 it was limited to Notion pages and databases in hosted sessions. Connected-source search moved to notion-connector-search. notion-ai-search was dropped from tools/list on 2026-10-07 but remains callable by name.",
+  "fix": "Call notion-connector-search for Slack, Drive, GitHub, mail and calendar. It only appears when the user has AI search and the workspace has a connected source. Refresh the client tool list or reconnect Notion MCP if it is missing.",
+  "apply": "notion-connector-search {\"query\":\"<text>\",\"sources\":[\"slack\"]}",
+  "affected": "Hosted Notion MCP sessions, from 2026-09-02 and 2026-10-20",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "mcp",
+    "search",
+    "connectors",
+    "tool-list"
+  ],
+  "verified_on": "2026-10-24",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
