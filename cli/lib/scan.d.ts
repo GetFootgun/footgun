@@ -14,6 +14,8 @@ export type PackRule = {
   fix: string;
   url: string | null;
   private?: boolean;
+  /** Absent in packs from older servers; read as false. */
+  launch?: boolean;
 };
 
 /** dir is relative to the scan root ("" for the root); values are resolved versions. */
@@ -36,6 +38,7 @@ export type Finding = {
   url: string | null;
   private: boolean;
   manual: boolean;
+  launch: boolean;
 };
 
 export type SkippedRule = { id: string; why: string };

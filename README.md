@@ -27,9 +27,13 @@ The plugin also adds `/footgun:scan`, which checks your project on your machine 
 
 `cli/` holds the same scanner as a command, published on npm as `@getfootgun/footgun`: `npx @getfootgun/footgun scan [path]` (Node 20 or later). Add `--json` for machine-readable output or `--fail-on breaks` to fail a CI job.
 
-After a scan it prints a dated README badge: "no known API traps" only when the scan found nothing, "scanned" otherwise.
+Launch checks come first, under "Before you launch": problems that leak data or run up a bill, such as secret keys in browser code or a Supabase table with RLS off. Ones that live in a dashboard rather than in code are listed as items to check yourself whenever you use that package.
 
-In GitHub Actions, use [GetFootgun/scan-action](https://github.com/GetFootgun/scan-action). It lists findings in the job summary and can fail the job on `breaks` or `will-break`.
+After a scan it prints a dated README badge: "no known API traps" only when the scan found nothing apart from launch reminders, "scanned" otherwise.
+
+With a Pro or Team key, `scan --watch` adds the project to Footgun Watch, which lists new and changed traps that match your exact package versions on your Projects page. It sends the project name, the folder of each package file, your package names and versions, and the trap, file and line of each finding, never code. See [getfootgun.com/docs](https://getfootgun.com/docs#watch).
+
+In GitHub Actions, use [GetFootgun/scan-action](https://github.com/GetFootgun/scan-action). It lists findings in the job summary, can fail the job on `breaks` or `will-break`, and with `watch: "true"` sends the project to Footgun Watch.
 
 ## Any other MCP client
 

@@ -20,7 +20,11 @@ const RANK = { breaks: 0, "will-break": 1, silent: 2, cost: 3 };
 function rankedTraps(findings, applicable, rules) {
   const order = new Map(rules.map((r, i) => [r.id, i]));
   const byId = new Map();
+  // a check-yourself item shows only where a narrow ref applies (it is then in `applicable`); a launch item that
+  // matched through an "any version" ref is for the scan report, not the session note
+  const narrow = new Set(applicable.map((a) => a.trapId));
   for (const f of findings) {
+    if (f.manual && !narrow.has(f.trapId)) continue;
     const have = byId.get(f.trapId);
     if (!have || (have.manual && !f.manual)) byId.set(f.trapId, f);
   }
@@ -29,11 +33,12 @@ function rankedTraps(findings, applicable, rules) {
   for (const a of applicable) {
     const r = ruleById.get(a.trapId);
     if (r && !byId.has(a.trapId)) {
-      byId.set(a.trapId, { trapId: r.id, title: r.title, severity: r.severity, deadline: r.deadline ?? null, applies: a.package });
+      byId.set(a.trapId, { trapId: r.id, title: r.title, severity: r.severity, deadline: r.deadline ?? null, launch: r.launch === true, applies: a.package });
     }
   }
   return [...byId.values()].sort((a, b) =>
     (RANK[a.severity] ?? 9) - (RANK[b.severity] ?? 9) ||
+    (b.launch === true) - (a.launch === true) ||
     (a.deadline ?? "￿").localeCompare(b.deadline ?? "￿") ||
     (order.get(a.trapId) ?? 0) - (order.get(b.trapId) ?? 0));
 }

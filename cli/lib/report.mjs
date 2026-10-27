@@ -26,10 +26,20 @@ function details(f) {
 export function textReport(findings) {
   if (!findings.length) return "No known traps found.";
   const found = findings.filter((f) => !f.manual);
-  const manual = findings.filter((f) => f.manual);
+  const manual = findings.filter((f) => f.manual && !f.launch);
+  const launchManual = findings.filter((f) => f.manual && f.launch);
   const out = [];
+  const launch = found.filter((f) => f.launch);
+  if (launch.length || launchManual.length) {
+    out.push("Before you launch:", "");
+    for (const f of launch) out.push(`${clean(f.file)}:${f.line}  ${clean(f.title)} [${clean(f.severity)}]`, ...details(f), "");
+    if (launchManual.length) {
+      out.push("Check yourself:", "");
+      for (const f of launchManual) out.push(clean(f.title), ...details(f), "");
+    }
+  }
   for (const [sev, heading] of GROUPS) {
-    const group = found.filter((f) => f.severity === sev);
+    const group = found.filter((f) => !f.launch && f.severity === sev);
     if (!group.length) continue;
     out.push(`${heading}:`, "");
     for (const f of group) out.push(`${clean(f.file)}:${f.line}  ${clean(f.title)}`, ...details(f), "");

@@ -265,6 +265,7 @@ function finding(rule, file, line, manual) {
     url: rule.url ?? null,
     private: rule.private === true,
     manual,
+    launch: rule.launch === true,
   };
 }
 
@@ -317,8 +318,11 @@ export async function scanProject(root, rules) {
   // a manual finding and the applicable list both need a ref narrower than "any version": a broad ref
   // only shows the package is present, which is enough to run detect rules but not to say the trap applies
   const narrow = (ri) => matches.findIndex((row) => row[ri] && !row[ri].broad);
+  const present = (ri) => matches.some((row) => row[ri]);
   good.forEach((r, ri) => {
-    if (r.checkManually && !skipped.has(ri) && !hitRules.has(ri) && narrow(ri) !== -1) {
+    // a launch check ("you use Supabase, so check RLS") is about the package being there, so any ref counts
+    const shows = r.launch === true ? present(ri) : narrow(ri) !== -1;
+    if (r.checkManually && !skipped.has(ri) && !hitRules.has(ri) && shows) {
       findings.push(finding(r, null, null, true));
     }
   });

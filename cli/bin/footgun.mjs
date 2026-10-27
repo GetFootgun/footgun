@@ -4,7 +4,8 @@ import { scrub } from "../lib/scrub.mjs";
 import { statSync } from "node:fs";
 import { resolve } from "node:path";
 import { loadPack, NoRulesError, pingCounts, sendPing } from "../lib/pack.mjs";
-import { scanProject } from "../lib/scan.mjs";
+import { scanProject, readManifests } from "../lib/scan.mjs";
+import { buildWatchBody, defaultProjectName, sendWatch, validRepoUrl } from "../lib/watch.mjs";
 import { runContext } from "../lib/context.mjs";
 import { textReport, jsonReport, failed, FAIL_ON } from "../lib/report.mjs";
 import { badgeMarkdown } from "../lib/badge.mjs";
@@ -30,15 +31,21 @@ function print(traps) {
 class UsageError extends Error {}
 
 function scanArgs(args) {
-  const o = { path: ".", json: false, failOn: null, key: KEY || undefined };
+  const o = { path: ".", json: false, failOn: null, key: KEY || undefined, watch: false, project: null, repoUrl: null };
   let path = null;
   for (let i = 0; i < args.length; i++) {
     const v = args[i];
     if (v === "--json") o.json = true;
-    else if (v === "--fail-on" || v === "--key") {
+    else if (v === "--watch") o.watch = true;
+    else if (v === "--fail-on" || v === "--key" || v === "--project" || v === "--repo-url") {
       const val = args[++i];
       if (val === undefined) throw new UsageError(`${v} needs a value`);
       if (v === "--key") o.key = val;
+      else if (v === "--project") o.project = val;
+      else if (v === "--repo-url") {
+        if (!validRepoUrl(val)) throw new UsageError("--repo-url must be an http or https URL of at most 200 characters, with no username, password, query or fragment");
+        o.repoUrl = val;
+      }
       else if (!Object.hasOwn(FAIL_ON, val)) throw new UsageError("--fail-on must be breaks or will-break");
       else o.failOn = val;
     } else if (v.startsWith("-") || path !== null) throw new UsageError(`unknown argument: ${v}`);
@@ -51,6 +58,20 @@ function scanArgs(args) {
 // One finding per trap, so a scan counts traps the way the session note does, not file and line hits.
 function uniqueTraps(findings) {
   return [...new Map(findings.map((f) => [f.trapId, f])).values()];
+}
+
+// Watch sends names, versions and finding locations only. Messages go to stderr with --json so stdout stays JSON.
+// Nothing here can change the scan's exit code.
+async function watchProject(o, findings) {
+  const say = o.json ? console.error : console.log;
+  if (!o.key) { say("--watch needs an API key (--key or FOOTGUN_API_KEY) on a Pro or Team plan. Nothing was sent."); return; }
+  try {
+    const root = resolve(o.path);
+    const body = buildWatchBody(o.project || defaultProjectName(root), readManifests(root), findings, o.repoUrl);
+    say(clean(await sendWatch({ url: BASE, key: o.key, body })));
+  } catch {
+    say("Could not send this project to Watch. The scan itself is unaffected.");
+  }
 }
 
 async function scan(args) {
@@ -87,19 +108,25 @@ async function scan(args) {
     console.log(`\nREADME badge for this scan:\n${badge}`);
   }
   if (failed(result.findings, o.failOn)) process.exitCode = 1;
-  await sendPing({ url: BASE, kind: "scan", counts: pingCounts(uniqueTraps(result.findings)) });
+  if (o.watch) await watchProject(o, result.findings);
+  // launch reminders only say a package is in use, so they are not counted as matched traps
+  await sendPing({ url: BASE, kind: "scan", counts: pingCounts(uniqueTraps(result.findings.filter((f) => !(f.manual && f.launch)))) });
 }
 
 const USAGE = `usage:
   npx @getfootgun/footgun "<error text>"
   npx @getfootgun/footgun lookup <provider> [context]
-  npx @getfootgun/footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>]
+  npx @getfootgun/footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>] [--watch [--project <name>]]
   npx @getfootgun/footgun context [path]
 
 scan flags:
   --json                        print machine-readable output
   --fail-on breaks|will-break   exit 1 when a finding of that kind is found
   --key <key>                   search and scan with your private namespaces too
+  --watch                       send this project's package versions and finding locations (never code)
+                                to Footgun Watch; needs a Pro or Team key
+  --project <name>              Watch project name (default: package.json or pyproject name, then folder)
+  --repo-url <url>              repository link to store with the Watch project
 
 environment:
   FOOTGUN_API_KEY               same as --key
