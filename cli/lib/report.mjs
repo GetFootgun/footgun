@@ -44,6 +44,6 @@ export function textReport(findings) {
   return out.join("\n");
 }
 
-export function jsonReport({ findings, skippedRules, fromCache, version }) {
-  return JSON.stringify({ version, fromCache, findings, skippedRules }, null, 2);
+export function jsonReport({ findings, skippedRules, fromCache, version, badge }) {
+  return JSON.stringify({ version, fromCache, findings, skippedRules, badge }, null, 2);
 }

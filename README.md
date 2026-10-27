@@ -27,6 +27,10 @@ The plugin also adds `/footgun:scan`, which checks your project on your machine 
 
 `cli/` holds the same scanner as a command, published on npm as `@getfootgun/footgun`: `npx @getfootgun/footgun scan [path]` (Node 20 or later). Add `--json` for machine-readable output or `--fail-on breaks` to fail a CI job.
 
+After a scan it prints a dated README badge: "no known API traps" only when the scan found nothing, "scanned" otherwise.
+
+In GitHub Actions, use [GetFootgun/scan-action](https://github.com/GetFootgun/scan-action). It lists findings in the job summary and can fail the job on `breaks` or `will-break`.
+
 ## Any other MCP client
 
 ```

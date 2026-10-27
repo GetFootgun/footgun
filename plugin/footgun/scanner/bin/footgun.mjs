@@ -7,6 +7,7 @@ import { loadPack, NoRulesError, pingCounts, sendPing } from "../lib/pack.mjs";
 import { scanProject } from "../lib/scan.mjs";
 import { runContext } from "../lib/context.mjs";
 import { textReport, jsonReport, failed, FAIL_ON } from "../lib/report.mjs";
+import { badgeMarkdown } from "../lib/badge.mjs";
 const BASE = process.env.FOOTGUN_URL ?? "https://getfootgun.com";
 const KEY = process.env.FOOTGUN_API_KEY;
 const [a, ...rest] = process.argv.slice(2);
@@ -77,11 +78,13 @@ async function scan(args) {
   // a matcher that cannot start rejects here and exits 3 in main, so no clean report is printed
   const result = await scanProject(resolve(o.path), pack.rules);
   const skippedRules = [...pack.skippedRules, ...result.skippedRules];
+  const badge = badgeMarkdown(result.findings, { base: BASE, date: new Date().toISOString().slice(0, 10) });
   if (o.json) {
-    console.log(jsonReport({ findings: result.findings, skippedRules, fromCache, version: pack.version }));
+    console.log(jsonReport({ findings: result.findings, skippedRules, fromCache, version: pack.version, badge }));
   } else {
     for (const s of skippedRules) console.error(clean(`Skipped rule ${s.id}: ${s.why}`));
     console.log(textReport(result.findings));
+    console.log(`\nREADME badge for this scan:\n${badge}`);
   }
   if (failed(result.findings, o.failOn)) process.exitCode = 1;
   await sendPing({ url: BASE, kind: "scan", counts: pingCounts(uniqueTraps(result.findings)) });

@@ -14,6 +14,8 @@ npx @getfootgun/footgun scan [path] [--json] [--fail-on breaks|will-break] [--ke
 - `--fail-on breaks` exits 1 when something breaks now. `--fail-on will-break` also exits 1 for anything with a known break date or version. Use either in CI.
 - Exit code 2 means the rules could not be downloaded and there is no cached copy. Exit code 3 means the scan could not run.
 
+After a scan, `scan` prints a Markdown badge for your README, dated the day it ran. It reads "no known API traps" only when the scan found nothing at all, and "scanned" otherwise. `--json` puts the same Markdown in a `badge` field.
+
 Requires Node 20 or later.
 
 `scan` sends one anonymous usage count (that it ran, and how many traps matched at each severity, never paths, package names or code). Set `FOOTGUN_SHARE=false` to turn it off.
