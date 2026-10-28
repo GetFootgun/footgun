@@ -1,0 +1,27 @@
+{
+  "id": "fg-0572",
+  "provider": "vercel",
+  "surface_type": "billing",
+  "surface_name": "Vercel Spend Management",
+  "title": "A traffic spike on Vercel Pro keeps billing unless Spend Management pauses your production deployments",
+  "symptoms": [
+    "Spend notifications arrive at 50%, 75% and 100% of your budget while the site keeps serving and billing",
+    "The invoice shows metered usage well beyond the Pro plan's monthly credit"
+  ],
+  "cause": "On Pro, metered usage beyond the monthly credit is billed. Spend Management can notify, call a webhook or pause projects when your On-Demand Budget is reached, but setting a spend amount does not stop usage on its own. Only Pause Production Deployments stops serving, and Vercel checks spend every few minutes, so usage continues for several minutes after you cross the amount.",
+  "fix": "As a team Owner or Billing member, enable Spend Management, set an On-Demand Budget below the most you are willing to spend, and turn on Pause Production Deployments. Know that pausing does not stop AI Gateway or v0 usage or storage charges, and that each paused project must be resumed by hand.",
+  "apply": "Dashboard: Settings, Billing, Spend Management, toggle on, set the On-Demand Budget, enable Pause Production Deployments.\n\n# or with the CLI (vercel@59.23.0 and later)\nvercel budgets set --amount 200 --pause",
+  "affected": "Vercel Pro teams, and Enterprise teams on Flexible Commitment, without a budget that pauses production deployments",
+  "sources": [
+    "https://vercel.com/docs/spend-management"
+  ],
+  "tags": [
+    "launch",
+    "billing",
+    "spend-limit"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,31 @@
+{
+  "id": "fg-0571",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Storage buckets",
+  "title": "Files in a public Supabase Storage bucket can be downloaded by anyone who has the URL",
+  "symptoms": [
+    "A file URL opens in a private browser window with no sign-in",
+    "Storage policies you wrote for reads make no difference to downloads",
+    "Private user uploads, such as IDs or invoices, sit in a bucket marked public"
+  ],
+  "cause": "Marking a bucket public bypasses access controls for retrieving and serving its files, so anyone who has a file's URL can fetch it. Uploads, deletes, moves and copies are still checked. Buckets are private by default; a bucket is public when it was created with public set to true or changed later.",
+  "fix": "Keep private user files in a private bucket and serve them with short-lived signed URLs created on the server, or with an authenticated request that carries the user's token. Use public buckets only for files anyone may see, such as avatars or marketing images.",
+  "apply": "// server only, with a client created from a secret key: make an existing bucket private\nawait admin.storage.updateBucket('documents', { public: false })\n\n// serve one file for an hour\nconst { data, error } = await supabase.storage\n  .from('documents')\n  .createSignedUrl('private-document.pdf', 3600)",
+  "affected": "Supabase Storage buckets created or set with public true that hold files not meant for everyone",
+  "sources": [
+    "https://supabase.com/docs/guides/storage/buckets/fundamentals",
+    "https://supabase.com/docs/guides/storage/buckets/creating-buckets",
+    "https://supabase.com/docs/guides/storage/serving/downloads"
+  ],
+  "tags": [
+    "launch",
+    "storage",
+    "exposed-data",
+    "security"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

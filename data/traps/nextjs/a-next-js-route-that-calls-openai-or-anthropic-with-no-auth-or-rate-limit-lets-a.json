@@ -1,0 +1,28 @@
+{
+  "id": "fg-0563",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "Next.js Route Handlers",
+  "title": "A Next.js route that calls OpenAI or Anthropic with no auth or rate limit lets anyone spend your API credits",
+  "symptoms": [
+    "The AI route answers requests that carry no session cookie",
+    "AI provider usage grows much faster than your number of real users"
+  ],
+  "cause": "Route Handlers are public HTTP endpoints that any client can call, not only your own pages. A handler that passes the request body to a paid model with your server key spends money on every call, whoever makes it.",
+  "fix": "Check the user's session at the top of the handler and return 401 without one, then apply a per-user or per-IP rate limit and return 429 when it is hit. Also turn on any rate limiting your host provides, and set a hard spend limit with the AI provider as a backstop.",
+  "apply": "import { NextResponse } from 'next/server'\nimport { auth } from '@/lib/auth'\nimport { checkRateLimit } from '@/lib/rate-limit'\n\nexport async function POST(request: Request) {\n  const session = await auth()\n  if (!session?.user) {\n    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })\n  }\n  const { rateLimited } = await checkRateLimit(request)\n  if (rateLimited) {\n    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 })\n  }\n  // call the model here\n}",
+  "affected": "Next.js Route Handlers and Pages Router API Routes that call a paid AI API",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/backend-for-frontend"
+  ],
+  "tags": [
+    "launch",
+    "rate-limit",
+    "ai-costs",
+    "route-handlers"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0561",
+  "provider": "aws",
+  "surface_type": "infra",
+  "surface_name": "Amazon S3 Block Public Access and bucket policies",
+  "title": "An S3 bucket with Block Public Access off and a public bucket policy serves your files to anyone",
+  "symptoms": [
+    "Objects open in a browser with no signed URL or credentials",
+    "The bucket policy allows \"Principal\": \"*\" with no limiting Condition",
+    "IAM Access Analyzer for S3 lists the bucket as public"
+  ],
+  "cause": "New buckets do not allow public access by default, but a bucket policy, access point policy or ACL can grant it once Block Public Access is turned off. S3 treats a policy statement for Principal \"*\" without a fixed-value condition as public. Block Public Access does not change existing policies, so turning it off makes a bucket with a public policy or ACL public again.",
+  "fix": "Turn on all four Block Public Access settings on the bucket, and on the account so current and future buckets are covered. If something must be public, such as a static website, keep it in its own bucket and keep user uploads in a private one.",
+  "apply": "aws s3api put-public-access-block \\\n    --bucket my-app-uploads \\\n    --public-access-block-configuration \"BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true\"",
+  "affected": "Amazon S3 buckets with Block Public Access turned off and a public bucket policy or ACL",
+  "sources": [
+    "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html",
+    "https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-bucket.html"
+  ],
+  "tags": [
+    "launch",
+    "s3",
+    "storage",
+    "exposed-data"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

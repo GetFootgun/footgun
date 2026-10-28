@@ -1,0 +1,29 @@
+{
+  "id": "fg-0567",
+  "provider": "openai-api",
+  "surface_type": "billing",
+  "surface_name": "OpenAI organization and project spend limits",
+  "title": "With no hard spend limit on your OpenAI organization or project, a traffic spike or leaked key is billed in full",
+  "symptoms": [
+    "Spend alert emails arrive but API traffic keeps running",
+    "The month's usage is far above what you planned, with no requests ever refused"
+  ],
+  "cause": "Spend alerts only send a notification and do not enforce a cap. Traffic stops at a set amount only when a hard spend limit is enforced on the organization or the project. Without one, usage runs up to the organization's approved usage limit, which OpenAI raises automatically as usage grows.",
+  "fix": "Set a monthly spend limit with Enforce a hard limit turned on, for the organization and for the project your app's key belongs to, and keep spend alerts below it as early warnings. When a limit is hit, requests fail with 429 and the code organization_spend_limit_exceeded or project_spend_limit_exceeded, so show users a clear message. Enforcement is not instant, so recorded spend can slightly pass the limit.",
+  "apply": "Organization: Organization limits, Spend, Edit spend limit, enter the Monthly spend limit, turn on Enforce a hard limit, Save.\nProject: Project settings, Limits, Edit spend limit, enter the Monthly spend limit, turn on Enforce a hard limit, Save.\n\n// in the app\ntry {\n  await openai.responses.create({ model, input })\n} catch (err) {\n  if (err instanceof OpenAI.APIError && err.status === 429 && ['organization_spend_limit_exceeded', 'project_spend_limit_exceeded'].includes(err.code ?? '')) {\n    // tell the user the feature is paused\n  }\n  throw err\n}",
+  "affected": "OpenAI API organizations and projects without an enforced hard spend limit",
+  "sources": [
+    "https://developers.openai.com/api/docs/guides/spend-limits",
+    "https://developers.openai.com/api/docs/guides/production-best-practices"
+  ],
+  "tags": [
+    "launch",
+    "billing",
+    "spend-limit",
+    "ai-costs"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

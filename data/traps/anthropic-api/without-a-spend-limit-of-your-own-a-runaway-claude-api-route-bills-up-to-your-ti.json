@@ -1,0 +1,28 @@
+{
+  "id": "fg-0560",
+  "provider": "anthropic-api",
+  "surface_type": "billing",
+  "surface_name": "Claude API spend limits",
+  "title": "Without a spend limit of your own, a runaway Claude API route bills up to your tier's full monthly cap",
+  "symptoms": [
+    "Usage in the Claude Console climbs far beyond what your real users explain",
+    "No spend limit is shown in the Spend limits section of the Billing page, so nothing you chose stops usage before the tier cap"
+  ],
+  "cause": "Each of the Start, Build and Scale tiers carries a monthly spend cap, and without a lower limit you set, usage can run all the way to it. When the tier cap is reached, API usage pauses until 00:00 UTC on the first day of the next month unless you request a higher limit, so one abused route can both cost the full cap and take your app down.",
+  "fix": "On the Billing page of the Claude Console, set your own spend limit below the tier cap. For an app, give it its own workspace with its own spend and rate limits (the default workspace cannot have a spend limit). Once a limit you set is reached, requests return HTTP 400 invalid_request_error with a message starting You have reached your specified API usage limits; for handling the tier cap 429 itself, see fg-0470.",
+  "apply": "Organization: Claude Console, Billing, Spend limits, Adjust limit (or Set limit), enter a value below your tier's cap.\nApp: create a workspace for the app (not the default workspace, which cannot have a spend limit), set its spend and rate limits, and issue the app's API key from that workspace.",
+  "affected": "Claude API organizations on the Start, Build or Scale tier without a lower spend limit of their own",
+  "sources": [
+    "https://platform.claude.com/docs/en/api/rate-limits"
+  ],
+  "tags": [
+    "launch",
+    "billing",
+    "spend-limit",
+    "ai-costs"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

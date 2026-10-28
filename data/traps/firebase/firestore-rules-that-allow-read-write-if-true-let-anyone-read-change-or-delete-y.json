@@ -1,0 +1,28 @@
+{
+  "id": "fg-0562",
+  "provider": "firebase",
+  "surface_type": "infra",
+  "surface_name": "Cloud Firestore security rules",
+  "title": "Firestore rules that allow read, write: if true let anyone read, change or delete your whole database",
+  "symptoms": [
+    "firestore.rules matches /{document=**} with allow read, write: if true;",
+    "Documents can be read or overwritten by clients that never signed in"
+  ],
+  "cause": "Security rules decide what clients may do in Firestore. If you are not authenticating users and configuring rules, anyone who guesses your project ID can steal, modify or delete the data. Firebase marks the allow-everything rule set as never to be used in production, since it lets anyone overwrite the entire database.",
+  "fix": "Require Firebase Authentication and write rules per collection that fit your data, for example letting only a document's owner read, change or delete it, and stopping updates that change the owner. Deploy the rules before launch.",
+  "apply": "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /posts/{postId} {\n      allow read, delete: if request.auth != null && request.auth.uid == resource.data.author_uid;\n      allow create: if request.auth != null && request.auth.uid == request.resource.data.author_uid;\n      allow update: if request.auth != null\n        && request.auth.uid == resource.data.author_uid\n        && request.auth.uid == request.resource.data.author_uid;\n    }\n  }\n}",
+  "affected": "Cloud Firestore databases whose security rules grant open read or write access",
+  "sources": [
+    "https://firebase.google.com/docs/firestore/security/insecure-rules"
+  ],
+  "tags": [
+    "launch",
+    "security-rules",
+    "firestore",
+    "exposed-data"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

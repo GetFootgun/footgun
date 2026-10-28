@@ -1,0 +1,29 @@
+{
+  "id": "fg-0568",
+  "provider": "stripe",
+  "surface_type": "api",
+  "surface_name": "Stripe webhook signature verification",
+  "title": "A Stripe webhook handler that skips constructEvent accepts fake payment events from anyone",
+  "symptoms": [
+    "The webhook handler parses the JSON body directly and never reads the Stripe-Signature header",
+    "Orders are fulfilled or plans upgraded for payments that do not exist in your Stripe account"
+  ],
+  "cause": "Your webhook endpoint is a public URL, so anyone can POST a body shaped like a Stripe event. Without verification, an attacker could send fake events to trigger actions like fulfilling orders, granting account access or modifying records. Verification needs the exact raw body; a framework that parses or changes the body first makes every check fail.",
+  "fix": "Verify every event with stripe.webhooks.constructEvent, passing the raw body, the Stripe-Signature header and the endpoint's whsec_ signing secret, and return 400 when it throws. In a Next.js App Router handler read the body with request.text(), not request.json(). The secret printed by stripe listen differs from the Dashboard endpoint's secret, so use the one that matches where events come from. Stripe also recommends accepting webhook requests only from its published IP addresses, alongside signature verification.",
+  "apply": "import Stripe from 'stripe'\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)\n\nexport async function POST(request: Request) {\n  const body = await request.text()\n  const signature = request.headers.get('stripe-signature') ?? ''\n  let event: Stripe.Event\n  try {\n    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)\n  } catch (err) {\n    return new Response(`Webhook Error: ${(err as Error).message}`, { status: 400 })\n  }\n  // handle event.type here\n  return new Response(null, { status: 200 })\n}",
+  "affected": "Stripe webhook endpoints that act on events without signature verification",
+  "sources": [
+    "https://docs.stripe.com/webhooks",
+    "https://docs.stripe.com/events/manage-webhook-endpoints"
+  ],
+  "tags": [
+    "launch",
+    "webhooks",
+    "payments",
+    "security"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

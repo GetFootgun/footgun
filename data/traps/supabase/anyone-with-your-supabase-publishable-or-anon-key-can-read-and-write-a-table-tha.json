@@ -1,0 +1,30 @@
+{
+  "id": "fg-0570",
+  "provider": "supabase",
+  "surface_type": "api",
+  "surface_name": "Supabase Data API and row level security",
+  "title": "Anyone with your Supabase publishable or anon key can read and write a table that has RLS off",
+  "symptoms": [
+    "Rows can be read through the Data API with only the project URL and the publishable or anon key, no sign-in",
+    "Rows can be inserted, changed or deleted by requests your app never made",
+    "The table shows RLS disabled while your app ships the key in its browser code, as it is meant to"
+  ],
+  "cause": "The publishable key (the legacy anon key) is meant to be public, so it only protects data when Row Level Security is on. A table in an exposed schema, such as public, without RLS is readable and writable by any role with a grant on it, and on existing projects new tables in public may start with grants to anon and authenticated.",
+  "fix": "Enable RLS on every table in an exposed schema, then add policies for exactly the access each role needs. Once RLS is on, the publishable key reaches no rows until a policy allows it, so write the policies before your app relies on the table.",
+  "apply": "alter table public.todos enable row level security;\n\ncreate policy \"owners read their rows\" on public.todos\n  for select to authenticated\n  using ((select auth.uid()) = user_id);",
+  "affected": "Supabase projects with any table in an exposed schema, usually public, that has RLS disabled",
+  "sources": [
+    "https://supabase.com/docs/guides/database/postgres/row-level-security",
+    "https://supabase.com/docs/guides/api/api-keys"
+  ],
+  "tags": [
+    "launch",
+    "rls",
+    "exposed-data",
+    "security"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0566",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "Next.js Route Handlers",
+  "title": "An admin Route Handler with no auth check inside it is open to anyone who finds the URL",
+  "symptoms": [
+    "A request to an /api/admin route with no cookie returns data or makes a change",
+    "The admin page hides itself from strangers, but the API routes it calls still answer them"
+  ],
+  "cause": "Route Handlers are public HTTP endpoints that any client can call directly. Hiding the admin page, or a check in the page component, does not protect the handlers it calls, and Next.js advises against relying on proxy (formerly middleware) alone for authentication and authorization.",
+  "fix": "Verify the session and the user's role at the top of every admin Route Handler, returning 401 when there is no session and 403 when the user is not an admin. Keep any proxy check as an extra layer, not the only one.",
+  "apply": "import { NextResponse } from 'next/server'\nimport { auth } from '@/lib/auth'\n\nexport async function POST(request: Request) {\n  const session = await auth()\n  if (!session?.user) {\n    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })\n  }\n  if (!session.user.isAdmin) {\n    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })\n  }\n  // admin work here\n}",
+  "affected": "Next.js Route Handlers and Pages Router API Routes that do admin or other privileged work",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/backend-for-frontend",
+    "https://nextjs.org/docs/app/guides/data-security"
+  ],
+  "tags": [
+    "launch",
+    "auth",
+    "route-handlers",
+    "security"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

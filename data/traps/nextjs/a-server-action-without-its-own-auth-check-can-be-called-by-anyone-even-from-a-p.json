@@ -1,0 +1,29 @@
+{
+  "id": "fg-0565",
+  "provider": "nextjs",
+  "surface_type": "sdk",
+  "surface_name": "Next.js Server Actions",
+  "title": "A Server Action without its own auth check can be called by anyone, even from a page that redirects strangers",
+  "symptoms": [
+    "An admin page redirects signed-out visitors, but its form action still runs when posted to directly",
+    "A 'use server' function changes or deletes data without calling your auth helper",
+    "A signed-in user can change another user's records by passing a different id"
+  ],
+  "cause": "An exported Server Action is reachable by a direct POST request, not only through your UI. A page-level authentication check does not extend to the Server Actions defined in it, because each action is a separate entry point. Checking that a user is logged in is also not enough when the action acts on a record they do not own.",
+  "fix": "Verify authentication and authorization inside every Server Action, or in a server-only data access layer each action calls: get the session, throw if there is none, then check that the user owns or may act on the specific record before changing it.",
+  "apply": "'use server'\n\nimport { auth } from '@/lib/auth'\nimport { db } from '@/lib/db'\n\nexport async function deletePost(postId: string) {\n  const session = await auth()\n  if (!session?.user) {\n    throw new Error('Unauthorized')\n  }\n  const post = await db.post.findUnique({ where: { id: postId } })\n  if (post?.authorId !== session.user.id) {\n    throw new Error('Forbidden')\n  }\n  await db.post.delete({ where: { id: postId } })\n}",
+  "affected": "Next.js App Router apps with Server Actions that change data",
+  "sources": [
+    "https://nextjs.org/docs/app/guides/data-security"
+  ],
+  "tags": [
+    "launch",
+    "auth",
+    "server-actions",
+    "security"
+  ],
+  "verified_on": "2026-10-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
