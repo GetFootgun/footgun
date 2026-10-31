@@ -1,0 +1,29 @@
+{
+  "id": "fg-0574",
+  "provider": "cloudflare",
+  "surface_type": "sdk",
+  "surface_name": "Agents SDK skills",
+  "title": "Build breaks on agents:skills import, SkillRegistry or skillWorkspace after Agents SDK 0.32.0",
+  "symptoms": [
+    "Cannot resolve the agents:skills Vite import",
+    "agents/skills/compile or SkillRegistry is not found",
+    "Think skillWorkspace option no longer works"
+  ],
+  "cause": "Skills moved to plain files in the agent Workspace. The agents:skills Vite import, agents/skills/compile, SkillRegistry and Think's skillWorkspace were removed, and runner() moved to agents/skills/runner.",
+  "fix": "Upgrade to Agents SDK 0.32.0 and Think 0.23.0 or later, return skills.workspace(this.workspace) or skills.r2(...) from getSkills(), and import runner from agents/skills/runner.",
+  "apply": "import { Think, skills } from \"@cloudflare/think\";\n// in your Think subclass:\ngetSkills() { return [skills.workspace(this.workspace)]; }",
+  "affected": "Agents SDK before 0.32.0 migrating, Think before 0.23.0, from 2026-10-29",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "agents-sdk",
+    "think",
+    "skills",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

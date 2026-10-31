@@ -1,0 +1,28 @@
+{
+  "id": "fg-0576",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Cursor Remote Control",
+  "title": "Cursor iOS app cannot see or reply to local agents for an Enterprise organization",
+  "symptoms": [
+    "Computer does not show remote control access in the Cursor iOS app",
+    "Local agents list is unavailable for Enterprise org members"
+  ],
+  "cause": "Remote Control is on by default for everyone except Enterprise organizations. For Enterprise it stays off until an admin turns it on.",
+  "fix": "Have an Enterprise admin enable Remote Control in org settings, then sign in to the iOS app and approve the pairing request in the desktop app.",
+  "apply": "Org settings > Security and identity > Remote control",
+  "affected": "Enterprise organizations, from the Oct 6, 2026 Remote Control release",
+  "sources": [
+    "https://cursor.com/changelog"
+  ],
+  "tags": [
+    "remote-control",
+    "enterprise",
+    "ios",
+    "admin-setting"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

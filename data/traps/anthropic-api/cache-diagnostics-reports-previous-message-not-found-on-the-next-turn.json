@@ -1,0 +1,27 @@
+{
+  "id": "fg-0578",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API cache diagnostics",
+  "title": "Cache diagnostics reports previous_message_not_found on the next turn",
+  "symptoms": [
+    "diagnostics shows previous_message_not_found when previous_message_id is set",
+    "Request with only the cache-diagnosis-2026-04-07 beta header is accepted but gives no diagnostic history"
+  ],
+  "cause": "Since September 9, 2026, the API stores a request's fingerprint only when the request includes the diagnostics object. Sending just the beta header stores nothing, so a later turn cannot find the earlier message.",
+  "fix": "Include the diagnostics object on every turn. Set previous_message_id to null on the first turn and to the prior message id after that. The beta header is no longer required as of September 23, 2026.",
+  "apply": "{\"diagnostics\": {\"previous_message_id\": null}}  // first turn; use the prior message id on later turns",
+  "affected": "Claude API, from 2026-09-09",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview"
+  ],
+  "tags": [
+    "prompt-caching",
+    "diagnostics",
+    "beta-header"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

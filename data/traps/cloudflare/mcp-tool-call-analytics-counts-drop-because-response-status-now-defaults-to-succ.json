@@ -1,0 +1,28 @@
+{
+  "id": "fg-0573",
+  "provider": "cloudflare",
+  "surface_type": "api",
+  "surface_name": "Access MCP tool-call analytics",
+  "title": "MCP tool-call analytics counts drop because response_status now defaults to success",
+  "symptoms": [
+    "Tool-call timeseries totals are lower than before 2026-10-28",
+    "Failed and cached MCP calls no longer appear in analytics results"
+  ],
+  "cause": "The timeseries endpoints for account, portal and server now take a response_status parameter that defaults to success. Previously counts included failed and cached calls. Invalid or empty values return 400.",
+  "fix": "Pass response_status=all to get the old all-status counts, or choose error or cached to count one status.",
+  "apply": "GET /accounts/{account_id}/access/ai-controls/mcp/analytics/tool-calls/timeseries?response_status=all",
+  "affected": "MCP tool-call analytics endpoints from 2026-10-28",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "access",
+    "mcp",
+    "analytics",
+    "changed-default"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

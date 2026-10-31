@@ -1,0 +1,29 @@
+{
+  "id": "fg-0579",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion markdown endpoints (markdown_version)",
+  "title": "Notion markdown endpoint returns 400 validation_error when markdown_version is v1 on the next Notion-Version",
+  "symptoms": [
+    "400 validation_error on POST /v1/pages, GET or PATCH /v1/pages/:page_id/markdown, POST /v1/comments or PATCH /v1/comments/:comment_id after bumping Notion-Version",
+    "Markdown output changes format because requests without markdown_version now use v2 instead of enhanced markdown v1"
+  ],
+  "cause": "Notion deprecated enhanced markdown (v1). The next Notion-Version makes Notion-flavored Markdown (v2) the default on the markdown endpoints, and an explicit markdown_version of v1 is rejected on that version. Current versions still default to v1, and v1 is planned to retire on every version about three months after the new version ships.",
+  "fix": "Set markdown_version to v2 on all markdown requests now and test the parsed and written content. Stop sending v1 before you move to the new Notion-Version. Upgrade @notionhq/client to v5.29.0 or later for the parameter.",
+  "apply": "{\"markdown_version\": \"v2\"}",
+  "affected": "All current Notion-Version values keep v1 as default; the next Notion-Version (name and date not yet announced as of 2026-10-30) defaults to v2 and rejects v1; v1 retirement planned about three months after that release",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "markdown",
+    "deprecation",
+    "notion-version",
+    "breaking-change"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

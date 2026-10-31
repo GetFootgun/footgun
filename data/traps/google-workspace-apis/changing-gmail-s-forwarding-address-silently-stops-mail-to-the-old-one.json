@@ -11,12 +11,14 @@
   "fix": "Keep the main forward for one recipient and add a filter with a Forward to action for each additional recipient. The address must already be a verified forwarding address.",
   "apply": "Gmail Settings > Filters and Blocked Addresses > Create a new filter > To: (address) > Create filter > Forward it to",
   "affected": "Gmail, August 2026",
-  "sources": [],
+  "sources": [
+    "https://developers.google.com/workspace/gmail/api/guides/forwarding_settings"
+  ],
   "tags": [
     "silent-failure",
     "email"
   ],
-  "verified_on": "2026-08-20",
+  "verified_on": "2026-10-30",
   "status": "verified",
   "confirmations": 0,
   "trust": 50

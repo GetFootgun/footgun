@@ -1,0 +1,28 @@
+{
+  "id": "fg-0581",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Durable Objects",
+  "title": "Durable Object keeps running old code for up to 5 minutes after wrangler deploy",
+  "symptoms": [
+    "A Durable Object still returns old behavior right after a deploy",
+    "Tooling that calls a Durable Object immediately after deploying hits the previous code version"
+  ],
+  "cause": "Durable Objects now defer code updates by default. An active object can keep its current code for up to 300 seconds while it waits to hibernate, instead of resetting immediately. Deferral is best effort, so the object can still reset earlier.",
+  "fix": "For a deployment that needs the new code at once, use immediate mode. To change the default window, set code_update_strategy with a max_delay in seconds (0 to 86400) in the Wrangler config.",
+  "apply": "npx wrangler versions deploy <VERSION_ID>@100% --durable-objects-code-update-mode immediate",
+  "affected": "All Durable Objects deployments as of 2026-10-30",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "durable-objects",
+    "deploy",
+    "wrangler",
+    "defaults"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

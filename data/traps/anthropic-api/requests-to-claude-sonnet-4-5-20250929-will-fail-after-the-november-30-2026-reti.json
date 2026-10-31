@@ -1,0 +1,28 @@
+{
+  "id": "fg-0577",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API (claude-sonnet-4-5-20250929)",
+  "title": "Requests to claude-sonnet-4-5-20250929 will fail after the November 30, 2026 retirement",
+  "symptoms": [
+    "Requests pinned to claude-sonnet-4-5-20250929 start returning errors after November 30, 2026",
+    "Model not found style errors in production with no code change"
+  ],
+  "cause": "Claude Sonnet 4.5 was deprecated on September 30, 2026, and retirement on the Claude API is scheduled for November 30, 2026. Pinned model IDs stop working on that date.",
+  "fix": "Move to claude-sonnet-5-5 before the date. Sonnet 5.5 has its own breaking changes: use thinking type between_tools instead of disabled, drop tool_choice any and tool, and use the newer computer use toolset. Test before switching.",
+  "apply": "model=\"claude-sonnet-5-5\"  # replaces claude-sonnet-4-5-20250929",
+  "affected": "Claude API, claude-sonnet-4-5-20250929, retirement scheduled 2026-11-30",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview"
+  ],
+  "tags": [
+    "deprecation",
+    "sonnet-4-5",
+    "model-retirement",
+    "migration"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

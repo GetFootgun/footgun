@@ -1,0 +1,27 @@
+{
+  "id": "fg-0582",
+  "provider": "cursor",
+  "surface_type": "tool",
+  "surface_name": "Cursor Remote Control",
+  "title": "Cursor Remote Control stops working when the laptop sleeps",
+  "symptoms": [
+    "Local agents disappear from the iOS app after the computer goes idle",
+    "Messages sent from the phone are not received while away"
+  ],
+  "cause": "Remote control does not move agents off the machine. The agents keep running locally and the app connects to them, so the computer must stay on and online. Keeping it awake is an opt-in setting, and the computer must be plugged in with the lid open.",
+  "fix": "Turn on the keep-awake option in the desktop settings, and keep the machine plugged in with the lid open.",
+  "apply": "Cursor desktop settings > Remote Control > Keep this computer awake",
+  "affected": "Cursor desktop with Remote Control, from Oct 6, 2026",
+  "sources": [
+    "https://cursor.com/changelog"
+  ],
+  "tags": [
+    "remote-control",
+    "sleep",
+    "local-agents"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

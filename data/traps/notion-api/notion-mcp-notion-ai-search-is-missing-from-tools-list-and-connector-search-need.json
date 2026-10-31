@@ -1,0 +1,30 @@
+{
+  "id": "fg-0580",
+  "provider": "notion-api",
+  "surface_type": "tool",
+  "surface_name": "Notion MCP notion-search and notion-connector-search",
+  "title": "Notion MCP notion-ai-search is missing from tools/list and connector search needs notion-connector-search",
+  "symptoms": [
+    "notion-ai-search no longer appears in the client tool list",
+    "Cannot find notion-connector-search in the tool list after reconnecting",
+    "Search returns only Notion pages and databases, no Slack or Drive hits"
+  ],
+  "cause": "From October 20, 2026, hosted Notion MCP notion-search searches only Notion pages and databases. Connected sources moved to the new notion-connector-search tool, which is listed only when the user has AI search and the workspace has a connected source. notion-ai-search is hidden from tools/list but still callable by name. Workspace-owned connections keep their selected tools. In ChatGPT the new tool appears only after OpenAI reviews the updated Notion app.",
+  "fix": "Refresh the client's tool list or reconnect Notion MCP, then call notion-connector-search for Slack, Drive, GitHub, mail and calendar, optionally passing sources to narrow it. Use notion-fetch with a result id or url to open a connector result (Outlook, Google Calendar and Confluence results cannot be fetched).",
+  "apply": "Call tool notion-connector-search with {\"query\": \"...\", \"sources\": [\"slack\"]}",
+  "affected": "Hosted Notion MCP sessions from 2026-10-20",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "mcp",
+    "search",
+    "connector-search",
+    "tools-list"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

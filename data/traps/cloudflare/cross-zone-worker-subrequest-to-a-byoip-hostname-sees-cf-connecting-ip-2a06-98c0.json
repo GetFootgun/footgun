@@ -1,0 +1,28 @@
+{
+  "id": "fg-0575",
+  "provider": "cloudflare",
+  "surface_type": "api",
+  "surface_name": "Workers subrequests to BYOIP",
+  "title": "Cross-zone Worker subrequest to a BYOIP hostname sees CF-Connecting-IP 2a06:98c0:3600::103",
+  "symptoms": [
+    "Origin or WAF rules see client IP 2a06:98c0:3600::103 for requests from a Worker in another zone",
+    "IP-based allowlists or rate limits behave differently for Worker subrequests to BYOIP hostnames"
+  ],
+  "cause": "Cloudflare-proxied BYOIP destinations now follow standard Workers subrequest handling. For cross-zone subrequests, CF-Connecting-IP is set to the Workers client IP 2a06:98c0:3600::103. Same-zone subrequests still carry the real client IP.",
+  "fix": "Do not key rules on the CF-Connecting-IP of cross-zone Worker subrequests. Match on the CF-Worker header or the cf.worker.upstream_zone field, or pass the original client IP in your own header.",
+  "apply": "Custom rule expression: cf.worker.upstream_zone eq \"example.com\"",
+  "affected": "Workers subrequests to Cloudflare-proxied BYOIP hostnames in another zone, from 2026-10-30",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "workers",
+    "byoip",
+    "cf-connecting-ip",
+    "waf"
+  ],
+  "verified_on": "2026-10-30",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
