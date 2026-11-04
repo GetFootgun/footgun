@@ -7,6 +7,14 @@
         "Authorization": "Bearer ${user_config.api_key}",
         "X-Footgun-Share": "${user_config.share_learnings}"
       }
+    },
+    "footgun-keys": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@getfootgun/keys",
+        "mcp"
+      ]
     }
   }
 }

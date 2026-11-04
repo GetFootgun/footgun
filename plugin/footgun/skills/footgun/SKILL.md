@@ -15,6 +15,8 @@ Call `lookup_traps` with the provider name (for example `meta-graph-api` or `str
 
 If a tool call or API request fails and the error mentions a provider, call `search_traps` with the error text. If a trap matches, apply its fix before trying anything else.
 
+When a shell command fails, Footgun may already have searched: a note beginning `Footgun: this error matches a known trap.` next to the error is that search's result, so do not call `search_traps` again for the same error. A note beginning `Footgun: this command has failed the same way 3 times` means stop repeating the last fix.
+
 ## The session note
 
 If the session starts with a note from Footgun that begins `Footgun: known traps for this project's exact package versions. Call lookup_traps for detail.`, treat it as the stack's known traps. Do not call `lookup_traps` again for those providers unless you need more detail than the note gives. Call it for any provider the note does not cover.

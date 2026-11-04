@@ -7,6 +7,7 @@ import { loadPack, NoRulesError, pingCounts, sendPing } from "../lib/pack.mjs";
 import { scanProject, readManifests } from "../lib/scan.mjs";
 import { buildWatchBody, defaultProjectName, sendWatch, validRepoUrl } from "../lib/watch.mjs";
 import { runContext } from "../lib/context.mjs";
+import { runFailure, searchWith } from "../lib/failure.mjs";
 import { textReport, jsonReport, failed, FAIL_ON } from "../lib/report.mjs";
 import { badgeMarkdown } from "../lib/badge.mjs";
 const BASE = process.env.FOOTGUN_URL ?? "https://getfootgun.com";
@@ -118,6 +119,7 @@ const USAGE = `usage:
   npx @getfootgun/footgun lookup <provider> [context]
   npx @getfootgun/footgun scan [path] [--json] [--fail-on breaks|will-break] [--key <key>] [--watch [--project <name>]]
   npx @getfootgun/footgun context [path]
+  npx @getfootgun/footgun failure < hook-event.json
 
 scan flags:
   --json                        print machine-readable output
@@ -131,7 +133,8 @@ scan flags:
 environment:
   FOOTGUN_API_KEY               same as --key
   FOOTGUN_URL                   point at another server
-  FOOTGUN_SHARE=false           turn off the anonymous usage count`;
+  FOOTGUN_SHARE=false           turn off the anonymous usage count
+  FOOTGUN_AUTO_SEARCH=false     failure: guard retry loops only, send nothing`;
 
 async function main() {
   if (!a || process.argv.slice(2).some((x) => x === "--help" || x === "-h")) { console.log(USAGE); return; }
@@ -139,6 +142,13 @@ async function main() {
   if (a === "context") {
     const deadlineMs = Number(process.env.FOOTGUN_CONTEXT_DEADLINE_MS) || undefined;
     return runContext(resolve(rest[0] ?? "."), { url: BASE, key: KEY || undefined, deadlineMs }).finally(() => process.exit(0));
+  }
+  // failure reads one Claude Code PostToolUseFailure event on stdin and is as quiet as context
+  if (a === "failure") {
+    let input = "";
+    for await (const chunk of process.stdin) input += chunk;
+    const autoSearch = process.env.FOOTGUN_AUTO_SEARCH !== "false";
+    return runFailure(input, { search: searchWith({ url: BASE, key: KEY || undefined }), autoSearch }).finally(() => process.exit(0));
   }
   if (a === "scan") return scan(rest).catch((e) => { console.error(clean(e.message)); process.exitCode = 3; });
   // error text goes in a POST body, scrubbed of secrets first, so it never lands in a URL or a log

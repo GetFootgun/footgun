@@ -1,11 +1,19 @@
 {
-  "description": "Footgun automatic context: at session start, scan this project locally and add a short note of the traps that apply to its package versions. On by default; off when auto_context is false.",
+  "description": "Footgun automatic context and trap matching: at session start, scan this project locally and add a short note of the traps that apply to its package versions (off when auto_context is false). When a shell command fails, search known traps with its error, secrets and paths removed, and say when the same command keeps failing the same way (searching is off when auto_search is false).",
   "hooks": {
     "SessionStart": [
       {
         "matcher": "startup|clear|compact",
         "hooks": [
           { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh\"", "timeout": 15 }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/tool-failure.sh\"", "timeout": 10 }
         ]
       }
     ]
