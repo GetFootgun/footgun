@@ -9,6 +9,7 @@ import { buildWatchBody, defaultProjectName, sendWatch, validRepoUrl } from "../
 import { runContext } from "../lib/context.mjs";
 import { runFailure, searchWith } from "../lib/failure.mjs";
 import { hookAnswer } from "../lib/guard.mjs";
+import { deployHookAnswer } from "../lib/deployed.mjs";
 import { createCheckpoint, listCheckpoints, MANUAL_LIMITS, sessionNote, unsafePaths } from "../lib/checkpoint.mjs";
 import { textReport, jsonReport, failed, FAIL_ON } from "../lib/report.mjs";
 import { badgeMarkdown } from "../lib/badge.mjs";
@@ -175,6 +176,16 @@ async function main() {
       for await (const chunk of process.stdin) input += chunk;
       const out = hookAnswer(JSON.parse(input));
       if (out) process.stdout.write(JSON.stringify(out));
+    } catch {}
+    process.exit(0);
+  }
+  // deployed reads one Claude Code PostToolUse event on stdin, prints a deploy-check reminder or nothing, and always exits 0
+  if (a === "deployed") {
+    try {
+      let input = "";
+      for await (const chunk of process.stdin) input += chunk;
+      const out = deployHookAnswer(JSON.parse(input));
+      if (out) process.stdout.write(out);
     } catch {}
     process.exit(0);
   }

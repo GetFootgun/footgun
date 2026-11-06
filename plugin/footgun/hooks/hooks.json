@@ -1,5 +1,5 @@
 {
-  "description": "Footgun automatic context and trap matching: at session start, scan this project locally and add a short note of the traps that apply to its package versions (off when auto_context is false). When a shell command fails, search known traps with its error, secrets and paths removed, and say when the same command keeps failing the same way (searching is off when auto_search is false). Before a shell command runs, pause and ask first when it looks destructive, such as dropping a database, destroying infrastructure or deleting the project. In a git repo, at the start of a new session, save an undo point of the project's files that /footgun:undo restores, without touching the working tree or the index (both off when safety_net is false).",
+  "description": "Footgun automatic context and trap matching: at session start, scan this project locally and add a short note of the traps that apply to its package versions (off when auto_context is false). When a shell command fails, search known traps with its error, secrets and paths removed, and say when the same command keeps failing the same way (searching is off when auto_search is false). Before a shell command runs, pause and ask first when it looks destructive, such as dropping a database, destroying infrastructure or deleting the project. In a git repo, at the start of a new session, save an undo point of the project's files that /footgun:undo restores, without touching the working tree or the index (both off when safety_net is false). After a shell command that deploys to production on Vercel or Railway succeeds, remind Claude to check the live app (off when deploy_check is false).",
   "hooks": {
     "SessionStart": [
       {
@@ -14,6 +14,14 @@
         "matcher": "Bash|PowerShell",
         "hooks": [
           { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/guard.sh\"", "timeout": 5 }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/deployed.sh\"", "timeout": 5 }
         ]
       }
     ],

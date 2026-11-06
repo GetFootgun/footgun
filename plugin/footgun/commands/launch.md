@@ -43,6 +43,25 @@ FOOTGUN_SHARE=false node "${CLAUDE_PLUGIN_ROOT}/scanner/bin/footgun.mjs" scan "$
 
 9. After the report, offer to fix each item in order, starting with the first under "Fix before launch". Apply nothing without the user's yes, and check each fix against what the user asked for before applying it. Never run `keys_sync_env` with `apply` unless the user says yes to that exact change.
 
+10. Deploy check list. If `.footgun/checks.json` is missing from the project, offer to create it. Read the app's routes, then propose a short list in plain words, for example: "I'll check your home page, /pricing, /checkout and /login after every deploy. OK?" Write the file only after the user's yes. Ask once for the live address if it is not known. The format:
+
+```
+{
+  "site": "https://example.com",
+  "checks": [
+    { "kind": "page", "path": "/pricing", "mustContain": "Buy" },
+    { "kind": "endpoint", "path": "/api/checkout", "method": "GET", "expect": [200, 401, 405] },
+    { "kind": "stripe-webhook" },
+    { "kind": "env" },
+    { "kind": "bundle-keys" }
+  ]
+}
+```
+
+   A `page` check loads the page and looks for the text. An `endpoint` check uses GET or HEAD only. The other three need no fields. Add only the checks that fit this app. If the file already exists, leave it alone.
+
+   After any production deploy, call `keys_deploy_check` with `project_path` set to the project folder. It waits for the deploy to go live, runs the checks, and reads only. If it finds something broken, offer a rollback and run nothing without the user's yes.
+
 Rules:
 - Never send file contents anywhere. The scan runs on this machine; do not paste project files into any tool, search, or filing.
 - Never print a key value. Report key names and status only.
