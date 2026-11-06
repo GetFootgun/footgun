@@ -1,0 +1,29 @@
+{
+  "id": "fg-0583",
+  "provider": "prisma",
+  "surface_type": "sdk",
+  "surface_name": "Prisma Client",
+  "title": "A new PrismaClient in each route or function opens its own connection pool and runs the database out of connections under real traffic",
+  "symptoms": [
+    "Requests fail with too many connections or connection pool timeout errors once more than a handful of people use the app",
+    "The database dashboard shows far more open connections than active users"
+  ],
+  "cause": "In a serverless deployment each function instance makes its own PrismaClient, and each client keeps its own connection pool. A client created inside a route, or in every route file, multiplies those pools, and concurrent functions during a traffic spike can use up the database's connection limit quickly.",
+  "fix": "Create one PrismaClient in a shared module, outside any handler, and import it everywhere. Keep each function's pool small, and put a connection pooler (such as PgBouncer, or your host's pooled connection string) between the functions and the database.",
+  "apply": "// lib/prisma.ts\nimport { PrismaClient } from '@prisma/client'\n\nconst globalForPrisma = global as unknown as { prisma: PrismaClient }\n\nexport const prisma = globalForPrisma.prisma || new PrismaClient()\n\nif (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma\n\n// app/api/orders/route.ts\nimport { prisma } from '@/lib/prisma'",
+  "affected": "Apps that use Prisma Client from serverless functions, Next.js Route Handlers, Server Actions or API Routes",
+  "sources": [
+    "https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections",
+    "https://www.prisma.io/docs/orm/more/help-and-troubleshooting/nextjs-help"
+  ],
+  "tags": [
+    "launch",
+    "database",
+    "connections",
+    "serverless"
+  ],
+  "verified_on": "2026-11-05",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

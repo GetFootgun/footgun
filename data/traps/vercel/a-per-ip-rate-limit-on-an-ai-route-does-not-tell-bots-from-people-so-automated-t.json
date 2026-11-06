@@ -1,0 +1,29 @@
+{
+  "id": "fg-0584",
+  "provider": "vercel",
+  "surface_type": "infra",
+  "surface_name": "Vercel Firewall and BotID",
+  "title": "A per-IP rate limit on an AI route does not tell bots from people, so automated traffic can still run up your model bill",
+  "symptoms": [
+    "AI provider usage keeps climbing while every single IP stays under the rate limit",
+    "Many short sessions from different addresses hit the AI route without using the rest of the app"
+  ],
+  "cause": "A rate limit counts requests from one source, such as an IP address or JA4 digest, and Vercel's WAF counts per region. It caps each source but does not check whether the caller is a person, so automated traffic spread across sources each stays under the limit while the total keeps calling your paid model.",
+  "fix": "Keep the rate limit, and also require a signed-in user on the AI route, call checkBotId() before any inference, and set a hard spend limit with the AI provider as a backstop.",
+  "apply": "import { checkBotId } from 'botid/server'\nimport { NextRequest, NextResponse } from 'next/server'\n\nexport async function POST(request: NextRequest) {\n  const verification = await checkBotId()\n  if (verification.isBot) {\n    return NextResponse.json({ error: 'Access denied' }, { status: 403 })\n  }\n  // check the session and the rate limit, then call the model\n}",
+  "affected": "Public AI routes on Vercel protected only by an IP-based rate limit",
+  "sources": [
+    "https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting",
+    "https://vercel.com/docs/botid"
+  ],
+  "tags": [
+    "launch",
+    "rate-limit",
+    "ai-costs",
+    "bots"
+  ],
+  "verified_on": "2026-11-05",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
