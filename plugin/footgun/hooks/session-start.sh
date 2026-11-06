@@ -18,12 +18,21 @@
 #   share_learnings or auto_context means its declared default (true for both).
 #   (MCP headers in .mcp.json do render the declared default.)
 # - Default command hook timeout is 600 s; hooks.json sets 15 (context mode stops itself at 8 s).
+# - Checked 2026-11-05 (https://code.claude.com/docs/en/hooks.md): SessionStart stdin carries "source"
+#   (startup, resume, clear, compact). The undo point is saved only when source is "startup" (checkpoint mode stops
+#   itself at 3 s), before the trap scan, and its one-line note goes first in the session note. It belongs to the
+#   safety net, so safety_net turns it off, not auto_context.
 # This script never writes to stderr and always exits 0, so it cannot disturb the session.
 
 exec 2>/dev/null
 # Unset auto_context means the declared default (on). When set, it is on only if exactly "true";
 # anything else (including "false", empty or unrendered) means off.
-[ -n "${CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT+x}" ] && [ "$CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT" != "true" ] && exit 0
+auto=true
+[ -n "${CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT+x}" ] && [ "$CLAUDE_PLUGIN_OPTION_AUTO_CONTEXT" != "true" ] && auto=false
+# safety_net reads the same way: unset means on.
+undo=true
+[ -n "${CLAUDE_PLUGIN_OPTION_SAFETY_NET+x}" ] && [ "$CLAUDE_PLUGIN_OPTION_SAFETY_NET" != "true" ] && undo=false
+[ "$auto" = "false" ] && [ "$undo" = "false" ] && exit 0
 # Unset share_learnings means the declared default (on). When set, sharing is on only if exactly "true";
 # anything else (including "false", empty or unrendered) means off.
 share=true
@@ -34,6 +43,7 @@ major="$(node -p 'process.versions.node.split(".")[0]')"
 case "$major" in ''|*[!0-9]*) major=0 ;; esac
 
 if [ "$major" -lt 20 ]; then
+  [ "$auto" = "false" ] && exit 0
   # Anonymous count of sessions without a usable Node: no paths, names or code. Skipped when share_learnings is off
   # or curl is absent. Runs in the background with short timeouts and discarded output, so it cannot slow or disturb the session.
   if [ "$share" = "true" ] && command -v curl >/dev/null; then
@@ -55,7 +65,16 @@ if [ "$major" -lt 20 ]; then
   exit 0
 fi
 
+# The hook's stdin (the SessionStart event) passes straight through to checkpoint mode.
+note=""
+[ "$undo" = "true" ] && note="$(node "$CLAUDE_PLUGIN_ROOT/scanner/bin/footgun.mjs" checkpoint "$root" --session-start)"
+if [ "$auto" = "false" ]; then
+  # plain-text stdout from a SessionStart hook is added to Claude's context
+  [ -n "$note" ] && printf '%s\n' "$note"
+  exit 0
+fi
+
 [ -n "$CLAUDE_PLUGIN_OPTION_API_KEY" ] && export FOOTGUN_API_KEY="$CLAUDE_PLUGIN_OPTION_API_KEY"
 export FOOTGUN_SHARE="$share"
-node "$CLAUDE_PLUGIN_ROOT/scanner/bin/footgun.mjs" context "$root"
+FOOTGUN_SESSION_NOTE="$note" node "$CLAUDE_PLUGIN_ROOT/scanner/bin/footgun.mjs" context "$root" </dev/null
 exit 0

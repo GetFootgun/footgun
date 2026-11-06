@@ -111,13 +111,18 @@ function writeState(file, state) {
 
 const write = (s) => new Promise((done) => process.stdout.write(s, () => done()));
 
+const hookJson = (text) => JSON.stringify({ hookSpecificOutput: { hookEventName: "SessionStart", additionalContext: text } }) + "\n";
+
 /**
  * Prints the SessionStart hook JSON for root, or nothing. Never throws. The whole run has deadlineMs;
  * past it nothing is printed. The state file is written only after printing.
+ * A note (the undo point line) goes first in the context; when no trap note can be made it is printed alone.
  */
-export async function runContext(root, { url, key, deadlineMs = 8000 }, print = write) {
+export async function runContext(root, { url, key, deadlineMs = 8000, note = "" }, print = write) {
   let expired = false;
+  let printed = false;
   let timer;
+  note = note ? one(note) : "";
   const deadline = new Promise((done) => { timer = setTimeout(() => { expired = true; done(); }, deadlineMs); });
   const work = async () => {
     try {
@@ -126,7 +131,8 @@ export async function runContext(root, { url, key, deadlineMs = 8000 }, print = 
       const file = stateFile(root);
       const { text, shown, counts } = await buildContext(root, pack, readState(file));
       if (text && !expired) {
-        await print(JSON.stringify({ hookSpecificOutput: { hookEventName: "SessionStart", additionalContext: text } }) + "\n");
+        printed = true;
+        await print(hookJson(note ? `${note}\n${text}` : text));
         writeState(file, { shown });
       }
       // sent after the note is printed, so it never delays it; main waits for this run, which the deadline bounds
@@ -139,5 +145,9 @@ export async function runContext(root, { url, key, deadlineMs = 8000 }, print = 
     await Promise.race([work(), deadline]);
   } finally {
     clearTimeout(timer);
+  }
+  if (note && !printed) {
+    printed = true;
+    await print(hookJson(note)).catch(() => {});
   }
 }
