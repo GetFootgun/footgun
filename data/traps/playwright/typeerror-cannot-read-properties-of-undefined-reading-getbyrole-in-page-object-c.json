@@ -1,0 +1,28 @@
+{
+  "id": "fg-0590",
+  "provider": "playwright",
+  "surface_type": "tool",
+  "surface_name": "Playwright Test runner",
+  "title": "TypeError: Cannot read properties of undefined (reading 'getByRole') in page object class field initializers after Playwright 1.65",
+  "symptoms": [
+    "TypeError: Cannot read properties of undefined (reading 'getByRole')",
+    "Page object classes that worked on 1.64 throw when constructed"
+  ],
+  "cause": "From 1.65 the test runner applies useDefineForClassFields from tsconfig.json like tsc does. It is on for ES2022 and later targets and when target is unset. Field initializers now run before constructor parameter properties are assigned, so this.page is undefined.",
+  "fix": "Assign the locators inside the constructor body, or set useDefineForClassFields to false in tsconfig.json.",
+  "apply": "tsconfig.json: { \"compilerOptions\": { \"useDefineForClassFields\": false } }",
+  "affected": "@playwright/test 1.65 and later, with tsconfig target ES2022+ or no target",
+  "sources": [
+    "https://playwright.dev/docs/release-notes"
+  ],
+  "tags": [
+    "typescript",
+    "page-object",
+    "tsconfig",
+    "1.65"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

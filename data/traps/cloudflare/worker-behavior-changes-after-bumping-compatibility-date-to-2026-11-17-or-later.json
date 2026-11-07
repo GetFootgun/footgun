@@ -1,0 +1,29 @@
+{
+  "id": "fg-0592",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Workers",
+  "title": "Worker behavior changes after bumping compatibility_date to 2026-11-17 or later (module registry, request.signal)",
+  "symptoms": [
+    "require() of an ES module fails when it or its dependencies use top-level await",
+    "invalid import attributes are now rejected at load",
+    "request.signal abort listeners start firing and in-flight work gets cancelled on client disconnect"
+  ],
+  "cause": "From 2026-11-17, JavaScript Workers with that compatibility date or later use the new module registry by default and receive client disconnect events through request.signal by default, with no flags needed. Existing Workers are unchanged until the date or flags change.",
+  "fix": "Before raising the date, test with new_module_registry and enable_request_signal flags on your current date. Fix invalid import attributes and top-level await in require() chains. To opt out, add legacy_module_registry and disable_request_signal. Pass request.signal explicitly to fetch, as request_signal_passthrough is not enabled.",
+  "apply": "wrangler.jsonc: \"compatibility_date\": \"2026-11-17\", \"compatibility_flags\": [\"legacy_module_registry\", \"disable_request_signal\"]",
+  "affected": "Workers with compatibility_date 2026-11-17 or later (JavaScript only; Python Workers keep legacy registry)",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "workers",
+    "compatibility-date",
+    "module-registry",
+    "request-signal"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

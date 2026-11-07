@@ -1,0 +1,28 @@
+{
+  "id": "fg-0585",
+  "provider": "cloudflare",
+  "surface_type": "api",
+  "surface_name": "AI Search",
+  "title": "AI Search index looks stale because default sync interval changed from 6 hours to 24 hours",
+  "symptoms": [
+    "new or edited source files take up to a day to appear in AI Search answers",
+    "instances created without a sync_interval sync less often than before"
+  ],
+  "cause": "The default sync interval for AI Search instances is changing from 6 hours to 24 hours (announced 2026-11-02). Instances relying on the default get slower refreshes. Billing also now starts 2026-12-01 instead of 2026-11-01.",
+  "fix": "Set the interval explicitly on instances that need fresher data. Supported values range from 15 minutes to 24 hours. Shorter intervals sync more often, so check cost against the pricing page.",
+  "apply": "Set sync_interval in the AI Search instance API body, or Instance settings > Sync interval in the dashboard",
+  "affected": "AI Search instances using the default sync interval, from the 2026-11-02 change",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "ai-search",
+    "sync-interval",
+    "defaults",
+    "billing"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

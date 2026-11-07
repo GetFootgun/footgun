@@ -1,0 +1,29 @@
+{
+  "id": "fg-0593",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code",
+  "title": "CLAUDE_CODE_PROXY_RESOLVES_HOSTS in a settings file is ignored",
+  "symptoms": [
+    "Monitor WebSocket watch fails with 'could not resolve' behind a proxy after 2.1.319",
+    "CLAUDE_CODE_PROXY_RESOLVES_HOSTS set under env in settings.json has no effect"
+  ],
+  "cause": "From 2.1.319 settings files can no longer set CLAUDE_CODE_PROXY_RESOLVES_HOSTS where the host manages the network. Only the process environment is honored.",
+  "fix": "Remove it from settings files and export it in the shell or service environment that launches Claude Code.",
+  "apply": "export CLAUDE_CODE_PROXY_RESOLVES_HOSTS=1",
+  "affected": "Claude Code 2.1.319 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "proxy",
+    "settings",
+    "env-var",
+    "monitor",
+    "2.1.319"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

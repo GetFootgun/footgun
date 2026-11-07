@@ -1,0 +1,28 @@
+{
+  "id": "fg-0588",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code",
+  "title": "Nested skills below the start folder stop loading when the Bash sandbox is on",
+  "symptoms": [
+    "Skills in subfolder .claude/skills directories are missing after upgrading to 2.1.319",
+    "Skills appear only after starting Claude Code or using /cd in that subfolder"
+  ],
+  "cause": "With the Bash sandbox enabled, 2.1.319 loads skills in .claude/skills folders below the starting folder only if you start there or /cd there.",
+  "fix": "Start Claude Code in the folder that holds the skills, run /cd into it, or move the skills to the project root .claude/skills.",
+  "apply": "/cd path/to/subfolder",
+  "affected": "Claude Code 2.1.319 and later with the Bash sandbox on",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "skills",
+    "sandbox",
+    "monorepo",
+    "2.1.319"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

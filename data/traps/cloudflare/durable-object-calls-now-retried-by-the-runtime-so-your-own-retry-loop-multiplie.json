@@ -1,0 +1,29 @@
+{
+  "id": "fg-0591",
+  "provider": "cloudflare",
+  "surface_type": "infra",
+  "surface_name": "Durable Objects",
+  "title": "Durable Object calls now retried by the runtime, so your own retry loop multiplies attempts",
+  "symptoms": [
+    "a failed Durable Object call takes up to about 10 seconds longer to surface an error",
+    "total attempts exceed your configured retry count",
+    "non-idempotent method seems not to rerun, while retryable-marked methods may run twice"
+  ],
+  "cause": "From 2026-11-05 the runtime retries fetch() and RPC calls to a Durable Object up to four times, none starting more than 10 seconds after the first call, when they fail with a retryable error before reaching the object. Errors thrown by your object code and errors with .overloaded true are not retried. Retry options need Wrangler 4.158.0 or later.",
+  "fix": "Lower your own attempt count, or set maxRetries to 0 on stubs where your code handles retries. Mark only idempotent methods with retryable() from cloudflare:durable-objects.",
+  "apply": "const stub = env.CART.getByName(\"user-123\", { retry: { maxRetries: 0 } });",
+  "affected": "All Durable Object stubs called from Workers or other Durable Objects, from 2026-11-05",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "durable-objects",
+    "retries",
+    "workers",
+    "idempotency"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0586",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code",
+  "title": "Auto mode behind an LLM gateway or with telemetry off now asks or denies calls instead of using the built-in classifier",
+  "symptoms": [
+    "Auto mode prompts for or refuses tool calls that used to run unattended after upgrading to 2.1.319",
+    "Setups with telemetry or feature flags off, or behind an LLM gateway, no longer fall back to the built-in classifier",
+    "/status may show 'Auto mode server: Enabled' misleadingly on older versions even though the gateway drops the review"
+  ],
+  "cause": "From 2.1.319, when telemetry or feature flags are off (including behind LLM gateways), calls the server cannot check are asked about or denied, with no fallback to the built-in classifier. Bedrock, Vertex and Foundry are unchanged.",
+  "fix": "Set CLAUDE_CODE_AUTO_MODE_SERVER=0 to keep using the built-in classifier. If you want the server-side check behind a gateway and have CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS set, set CLAUDE_CODE_AUTO_MODE_SERVER=1 as well, and in managed settings put the 1 there too.",
+  "apply": "export CLAUDE_CODE_AUTO_MODE_SERVER=0",
+  "affected": "Claude Code 2.1.319 and later, with DISABLE_TELEMETRY, disabled feature flags, or an LLM gateway base URL",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "auto-mode",
+    "llm-gateway",
+    "telemetry",
+    "env-var",
+    "2.1.319"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

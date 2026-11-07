@@ -1,0 +1,30 @@
+{
+  "id": "fg-0589",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion Update page markdown",
+  "title": "Notion update_content returns success while some edits were skipped, listed only in warnings",
+  "symptoms": [
+    "Update page markdown returns 200 but part of the requested text is unchanged",
+    "Response includes a warnings array with code no_match or indentation_mismatch",
+    "Code that treated any non-error response as full success leaves the page half edited"
+  ],
+  "cause": "Since October 16, 2026, when some update_content edits match and others do not, the matching edits are applied and each miss is reported in warnings. The request fails only if no content-changing edit matches. This works for both markdown versions. REST previously skipped misses silently, and the MCP tool failed the whole call.",
+  "fix": "Check the warnings array after every update_content call and treat any no_match or indentation_mismatch entry as a failure that needs a retry with corrected old_str text. Re-fetch the page markdown to copy exact indentation.",
+  "apply": "if (res.warnings?.some(w => w.code === 'no_match' || w.code === 'indentation_mismatch')) { /* re-fetch markdown and retry */ }",
+  "affected": "PATCH /v1/pages/:page_id/markdown and the notion-update-page MCP tool, from October 16, 2026",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "markdown",
+    "update_content",
+    "warnings",
+    "partial-success"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

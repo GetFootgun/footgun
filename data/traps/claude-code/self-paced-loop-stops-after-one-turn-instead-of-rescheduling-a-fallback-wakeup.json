@@ -1,0 +1,28 @@
+{
+  "id": "fg-0587",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code",
+  "title": "Self-paced /loop stops after one turn instead of rescheduling a fallback wakeup",
+  "symptoms": [
+    "A self-paced /loop ends when a turn finishes without rescheduling",
+    "Loops that used to keep waking up on a fallback timer no longer do after 2.1.319"
+  ],
+  "cause": "Since 2.1.319 a self-paced /loop ends if the turn finishes without rescheduling. It no longer schedules a fallback wakeup.",
+  "fix": "Set CLAUDE_CODE_LOOP_KEEPALIVE=1 to restore the earlier keepalive behavior, or make sure the loop prompt always reschedules itself.",
+  "apply": "export CLAUDE_CODE_LOOP_KEEPALIVE=1",
+  "affected": "Claude Code 2.1.319 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "loop",
+    "env-var",
+    "behavior-change",
+    "2.1.319"
+  ],
+  "verified_on": "2026-11-06",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

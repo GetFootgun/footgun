@@ -11,13 +11,15 @@
   "fix": "Register servers under each project's own block and keep the top-level block empty unless a server truly belongs everywhere.",
   "apply": "Move entries from mcpServers to projects[\"/path/to/project\"].mcpServers in ~/.claude.json, after backing the file up",
   "affected": "Claude Code, August 2026",
-  "sources": [],
+  "sources": [
+    "https://code.claude.com/docs/en/mcp"
+  ],
   "tags": [
     "mcp",
     "isolation"
   ],
-  "verified_on": "2026-08-03",
-  "status": "stale",
+  "verified_on": "2026-11-06",
+  "status": "verified",
   "confirmations": 0,
   "trust": 50
 }
