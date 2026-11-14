@@ -1,0 +1,29 @@
+{
+  "id": "fg-0596",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude-code",
+  "title": "Session on a non-Claude model with a small context window fails every turn once full after 2.1.323",
+  "symptoms": [
+    "Every turn errors after a long conversation on a third-party model",
+    "Context overflow errors that only clear after /clear",
+    "Autocompact never triggers early enough"
+  ],
+  "cause": "From 2.1.323, a model ID that Claude Code does not recognize is assumed to have a 1M context window instead of 200K. On models with a smaller real window, the session grows past the limit before compaction runs.",
+  "fix": "Force the 200K assumption with the environment variable, or lower the compaction point with /autocompact, before the session fills.",
+  "apply": "export CLAUDE_CODE_DISABLE_1M_CONTEXT=1",
+  "affected": "Claude Code 2.1.323 and later with unrecognized model IDs, such as other vendors' models behind a gateway",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "context-window",
+    "gateway",
+    "autocompact",
+    "upgrade"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

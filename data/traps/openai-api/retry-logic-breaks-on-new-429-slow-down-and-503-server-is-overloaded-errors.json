@@ -1,0 +1,30 @@
+{
+  "id": "fg-0607",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "OpenAI API error handling",
+  "title": "Retry logic breaks on new 429 slow_down and 503 server_is_overloaded errors",
+  "symptoms": [
+    "429 response with code slow_down even though the account is under its rate limit",
+    "503 response with code server_is_overloaded",
+    "Retry-After header present on some of these responses and ignored by custom retry code"
+  ],
+  "cause": "Since 2026-09-02 the API separates traffic that ramps up too fast (429, slow_down) from temporary model overload (503, server_is_overloaded). Handlers that treat every 429 as a hard quota failure, or that retry instantly, either give up early or hammer the API.",
+  "fix": "Treat slow_down and server_is_overloaded as retryable. Wait at least the Retry-After value when present, otherwise use exponential backoff. Ramp traffic up gradually instead of in a sudden burst.",
+  "apply": "delay = float(resp.headers.get(\"Retry-After\", 0)) or min(60, 2 ** attempt)  # retry on 429 slow_down and 503 server_is_overloaded",
+  "affected": "All OpenAI API users from 2026-09-02",
+  "sources": [
+    "https://platform.openai.com/docs/changelog"
+  ],
+  "tags": [
+    "429",
+    "503",
+    "retry",
+    "rate-limits",
+    "slow_down"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

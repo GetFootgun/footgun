@@ -1,0 +1,29 @@
+{
+  "id": "fg-0601",
+  "provider": "n8n",
+  "surface_type": "infra",
+  "surface_name": "n8n queue mode webhook responses",
+  "title": "n8n Respond to Webhook node fails in queue mode when the response is larger than 64 MiB",
+  "symptoms": [
+    "Respond to Webhook node errors on a large payload from a worker in queue mode",
+    "Large database result sets or CSV/XML responses fail while small ones succeed"
+  ],
+  "cause": "In queue mode the worker sends the webhook response back through Redis to the main or webhook instance. n8n caps this at 64 MiB by default (N8N_WEBHOOK_RESPONSE_RELAY_SIZE_MAX), and larger responses fail the node.",
+  "fix": "On n8n 2.34 or later, upgrade main and webhook instances first, then set N8N_WEBHOOK_RESPONSE_RELAY_OFFLOAD_ENABLED=true on workers. This requires a binary data mode other than default and storage all instances can read (s3 or azure recommended). Or shrink the response.",
+  "apply": "N8N_WEBHOOK_RESPONSE_RELAY_OFFLOAD_ENABLED=true\nN8N_DEFAULT_BINARY_DATA_MODE=s3",
+  "affected": "n8n queue mode before 2.34 (no offload option); offload requires main instances on 2.34.0+",
+  "sources": [
+    "https://docs.n8n.io/release-notes/"
+  ],
+  "tags": [
+    "n8n",
+    "queue-mode",
+    "webhook",
+    "redis",
+    "respond-to-webhook"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0597",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, advisor tool",
+  "title": "Advisor tool returns 400 when a Claude Fable 5.2 or Mythos 5.2 executor uses any other advisor model",
+  "symptoms": [
+    "400 error from a request using the advisor tool after switching the executor to claude-fable-5-2 or claude-mythos-5-2",
+    "Advisor model such as Opus 5.5 that worked with the previous executor is rejected"
+  ],
+  "cause": "A Fable 5.2 or Mythos 5.2 executor accepts only Fable 5.2 or Mythos 5.2 as its advisor. Other advisor models are rejected.",
+  "fix": "Set the advisor's model to claude-fable-5-2 or claude-mythos-5-2 when moving the executor to those models.",
+  "apply": "Set the advisor tool's \"model\" to \"claude-fable-5-2\" when the executor is claude-fable-5-2.",
+  "affected": "Advisor tool (beta) with claude-fable-5-2 or claude-mythos-5-2 executors, from November 9, 2026",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview",
+    "https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility"
+  ],
+  "tags": [
+    "advisor-tool",
+    "claude-fable-5-2",
+    "400"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

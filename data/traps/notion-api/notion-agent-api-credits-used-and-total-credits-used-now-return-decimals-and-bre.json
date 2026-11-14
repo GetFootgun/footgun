@@ -1,0 +1,29 @@
+{
+  "id": "fg-0599",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion Agent APIs",
+  "title": "Notion Agent API credits_used and total_credits_used now return decimals and break integer-only code",
+  "symptoms": [
+    "Integer parsing error or type mismatch on credits_used from Retrieve a session or Query sessions",
+    "total_credits_used from Retrieve agent insights does not equal the exact credit usage",
+    "Value such as 0.45 or 12.45 where whole numbers were expected"
+  ],
+  "cause": "Since October 30, 2026, credit fields report fractional credits and round down. credits_used has at most two decimals (12.456789 reads as 12.45). total_credits_used is a whole number from 1 up (12.7 reads as 12) and has at most two significant figures below 1 (0.456789 reads as 0.45).",
+  "fix": "Treat these fields as floating point numbers, not integers. Do not sum rounded values and expect exact totals.",
+  "apply": "const credits: number = Number(session.credits_used); // allow decimals, do not use parseInt",
+  "affected": "Notion Agent APIs from 2026-10-30",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "agent-api",
+    "credits",
+    "rounding",
+    "type-change"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

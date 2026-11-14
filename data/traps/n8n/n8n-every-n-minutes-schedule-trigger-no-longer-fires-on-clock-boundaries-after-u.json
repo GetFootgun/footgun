@@ -1,0 +1,30 @@
+{
+  "id": "fg-0600",
+  "provider": "n8n",
+  "surface_type": "tool",
+  "surface_name": "n8n Schedule Trigger",
+  "title": "n8n every-N-minutes Schedule Trigger no longer fires on clock boundaries after upgrading to 2.45",
+  "symptoms": [
+    "A workflow set to run every 15 minutes used to fire at :00, :15, :30, :45 and now fires at odd minutes",
+    "Runs are offset from the moment the workflow was published",
+    "Downstream systems expecting clock-aligned runs get data at unexpected times"
+  ],
+  "cause": "From n8n 2.45 the durable scheduler is the default for all Schedule Trigger nodes. Interval schedules in seconds and minutes now run a fixed N apart, counted from the publish time, instead of aligning to clock boundaries. Existing nodes switch over on upgrade without republishing.",
+  "fix": "Either republish the workflow at the moment you want the cycle to start, switch to a cron expression for clock-aligned timing, or set N8N_SCHEDULER_TRIGGER_NODE_MODE=legacy to keep clock-aligned timing. Both legacy variables are deprecated and will be removed in a future version.",
+  "apply": "N8N_SCHEDULER_TRIGGER_NODE_MODE=legacy",
+  "affected": "n8n 2.45 and later, self-hosted and cloud, interval-based (seconds/minutes) Schedule Trigger nodes",
+  "sources": [
+    "https://docs.n8n.io/release-notes/"
+  ],
+  "tags": [
+    "n8n",
+    "schedule-trigger",
+    "scheduler",
+    "upgrade",
+    "cron"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

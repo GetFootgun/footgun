@@ -1,0 +1,29 @@
+{
+  "id": "fg-0606",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, Claude Opus 4.8 fast mode",
+  "title": "Requests to claude-opus-4-8 with speed \"fast\" fail after the November 30, 2026 removal",
+  "symptoms": [
+    "Error response on requests to claude-opus-4-8 that set speed: \"fast\"",
+    "Fast mode requests that worked before November 30, 2026 now return an error"
+  ],
+  "cause": "Fast mode for Claude Opus 4.8 was deprecated on October 30, 2026 and is removed on November 30, 2026. After that date the speed parameter is no longer accepted for that model.",
+  "fix": "Move fast mode traffic to claude-opus-5-5, which supports speed: \"fast\". Alternatively drop the speed field and accept standard speed on Opus 4.8.",
+  "apply": "{\"model\": \"claude-opus-5-5\", \"speed\": \"fast\", \"max_tokens\": 1024, \"messages\": [...]}",
+  "affected": "claude-opus-4-8 with speed: \"fast\", from November 30, 2026",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview",
+    "https://platform.claude.com/docs/en/build-with-claude/fast-mode#supported-models"
+  ],
+  "tags": [
+    "fast-mode",
+    "deprecation",
+    "claude-opus-4-8",
+    "claude-opus-5-5"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

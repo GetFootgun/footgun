@@ -1,0 +1,30 @@
+{
+  "id": "fg-0603",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "codex exec",
+  "title": "codex exec in an untrusted directory ignores project config and MCP servers even with --sandbox workspace-write",
+  "symptoms": [
+    "MCP servers defined in the project's .codex/config.toml are not started under codex exec",
+    "Project-level settings have no effect in codex exec after upgrading to 0.169.0",
+    "Passing --sandbox workspace-write does not change which project config is loaded"
+  ],
+  "cause": "As of 0.169.0, codex exec keeps project configuration and MCP servers disabled in directories that are not trusted. Choosing a sandbox mode no longer implies trust, so a script that relied on workspace-write to pick up project config now runs without it.",
+  "fix": "Mark the project as trusted explicitly by passing --trust to codex exec or codex review, which saves project trust. Alternatively trust the directory once in an interactive session before running automation.",
+  "apply": "codex exec --trust --sandbox workspace-write \"your task here\"",
+  "affected": "Codex CLI 0.169.0 and later, for codex exec and codex review in directories not yet trusted",
+  "sources": [
+    "https://github.com/openai/codex/releases/tag/rust-v0.169.0"
+  ],
+  "tags": [
+    "codex-exec",
+    "trust",
+    "mcp",
+    "project-config",
+    "ci"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -11,12 +11,14 @@
   "fix": "Point the client at the /mcp endpoint with HTTP transport and authorize again.",
   "apply": "{\"type\": \"http\", \"url\": \"https://observability.mcp.cloudflare.com/mcp\"}",
   "affected": "Cloudflare MCP servers, September 2026",
-  "sources": [],
+  "sources": [
+    "https://developers.cloudflare.com/changelog/post/2026-10-22-cloudflare-mcp-servers-retire-sse/"
+  ],
   "tags": [
     "mcp",
     "deprecated"
   ],
-  "verified_on": "2026-09-04",
+  "verified_on": "2026-11-13",
   "status": "verified",
   "confirmations": 0,
   "trust": 50

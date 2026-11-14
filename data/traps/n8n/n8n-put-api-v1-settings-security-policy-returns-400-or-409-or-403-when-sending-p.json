@@ -1,0 +1,30 @@
+{
+  "id": "fg-0602",
+  "provider": "n8n",
+  "surface_type": "api",
+  "surface_name": "n8n public API settings endpoints",
+  "title": "n8n PUT /api/v1/settings/security-policy returns 400 or 409 or 403 when sending partial bodies or old API keys",
+  "symptoms": [
+    "400 response when PUT contains only some fields",
+    "409 Conflict when updating the security policy",
+    "Existing API key is refused on the settings endpoint"
+  ],
+  "cause": "The PUT endpoint requires the full configuration object and rejects partial bodies. If the policy is managed by environment variables, the API returns 409 and changes nothing. API key scopes are fixed at creation, so older keys lack the securitySettings:manage scope.",
+  "fix": "Create a new API key with the securitySettings:manage scope, GET the current policy, edit it and PUT the whole object back. Remove the environment variable management if you want to change it via API.",
+  "apply": "GET /api/v1/settings/security-policy then PUT /api/v1/settings/security-policy with the full object (key scope: securitySettings:manage)",
+  "affected": "n8n 2.31 and later, Enterprise",
+  "sources": [
+    "https://docs.n8n.io/release-notes/"
+  ],
+  "tags": [
+    "n8n",
+    "public-api",
+    "security-policy",
+    "api-key",
+    "enterprise"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fg-0595",
+  "provider": "cloudflare",
+  "surface_type": "api",
+  "surface_name": "Cloudflare Access service tokens",
+  "title": "Access service token disabled after leak detection and re-enable returns 409 or rotation returns 400",
+  "symptoms": [
+    "Service token suddenly disabled and account administrators receive an email",
+    "Re-enabling the token returns HTTP 409",
+    "Rotating the secret with previous_client_secret_expires_at set returns HTTP 400",
+    "Services using the old client secret start getting denied"
+  ],
+  "cause": "GitHub secret scanning reports Access service token secrets found in public repos and Access disables the token. A leaked token cannot be re-enabled until its secret is rotated, and leaked secrets get no rotation grace period, so the old secret is discarded immediately.",
+  "fix": "Rotate the secret without previous_client_secret_expires_at, update every service with the new secret, then re-enable the token. Avoid committing secrets, which use the cfast_ prefix for secrets created on or after 2026-08-26.",
+  "apply": "Rotate the service token via API with no previous_client_secret_expires_at field in the body, then re-enable the token after updating consumers.",
+  "affected": "Access service tokens, behavior documented 2026-11-11; cfast_ format for Client Secrets created from 2026-08-26",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "access",
+    "service-token",
+    "secret-scanning",
+    "rotation"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

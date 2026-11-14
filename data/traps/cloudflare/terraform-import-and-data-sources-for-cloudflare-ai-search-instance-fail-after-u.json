@@ -1,0 +1,30 @@
+{
+  "id": "fg-0594",
+  "provider": "cloudflare",
+  "surface_type": "tool",
+  "surface_name": "Terraform cloudflare provider (AI Search)",
+  "title": "terraform import and data sources for cloudflare_ai_search_instance fail after upgrading to provider v5.29.0",
+  "symptoms": [
+    "terraform import cloudflare_ai_search_instance.docs /docs fails with an invalid import ID",
+    "data \"cloudflare_ai_search_instance\" or data \"cloudflare_ai_search_instances\" fails validation because namespace is missing",
+    "filter.namespace on the cloudflare_ai_search_instance data source is rejected as an unsupported argument",
+    "plan shows an instance being replaced after namespace is changed"
+  ],
+  "cause": "Provider v5.29.0 added a namespace argument to cloudflare_ai_search_instance. The import ID now has three parts, the two data sources require namespace, and the old filter.namespace argument was removed. Changing namespace on an existing instance forces replacement.",
+  "fix": "Use the three-part import ID with default as the namespace for existing instances. Add namespace = \"default\" to every instance data source block, remove filter.namespace, and do not change namespace on a live instance unless you accept a replace.",
+  "apply": "terraform import cloudflare_ai_search_instance.docs <account_id>/default/docs\n\n# data source\ndata \"cloudflare_ai_search_instance\" \"docs\" {\n  account_id = var.account_id\n  namespace  = \"default\"\n  id         = \"docs\"\n}",
+  "affected": "Cloudflare Terraform provider v5.29.0 and later, announced 2026-11-13",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "terraform",
+    "ai-search",
+    "import",
+    "breaking-change"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

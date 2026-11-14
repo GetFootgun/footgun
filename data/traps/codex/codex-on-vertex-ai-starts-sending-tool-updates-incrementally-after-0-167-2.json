@@ -1,0 +1,29 @@
+{
+  "id": "fg-0604",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Codex CLI config.toml",
+  "title": "Codex on Vertex AI starts sending tool updates incrementally after 0.167.2",
+  "symptoms": [
+    "Behavior of tool definitions changes on Google Cloud Vertex AI after updating to 0.167.2",
+    "Tool list handling differs from earlier versions with a GCP-backed provider"
+  ],
+  "cause": "Version 0.167.2 turned on incremental tool updates by default for Codex running against Google Cloud Vertex AI. Setups that depended on the previous full-tool behavior now get the new one without any config change.",
+  "fix": "If the new behavior causes problems, opt out by setting the legacy GCP incremental tools flag to false under the [features] table in config.toml.",
+  "apply": "[features]\nincremental_tools_legacy_gcp = false",
+  "affected": "Codex CLI 0.167.2 and later when using Google Cloud Vertex AI",
+  "sources": [
+    "https://github.com/openai/codex/releases/tag/rust-v0.167.2"
+  ],
+  "tags": [
+    "vertex-ai",
+    "gcp",
+    "config",
+    "features",
+    "tools"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

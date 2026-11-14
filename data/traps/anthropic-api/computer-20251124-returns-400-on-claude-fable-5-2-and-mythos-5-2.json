@@ -1,0 +1,27 @@
+{
+  "id": "fg-0598",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Messages API, computer use tool on Claude Fable 5.2 and Mythos 5.2",
+  "title": "computer_20251124 returns 400 on Claude Fable 5.2 and Mythos 5.2",
+  "symptoms": [
+    "400 error when a request declares computer_20251124 with claude-fable-5-2 or claude-mythos-5-2"
+  ],
+  "cause": "These models support computer use only through the computer_toolset_20260801 toolset. The older tool still works only on Amazon Bedrock.",
+  "fix": "Replace the computer_20251124 tool declaration with computer_toolset_20260801 on the Claude API and Google Cloud, and update any tool-result handling to match the migration guide.",
+  "apply": "tools: [{\"type\": \"computer_toolset_20260801\", ...}]",
+  "affected": "claude-fable-5-2 and claude-mythos-5-2 on every platform except Amazon Bedrock, from November 9, 2026",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview",
+    "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#migrate-from-computer-20251124"
+  ],
+  "tags": [
+    "computer-use",
+    "claude-fable-5-2",
+    "400"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

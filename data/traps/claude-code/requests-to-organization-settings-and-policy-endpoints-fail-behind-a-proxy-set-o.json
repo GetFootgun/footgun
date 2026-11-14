@@ -1,0 +1,28 @@
+{
+  "id": "fg-0605",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude-code",
+  "title": "Requests to organization settings and policy endpoints fail behind a proxy set only by ALL_PROXY",
+  "symptoms": [
+    "Organization settings or policy never load on a network that requires a proxy",
+    "Managed policy missing after upgrading to 2.1.323 while ALL_PROXY is the only proxy variable set"
+  ],
+  "cause": "From 2.1.323, organization settings and policy requests no longer use a proxy configured only through ALL_PROXY. Only HTTPS_PROXY is honored for them, so the calls go direct and are blocked.",
+  "fix": "Set HTTPS_PROXY (and NO_PROXY if needed) to the same proxy address you had in ALL_PROXY before launching Claude Code.",
+  "apply": "export HTTPS_PROXY=\"$ALL_PROXY\"",
+  "affected": "Claude Code 2.1.323 and later, networks that rely on ALL_PROXY alone",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "proxy",
+    "managed-settings",
+    "network",
+    "upgrade"
+  ],
+  "verified_on": "2026-11-13",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
