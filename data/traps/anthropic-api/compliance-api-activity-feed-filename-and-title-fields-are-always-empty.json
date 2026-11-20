@@ -1,0 +1,28 @@
+{
+  "id": "fg-0610",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Compliance API Activity Feed",
+  "title": "Compliance API Activity Feed filename and title fields are always empty",
+  "symptoms": [
+    "filename or title is empty or missing on file, project document, and artifact activities",
+    "Old activities also lost their names after September 24, 2026",
+    "Audit exports show IDs but no human-readable names"
+  ],
+  "cause": "From September 24, 2026 the Activity Feed no longer returns file names, project document names, or artifact titles. The fields are blank or omitted for all activities, including ones recorded earlier.",
+  "fix": "Look up the name or title using the ID on the activity, through the Compliance API content endpoints with a Compliance Access Key that has the read:compliance_user_data scope. Store names at ingest time if you need history.",
+  "apply": "Use a Compliance Access Key with scope `read:compliance_user_data` and resolve each activity's file, document, or artifact ID through the content data endpoints.",
+  "affected": "Compliance API Activity Feed, all activities, from September 24, 2026",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview"
+  ],
+  "tags": [
+    "compliance-api",
+    "activity-feed",
+    "audit"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0609",
+  "provider": "cloudflare",
+  "surface_type": "ui",
+  "surface_name": "Spectrum",
+  "title": "New Spectrum TCP/UDP app created in dashboard does not enforce IP Access Rules",
+  "symptoms": [
+    "Blocked IPs from IP Access Rules can still connect to a newly created Spectrum application",
+    "Dashboard-created app behaves differently from an older app on the same zone"
+  ],
+  "cause": "Since the Spectrum dashboard redesign on 2026-11-19, new TCP and UDP applications created in the dashboard have IP Access Rules turned off by default, matching the API default. Existing applications keep their setting.",
+  "fix": "Turn on IP Access Rules in the application's Advanced Options when creating or editing it, if you rely on those rules to block traffic.",
+  "apply": "Dashboard: Spectrum > Applications > select hostname > Advanced Options > turn on IP Access Rules",
+  "affected": "Spectrum TCP and UDP applications created in the dashboard on or after 2026-11-19",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "spectrum",
+    "ip-access-rules",
+    "defaults",
+    "dashboard"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

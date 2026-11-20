@@ -1,0 +1,28 @@
+{
+  "id": "fg-0608",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude-code",
+  "title": "Behind a gateway, requests fail with a max_tokens error after upgrading to 2.1.329 because the automatic retry is gone",
+  "symptoms": [
+    "API error mentioning max_tokens exceeding the model's output limit",
+    "Requests that worked on 2.1.326 through 2.1.328 now fail on a gateway whose model allows fewer output tokens"
+  ],
+  "cause": "Version 2.1.326 added an automatic retry that read the limit from a max_tokens error and resent with it. Version 2.1.329 removed that retry, so the oversized max_tokens value is sent and rejected every time.",
+  "fix": "Set CLAUDE_CODE_MAX_OUTPUT_TOKENS to the output token limit of the model behind the gateway.",
+  "apply": "export CLAUDE_CODE_MAX_OUTPUT_TOKENS=8192  # use your gateway model's real output limit",
+  "affected": "Claude Code 2.1.329 and later, with gateways or custom base URLs whose model accepts fewer output tokens than the default",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "gateway",
+    "max_tokens",
+    "env-var",
+    "regression"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

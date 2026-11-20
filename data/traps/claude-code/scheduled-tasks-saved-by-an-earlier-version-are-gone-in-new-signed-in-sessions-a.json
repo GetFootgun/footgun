@@ -1,0 +1,27 @@
+{
+  "id": "fg-0613",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude-code",
+  "title": "Scheduled tasks saved by an earlier version are gone in new signed-in sessions after 2.1.329",
+  "symptoms": [
+    "Tasks created before the upgrade no longer run in a fresh session",
+    "Scheduled task list looks empty or missing entries until you resume the original session"
+  ],
+  "cause": "2.1.329 changed how saved scheduled tasks are handled. In new signed-in sessions, most tasks saved by earlier versions are not picked up and must be scheduled again. Only --resume of the session that owns them still runs them.",
+  "fix": "Recreate the scheduled tasks in the new version, or resume the original session with --resume if you need the old ones to keep running for now.",
+  "apply": "claude --resume  # pick the session that owned the old scheduled tasks, or re-create them with /loop or the scheduling command",
+  "affected": "Claude Code 2.1.329 and later, for tasks saved by 2.1.328 or earlier",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "scheduled-tasks",
+    "upgrade",
+    "migration"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

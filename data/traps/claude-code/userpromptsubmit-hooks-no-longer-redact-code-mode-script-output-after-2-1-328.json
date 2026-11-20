@@ -1,0 +1,28 @@
+{
+  "id": "fg-0614",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "claude-code",
+  "title": "UserPromptSubmit hooks no longer redact Code Mode script output after 2.1.328",
+  "symptoms": [
+    "Secrets or text that a UserPromptSubmit hook used to mask now appear in script output",
+    "Managed UserPromptSubmit hooks seem to be skipped for Code Mode scripts"
+  ],
+  "cause": "2.1.328 stopped running UserPromptSubmit hooks, including managed ones, on the output of Code Mode scripts.",
+  "fix": "Move the redaction to a PostToolUse hook that returns updatedToolOutput.",
+  "apply": "Add a PostToolUse hook in settings.json that returns {\"updatedToolOutput\": \"<redacted text>\"}",
+  "affected": "Claude Code 2.1.328 and later, Code Mode",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "hooks",
+    "code-mode",
+    "redaction",
+    "userpromptsubmit"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

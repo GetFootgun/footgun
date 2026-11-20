@@ -1,0 +1,29 @@
+{
+  "id": "fg-0612",
+  "provider": "slack",
+  "surface_type": "tool",
+  "surface_name": "Slack CLI",
+  "title": "Slack CLI app on an Enterprise org installs but never receives events",
+  "symptoms": [
+    "slack install or slack run succeeds on an Enterprise organization but no events arrive",
+    "Manifest has no org_deploy_enabled setting"
+  ],
+  "cause": "On an Enterprise organization the app needs organization-wide installation enabled in its manifest. Without it the app installs but gets no events. CLI v4.12.0 added a check that stops before creating the app.",
+  "fix": "Set org_deploy_enabled to true in the manifest settings and upgrade the CLI to v4.12.0 or later so the missing setting is caught up front.",
+  "apply": "manifest.json: \"settings\": { \"org_deploy_enabled\": true }",
+  "affected": "Slack CLI before v4.12.0 (released 2026-10-30) on Enterprise organizations",
+  "sources": [
+    "https://docs.slack.dev/changelog/"
+  ],
+  "tags": [
+    "slack-cli",
+    "enterprise",
+    "manifest",
+    "events",
+    "org-deploy"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

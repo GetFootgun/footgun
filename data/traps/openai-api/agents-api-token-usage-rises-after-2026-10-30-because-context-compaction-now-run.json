@@ -1,0 +1,28 @@
+{
+  "id": "fg-0611",
+  "provider": "openai-api",
+  "surface_type": "api",
+  "surface_name": "Agents API",
+  "title": "Agents API token usage rises after 2026-10-30 because context compaction now runs in the background",
+  "symptoms": [
+    "Token bills for Agents API sessions went up with no code change",
+    "Compaction no longer blocks a turn but extra tokens show in usage"
+  ],
+  "cause": "On 2026-10-30 the Agents API changed the default so context compaction runs in the background. Background compaction can use more tokens than the earlier blocking behavior.",
+  "fix": "If you need the earlier blocking behavior or want predictable token usage, set compaction.async to false in the agent configuration.",
+  "apply": "agent config: compaction: { \"async\": false }",
+  "affected": "Agents API public beta, default changed 2026-10-30",
+  "sources": [
+    "https://platform.openai.com/docs/changelog"
+  ],
+  "tags": [
+    "agents-api",
+    "compaction",
+    "cost",
+    "defaults"
+  ],
+  "verified_on": "2026-11-20",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
