@@ -1,0 +1,28 @@
+{
+  "id": "fg-0615",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code on Google Cloud Agent Platform",
+  "title": "Sonnet requests on Agent Platform go to the wrong region after 2.1.332 when only the 4_5 region variable is set",
+  "symptoms": [
+    "Sonnet requests hit us-east5 or CLOUD_ML_REGION instead of your chosen region",
+    "Region-specific quota or model-not-found errors after upgrading to 2.1.332"
+  ],
+  "cause": "The sonnet alias and background requests now resolve to Sonnet 5.5 and read VERTEX_REGION_CLAUDE_5_5_SONNET. If only the VERTEX_REGION_CLAUDE_4_5_SONNET variable is set, they fall back to CLOUD_ML_REGION or us-east5.",
+  "fix": "Set the new 5.5 region variable to the same region you used for 4.5.",
+  "apply": "export VERTEX_REGION_CLAUDE_5_5_SONNET=<your-region>",
+  "affected": "Claude Code 2.1.332 and later on Google Cloud Agent Platform",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "vertex",
+    "agent-platform",
+    "region",
+    "env-var"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,28 @@
+{
+  "id": "fg-0620",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion Agent APIs",
+  "title": "Notion Agent API alpha routes and Update agent status endpoint are deprecated",
+  "symptoms": [
+    "Private alpha agent routes flagged deprecated after Agent APIs went generally available",
+    "Update agent status endpoint marked deprecated"
+  ],
+  "cause": "The Agent APIs left beta on 2026-11-02. The private alpha routes are deprecated, and the separate Update agent status endpoint is replaced by PATCH /v1/agents/{agent_id}.",
+  "fix": "Move off the alpha routes to the GA ones and send status through Update an agent instead of the status endpoint.",
+  "apply": "PATCH /v1/agents/{agent_id} with body {\"status\": \"...\"}",
+  "affected": "Integrations using private alpha agent routes or Update agent status, from 2026-11-02",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "agents",
+    "deprecation",
+    "ga"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

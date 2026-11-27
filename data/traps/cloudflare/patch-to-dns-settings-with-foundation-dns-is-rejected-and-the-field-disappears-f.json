@@ -1,0 +1,30 @@
+{
+  "id": "fg-0624",
+  "provider": "cloudflare",
+  "surface_type": "api",
+  "surface_name": "DNS settings API",
+  "title": "PATCH to /dns_settings with foundation_dns is rejected and the field disappears from responses",
+  "symptoms": [
+    "PATCH request to /zones/{zone_id}/dns_settings containing foundation_dns is rejected",
+    "foundation_dns missing from GET responses for zone settings or account defaults",
+    "client code reading foundation_dns gets undefined"
+  ],
+  "cause": "Starting 2026-11-23, with a rollout of about seven days, the DNS settings endpoints for zones and account defaults no longer return or accept the deprecated foundation_dns boolean. Advanced Nameservers are now configured only through nameservers.type.",
+  "fix": "Stop reading and writing foundation_dns. Set nameservers.type to cloudflare.advanced instead. Your Foundation DNS subscription and zone state are not changed.",
+  "apply": "{\"nameservers\":{\"type\":\"cloudflare.advanced\"}}",
+  "affected": "/zones/{zone_id}/dns_settings and /accounts/{account_id}/dns_settings from 2026-11-23, rolling out over about 7 days",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "dns",
+    "api",
+    "foundation-dns",
+    "advanced-nameservers",
+    "deprecation"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

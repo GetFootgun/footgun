@@ -1,0 +1,31 @@
+{
+  "id": "fg-0622",
+  "provider": "n8n",
+  "surface_type": "api",
+  "surface_name": "n8n MCP server and package export",
+  "title": "n8n MCP delete_agent tool is gone and package export ignores includeArchivedWorkflows",
+  "symptoms": [
+    "MCP client reports unknown tool delete_agent",
+    "Package export no longer includes archived items when includeArchivedWorkflows is passed",
+    "Call to an archived sub-agent fails with an error asking you to restore it"
+  ],
+  "cause": "With agent archiving in n8n 3.3, the MCP server tool archive_agent replaces delete_agent. The package export flag includeArchivedWorkflows was renamed includeArchived, and when set, project exports also include archived agents. A sub-agent that is archived stays referenced by parent agents but calls to it fail.",
+  "fix": "Update MCP clients and scripts to call archive_agent, then delete from the UI after archiving if you need permanent removal. Rename the export flag to includeArchived. Before archiving an agent, check which parent agents use it as a sub-agent and restore it with Unarchive, then publish again, if calls fail.",
+  "apply": "Replace delete_agent with archive_agent in MCP tool calls, and replace includeArchivedWorkflows with includeArchived in package export requests or CLI options.",
+  "affected": "n8n 3.3 and later (agents are in Preview)",
+  "sources": [
+    "https://docs.n8n.io/release-notes/"
+  ],
+  "tags": [
+    "n8n",
+    "mcp",
+    "agents",
+    "archive",
+    "package-export",
+    "rename"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

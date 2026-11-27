@@ -1,0 +1,28 @@
+{
+  "id": "fg-0625",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code on Amazon Bedrock Mantle",
+  "title": "The sonnet alias on Bedrock Mantle now points at Sonnet 5 and fails if your account lacks that model",
+  "symptoms": [
+    "sonnet alias returns a model access error on Bedrock Mantle after upgrading to 2.1.332",
+    "Sessions that used to run on Haiku 4.5 via the sonnet alias now error out"
+  ],
+  "cause": "Before 2.1.332 the sonnet alias on Bedrock Mantle resolved to Haiku 4.5 by mistake. It now resolves to Sonnet 5 (not 5.5), and an account without Sonnet 5 enabled gets an error instead of a fallback.",
+  "fix": "Enable Sonnet 5 for the account in Bedrock before upgrading, or pin the model explicitly with ANTHROPIC_DEFAULT_SONNET_MODEL to one you have access to.",
+  "apply": "export ANTHROPIC_DEFAULT_SONNET_MODEL=<your-enabled-sonnet-model-id>",
+  "affected": "Claude Code 2.1.332 and later on Amazon Bedrock Mantle",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "bedrock",
+    "model-alias",
+    "sonnet",
+    "upgrade"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

@@ -1,0 +1,29 @@
+{
+  "id": "fg-0618",
+  "provider": "codex",
+  "surface_type": "tool",
+  "surface_name": "Codex CLI",
+  "title": "Optional stdio MCP server tools are missing at session start after 0.172.0",
+  "symptoms": [
+    "An MCP server that has a cached tool list does not appear started when the session opens",
+    "The server only launches when the model first calls one of its tools",
+    "Startup-time checks or hooks that expect the MCP process to already be running fail"
+  ],
+  "cause": "Since 0.172.0, optional stdio MCP servers that have a cached tool list start lazily on their first tool call by default, instead of at session startup.",
+  "fix": "Do not assume the server process is running before the first tool call. If a workflow needs the server up early, trigger a call to one of its tools first and confirm in /mcp that it started.",
+  "apply": "/mcp",
+  "affected": "Codex CLI 0.172.0 and later, for optional stdio MCP servers with cached tool lists",
+  "sources": [
+    "https://github.com/openai/codex/releases/tag/rust-v0.172.0"
+  ],
+  "tags": [
+    "mcp",
+    "stdio",
+    "lazy-startup",
+    "changed-default"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

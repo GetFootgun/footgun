@@ -1,0 +1,29 @@
+{
+  "id": "fg-0619",
+  "provider": "notion-api",
+  "surface_type": "api",
+  "surface_name": "Notion page markdown insert_content",
+  "title": "Notion insert_content with the ellipsis after parameter is deprecated in favor of position after_content",
+  "symptoms": [
+    "insert_content using after with ellipsis text is flagged deprecated",
+    "position after_content with an anchor is rejected when markdown_version is not v2"
+  ],
+  "cause": "The ellipsis-based insert_content.after parameter was deprecated on 2026-11-24. The replacement position types after_content and before_content only work with markdown_version v2.",
+  "fix": "Replace after with position of type after_content and an anchor string, and send markdown_version v2 on the request. Upgrade @notionhq/client to v5.32.0 or later for types.",
+  "apply": "\"insert_content\": {\"markdown\": \"...\", \"position\": {\"type\": \"after_content\", \"anchor\": \"## Action items\"}}, \"markdown_version\": \"v2\"",
+  "affected": "Update page markdown calls using insert_content.after; SDK @notionhq/client before v5.32.0 lacks the types",
+  "sources": [
+    "https://developers.notion.com/page/changelog"
+  ],
+  "tags": [
+    "notion",
+    "markdown",
+    "insert_content",
+    "deprecation",
+    "v2"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

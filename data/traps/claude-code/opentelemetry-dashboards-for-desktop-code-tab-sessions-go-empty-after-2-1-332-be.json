@@ -1,0 +1,28 @@
+{
+  "id": "fg-0616",
+  "provider": "claude-code",
+  "surface_type": "tool",
+  "surface_name": "Claude Code OpenTelemetry",
+  "title": "OpenTelemetry dashboards for desktop Code tab sessions go empty after 2.1.332 because service.name changed",
+  "symptoms": [
+    "Filters on service.name = claude-code show no desktop sessions",
+    "Desktop Code tab telemetry appears under a new service name claude-code-desktop"
+  ],
+  "cause": "2.1.332 changed the default service.name for desktop Code tab sessions from claude-code to claude-code-desktop.",
+  "fix": "Update queries and alerts to the new name, or set OTEL_SERVICE_NAME to keep the old value.",
+  "apply": "export OTEL_SERVICE_NAME=claude-code",
+  "affected": "Desktop Code tab sessions on Claude Code 2.1.332 and later",
+  "sources": [
+    "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md"
+  ],
+  "tags": [
+    "opentelemetry",
+    "telemetry",
+    "desktop",
+    "service-name"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

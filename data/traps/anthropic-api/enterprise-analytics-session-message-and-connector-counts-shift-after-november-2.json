@@ -1,0 +1,30 @@
+{
+  "id": "fg-0617",
+  "provider": "anthropic-api",
+  "surface_type": "api",
+  "surface_name": "Claude Enterprise Analytics API",
+  "title": "Enterprise Analytics session, message and connector counts shift after November 2026 counting changes",
+  "symptoms": [
+    "List User Activity sessions.distinct_session_count and message_count differ from earlier pulls",
+    "web_search_count and connector distinct user counts for the same past day change when pulled again",
+    "Dashboards show a step change in chat versus sessions metrics"
+  ],
+  "cause": "On November 20, 2026 the rule for when a Chat and Cowork unified chat counts as a session changed. A session now starts the first time on a UTC day that Claude runs Bash or creates or edits a file. The rollout is gradual and the API does not show which rule a chat follows. Fixes on November 23 and 24 also raise web search, connector, and project counts for data from November 17, 19 and 20 onward, and earlier days are not recounted.",
+  "fix": "Do not compare counts across the change dates as one series. Re-pull data from November 17, 2026 onward and mark the break in trend charts.",
+  "apply": "Re-pull List User Activity, Get Connector Usage and Get Chat Project Usage for dates on or after 2026-11-17 and overwrite stored values",
+  "affected": "Claude Enterprise Analytics API, data for November 17, 2026 (UTC) onward",
+  "sources": [
+    "https://platform.claude.com/docs/en/release-notes/overview",
+    "https://platform.claude.com/docs/en/manage-claude/analytics-api"
+  ],
+  "tags": [
+    "analytics",
+    "enterprise",
+    "metrics",
+    "data-change"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

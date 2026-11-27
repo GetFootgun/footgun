@@ -1,0 +1,31 @@
+{
+  "id": "fg-0623",
+  "provider": "cloudflare",
+  "surface_type": "api",
+  "surface_name": "Workers for Platforms dispatch namespace API",
+  "title": "Creating a dispatch namespace fails with 400 code 100120 'Invalid dispatch namespace name'",
+  "symptoms": [
+    "400 error with code 100120",
+    "Invalid dispatch namespace name. Ensure it does not already exist and uses only lowercase letters, numbers, underscores and dashes (do not start with a dash).",
+    "wrangler dispatch-namespace create returns error 100120",
+    "terraform apply fails on cloudflare_workers_for_platforms_dispatch_namespace"
+  ],
+  "cause": "New dispatch namespace names now follow Worker naming rules. Only lowercase letters, numbers, underscores and dashes are allowed, the name must start with a letter, number or underscore, and it must be 256 characters or fewer. Names with uppercase letters, slashes, percent signs or spaces were accepted before and are now rejected on create. Existing namespaces are unaffected.",
+  "fix": "Normalize the namespace name to lowercase with only letters, digits, underscores and dashes before calling the API, CLI or Terraform. Update any scripts that build names from tenant IDs or user input.",
+  "apply": "wrangler dispatch-namespace create my-tenant_namespace-01",
+  "affected": "Dispatch namespace creation via API, Wrangler and Terraform from 2026-11-25; existing namespaces keep working",
+  "sources": [
+    "https://developers.cloudflare.com/changelog/"
+  ],
+  "tags": [
+    "workers-for-platforms",
+    "dispatch-namespace",
+    "terraform",
+    "wrangler",
+    "error-100120"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}

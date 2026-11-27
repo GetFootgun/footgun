@@ -1,0 +1,31 @@
+{
+  "id": "fg-0621",
+  "provider": "n8n",
+  "surface_type": "ui",
+  "surface_name": "n8n workflow editor (credentials)",
+  "title": "n8n Execute and Publish buttons are disabled on a workflow that uses a teammate's credential",
+  "symptoms": [
+    "Execute workflow button is greyed out and names a credential and its owner",
+    "Publish is blocked with a message saying which credential you cannot use",
+    "Execution data from runs that used that credential is hidden from you",
+    "Sub-workflow output is hidden when the sub-workflow used a credential you cannot use"
+  ],
+  "cause": "From n8n 2.46 every run acts as a person and can only use credentials that person may use. A workflow that points at a credential owned by someone else, and not shared with you, can no longer be run or published by you. Its execution data is also hidden from you, including data returned from sub-workflows.",
+  "fix": "Open the workflow, replace the blocked credential on each node with one you can use (your own or one shared to the project), or ask the owner to share it. Then run or publish. Existing published workflows keep running.",
+  "apply": "Credential selector on the node: pick a credential under 'Available to you' or 'Available in <project name>'. Owner side: credential > Sharing tab > add the person or project.",
+  "affected": "n8n 2.46.0 and later, team projects",
+  "sources": [
+    "https://docs.n8n.io/release-notes/"
+  ],
+  "tags": [
+    "n8n",
+    "credentials",
+    "projects",
+    "permissions",
+    "publish"
+  ],
+  "verified_on": "2026-11-27",
+  "status": "verified",
+  "confirmations": 0,
+  "trust": 50
+}
